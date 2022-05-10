@@ -6,15 +6,15 @@ const Header = () => {
   return (
     <header className="fixed z-50  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
       <div className="left flex items-center gap-3">
-        {isNavOpen ? (
+        {!isNavOpen ? (
           <MdMenu
             className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md  sm:hidden"
-            onClick={() => setIsNavOpen(!isNavOpen)}
+            onClick={() => setIsNavOpen(true)}
           />
         ) : (
           <MdClose
             className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md sm:hidden"
-            onClick={() => setIsNavOpen(!isNavOpen)}
+            onClick={() => setIsNavOpen(false)}
           />
         )}
         <div className="site-title text-xl  ">
