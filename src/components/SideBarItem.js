@@ -20,7 +20,7 @@ const SideBarItem = ({ name, Icon, activeName, onClick, index }) => {
         to={`/${name.toLowerCase()}`}
       >
         {<Icon className="md:text-4xl text-3xl " />}
-        <span className="text-lg sm:text-base sm:flex hidden">{name}</span>
+        <span className="md:text-lg text-sm sm:flex hidden">{name}</span>
       </Link>
     </li>
   );

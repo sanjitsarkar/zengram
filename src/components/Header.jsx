@@ -17,7 +17,7 @@ const Header = () => {
             onClick={() => setIsNavOpen(false)}
           />
         )}
-        <div className="site-title text-xl  ">
+        <div className="site-title text-xl sm:inline-block hidden ">
           <img src="" alt="" />
           <h4>
             Zen
@@ -40,9 +40,9 @@ const Header = () => {
           isNavOpen ? "flex" : "hidden"
         }  sm:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
       >
-        <BiBell className="text-2xl text-white sm:text-darkBlue cursor-pointer" />
+        <BiBell className="w-10 h-10 p-2 focus:bg-lightBlue hover:bg-lightBlue focus:text-white hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white text-white sm:text-darkBlue cursor-pointer" />
         <img
-          className="border-2 border-secondary shadow-sm cursor-pointer rounded-full w-10 h-10 "
+          className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
           src="https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG"
           alt="Avatar"
         />

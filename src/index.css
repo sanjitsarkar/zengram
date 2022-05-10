@@ -4,3 +4,9 @@
 body{
     font-family: 'Poppins', sans-serif;
 }
+
+@media screen and (max-width: 335px) {
+   .site-title{
+       display: none;
+   } 
+}

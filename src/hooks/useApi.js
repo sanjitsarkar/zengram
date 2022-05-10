@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const useApi = () => {
-  const API_URL = "";
+  const API_URL = "http://localhost:5000/api";
   const token = localStorage.getItem("token");
   const callApi = async (method, endPoint, isProtected = false, data = {}) => {
     endPoint = `${API_URL}/${endPoint}`;
