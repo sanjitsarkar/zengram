@@ -18,7 +18,6 @@ const Header = () => {
           />
         )}
         <div className="site-title text-xl sm:inline-block hidden ">
-          <img src="" alt="" />
           <h4>
             Zen
             <span className="text-primary">Gram</span>
