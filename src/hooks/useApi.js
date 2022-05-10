@@ -41,6 +41,8 @@ export const useApi = () => {
           }
         );
       }
+      default: {
+      }
     }
   };
   return { callApi };

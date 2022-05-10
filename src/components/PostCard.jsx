@@ -20,7 +20,7 @@ const PostCard = ({
           <img
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={profileImageURL}
-            alt="Avatar"
+            alt="profilePicture"
           />
           <div className="flex flex-col">
             <span className="text-lightBlue">{profileName}</span>
@@ -32,7 +32,11 @@ const PostCard = ({
         <MdMoreHoriz className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out" />
       </div>
       <div className="flex flex-col gap-5">
-        <img className="w-full object-cover h-72 " src={mediaURL} alt="image" />
+        <img
+          className="w-full object-cover h-72 "
+          src={mediaURL}
+          alt="postImage"
+        />
         <p className="text-lightBlue leading-relaxed">{postDescription}</p>
       </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">

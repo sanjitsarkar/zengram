@@ -44,7 +44,7 @@ const Header = () => {
         <img
           className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
           src="https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG"
-          alt="Avatar"
+          alt="profilePicture"
         />
       </div>
     </header>
