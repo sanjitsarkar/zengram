@@ -7,7 +7,7 @@ const HomePage = () => {
   return (
     <Layout>
       <div className="row gap-4 ">
-        <div className="flex flex-col gap-8 md:w-4/5">
+        <div className="flex flex-col gap-8 md:w-5/6">
           <StorySection />
           <AddPostForm />
           <PostsSection />

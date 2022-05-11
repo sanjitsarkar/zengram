@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { BiBell, BiSearch } from "react-icons/bi";
+import { FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   return (
-    <header className="fixed z-50  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
+    <header className="fixed z-10  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
       <div className="left flex items-center gap-3">
         {!isNavOpen ? (
           <MdMenu
@@ -39,11 +44,15 @@ const Header = () => {
           isNavOpen ? "flex" : "hidden"
         }  sm:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
       >
-        <BiBell className="w-10 h-10 p-2 md:focus:bg-lightBlue md:hover:bg-lightBlue md:focus:text-white md:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer" />
+        <BiBell className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer" />
         <img
           className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
-          src="https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG"
+          src={`${user.profilePictureURL?user.profilePictureURL:"https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"}`}
           alt="profilePicture"
+        />
+        <FiLogOut
+          onClick={() => dispatch(logout())}
+          className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer"
         />
       </div>
     </header>

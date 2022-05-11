@@ -15,7 +15,7 @@ const SideBarItem = ({ name, Icon, activeName, onClick, index }) => {
             ? "md:border-b-4 border-white border-opacity-50 bg-primary"
             : "md:border-b-4 border-slate-200"
         }`}
-        to={`/${name.toLowerCase()}`}
+        to={`/${name !== "Home" ? name.toLowerCase() : ""}`}
       >
         {<Icon className="md:text-4xl text-3xl " />}
         <span className="md:text-lg text-sm sm:flex hidden">{name}</span>

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import {
   MdBookmark,
   MdExplore,
@@ -140,5 +141,5 @@ export const initialSignupCredState = {
   confirmPassword: "",
   name: "",
 };
-
+export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
