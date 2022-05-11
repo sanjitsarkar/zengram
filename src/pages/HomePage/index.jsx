@@ -1,7 +1,13 @@
 import React from "react";
+import { Layout } from "../../components";
+import PostsSection from "./PostsSection";
 
 const HomePage = () => {
-  return <div>HomePage</div>;
+  return (
+    <Layout>
+      <PostsSection />
+    </Layout>
+  );
 };
 
 export default HomePage;
