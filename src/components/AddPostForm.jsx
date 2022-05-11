@@ -4,7 +4,7 @@ import { MdGif } from "react-icons/md";
 
 const AddPostForm = () => {
   return (
-    <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   md:w-4/5">
+    <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
       <div className="flex items-center gap-3 mb-3">
         <img
           className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
