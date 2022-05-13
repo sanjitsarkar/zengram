@@ -19,14 +19,22 @@ const AddPostForm = () => {
           <div className=" relative  sm:w-60 w-48" key={mediaURL}>
             <MdClose
               onClick={() => {
-                const newImageUrls = imgUrls.filter((url) => url !== mediaURL);
+                const newImageUrls = imgUrls.filter(
+                  (url) => url.url !== mediaURL.url
+                );
+                const mediaURLs = Array.from(post.mediaURLs).filter(
+                  (file) =>
+                    file.name !== mediaURL.name &&
+                    file.lastModified !== mediaURL.lastModified
+                );
+                setPost({ ...post, mediaURLs });
                 setImgUrls(newImageUrls);
               }}
               className="cursor-pointer p-1 w-8 h-8 rounded-full fill-red-500 bg-white shadow-md absolute -right-1 -top-1"
             />
             <img
               key={index}
-              src={mediaURL}
+              src={mediaURL.url}
               alt="postImage"
               className="cursor-pointer aspect-square    p-1 bg-slate-200    object-cover shadow-sm"
             />
@@ -112,12 +120,17 @@ const AddPostForm = () => {
                 onChange={(e) => {
                   setPost({ ...post, mediaURLs: e.target.files });
                   Array.from(e.target.files).forEach((file) => {
+                    console.log("file", file);
                     let reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onloadend = (e) => {
                       setImgUrls((prevImgUrls) => [
                         ...prevImgUrls,
-                        reader.result,
+                        {
+                          name: file.name,
+                          lastModified: file.lastModified,
+                          url: reader.result,
+                        },
                       ]);
                     };
                   });
