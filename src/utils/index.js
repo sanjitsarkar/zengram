@@ -6,6 +6,7 @@ import {
   MdMessage,
   MdPerson,
 } from "react-icons/md";
+import { callApi } from "./callApi";
 export const sideBarItems = [
   {
     name: "Home",
@@ -141,6 +142,12 @@ export const initialSignupCredState = {
   confirmPassword: "",
   name: "",
 };
+export const initialPostState = {
+  content: "",
+  mediaURLs: [],
+};
 export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
-export const API_URL = "https://zengram.herokuapp.com/api";
+export { callApi };
+// export const API_URL = "https://zengram.herokuapp.com/api";
+export const API_URL = "http://localhost:5000/api";

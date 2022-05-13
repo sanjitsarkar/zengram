@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   AuthButton,
   InputCheckboxSection,
+  InputSection,
   LinkButton,
   Loader,
 } from "../../components";
@@ -23,11 +24,12 @@ const LoginPage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              console.log(loginCred);
               dispatch(login(loginCred));
-              setLoginCred(initialLoginCredState);
+              // setLoginCred(initialLoginCredState);
             }}
           >
-            {/* <InputSection
+            <InputSection
               value={loginCred.email}
               onChange={(e) =>
                 setLoginCred({ ...loginCred, email: e.target.value })
@@ -45,26 +47,26 @@ const LoginPage = () => {
               type="password"
               placeholder="Password"
               minLength={6}
-            /> */}
+            />
 
             <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
               <InputCheckboxSection label="Remember me" />
-              <LinkButton to="/forgot-password" name="Forgot password?" />
+              <LinkButton to="forgot-password" name="Forgot password?" />
             </div>
-
-            <AuthButton name="Log in" />
-            <AuthButton
-              type="button"
-              name=" Guest Login"
-              color="bg-secondary"
-              onClick={() => {
-                setLoginCred(GUEST_CREDENTIAL);
-                dispatch(login(GUEST_CREDENTIAL));
-              }}
-            />
-
+            <div className="flex flex-col gap-2">
+              <AuthButton name="Log in" />
+              <AuthButton
+                type="button"
+                name=" Guest Login"
+                color="bg-secondary"
+                onClick={() => {
+                  setLoginCred(GUEST_CREDENTIAL);
+                  dispatch(login(GUEST_CREDENTIAL));
+                }}
+              />
+            </div>
             <p className="text-gray-800 mt-2 text-center">
-              Not a member? <LinkButton to="/signup" name="Signup" />
+              Not a member? <LinkButton to="signup" name="Signup" />
             </p>
           </form>
         </div>

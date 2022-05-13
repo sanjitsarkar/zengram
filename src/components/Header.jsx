@@ -47,8 +47,12 @@ const Header = () => {
         <BiBell className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer" />
         <img
           className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
-          src={`${user.profilePictureURL?user.profilePictureURL:"https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"}`}
-          alt="profilePicture"
+          src={`${
+            user.profilePictureURL
+              ? user.profilePictureURL
+              : "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"
+          }`}
+          alt={user.name}
         />
         <FiLogOut
           onClick={() => dispatch(logout())}

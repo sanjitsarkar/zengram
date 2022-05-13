@@ -1,6 +1,7 @@
 import React from "react";
 
 const AuthButton = ({
+  disabled = false,
   color = "bg-primary",
   name,
   onClick,
@@ -10,6 +11,7 @@ const AuthButton = ({
     <button
       type={`${type ? type : "button"}`}
       onClick={onClick}
+      disabled={disabled}
       className={`
       w-full
       px-6
@@ -22,9 +24,9 @@ const AuthButton = ({
       uppercase
       rounded
       shadow-md
-      hover:bg-primary hover:shadow-lg
-      focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0
-      active:bg-primary active:shadow-lg
+      hover:${color} hover:shadow-lg
+      focus:${color} focus:shadow-lg focus:outline-none focus:ring-0
+      active:${color} active:shadow-lg
       transition
       duration-150
       ease-in-out`}

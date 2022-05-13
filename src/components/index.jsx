@@ -1,5 +1,6 @@
-import AddPostForm from "./AddPostForm";
+import AddPostForm from "../pages/HomePage/AddPostForm";
 import AuthButton from "./AuthButton";
+import IconButton from "./IconButton";
 import InputCheckboxSection from "./InputCheckboxSection";
 import InputSection from "./InputSection";
 import Layout from "./Layout";
@@ -19,4 +20,5 @@ export {
   AuthButton,
   LinkButton,
   InputCheckboxSection,
+  IconButton,
 };

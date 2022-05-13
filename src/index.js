@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { store } from "./app/store";
+import { ModalProvider } from "./context/modalContext";
 import { SideBarItemProvider } from "./context/sideBarItemContext";
 import "./index.css";
 
@@ -12,9 +13,11 @@ const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <SideBarItemProvider>
-        <App />
-      </SideBarItemProvider>
+      <ModalProvider>
+        <SideBarItemProvider>
+          <App />
+        </SideBarItemProvider>
+      </ModalProvider>
     </Provider>
   </BrowserRouter>
 );

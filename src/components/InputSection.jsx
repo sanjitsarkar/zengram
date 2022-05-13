@@ -7,6 +7,7 @@ const InputSection = ({
   value = "",
   onChange,
   required = true,
+  minLength = 5,
 }) => {
   return (
     <div className="form-group mb-4">
@@ -19,10 +20,12 @@ const InputSection = ({
         </label>
       )}
       <input
-        value={value}
+        defaultValue={value}
         onChange={onChange}
         type={type}
+        minLength={minLength}
         className="form-control
+       
         block
         w-full
         px-3

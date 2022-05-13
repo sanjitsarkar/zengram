@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
-import { PostCard } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader, PostCard } from "../../components";
+import { fetchPosts } from "../../services/posts/postsService";
 
 const PostsSection = () => {
+  const posts = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-4">
@@ -16,10 +23,17 @@ const PostsSection = () => {
           </span>
         </button>
       </div>
+      {posts.status === "loading" && (
+        <Loader status={"Please wait until your posts are loaded"} />
+      )}
+      {posts.status === "succeeded" && posts.data.length === 0 && (
+        <span className="text-center text-base font-medium text-lightBlue">
+          No posts to show
+        </span>
+      )}
       <div className="flex flex-col gap-4 ">
-        <PostCard />
-        <PostCard />
-        <PostCard />
+        {posts.status === "succeeded" &&
+          posts.data.map((post) => <PostCard key={post._id} post={post} />)}
       </div>
     </div>
   );

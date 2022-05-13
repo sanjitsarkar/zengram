@@ -15,8 +15,9 @@ body{
        display: none;
    } 
 }
+
 @media screen and (max-width: 767px) {
-.story-section::-webkit-scrollbar {
+:is(.photos,.story-section)::-webkit-scrollbar {
         display: none;
     }
 }
