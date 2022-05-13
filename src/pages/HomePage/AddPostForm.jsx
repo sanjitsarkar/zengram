@@ -120,7 +120,6 @@ const AddPostForm = () => {
                 onChange={(e) => {
                   setPost({ ...post, mediaURLs: e.target.files });
                   Array.from(e.target.files).forEach((file) => {
-                    console.log("file", file);
                     let reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onloadend = (e) => {
