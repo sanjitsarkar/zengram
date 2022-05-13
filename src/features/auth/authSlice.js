@@ -12,7 +12,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      // notify(`Goodbye, ${state.user.user.name}`);
+      notify(`You have been logged out`, "success");
       state.status = "loggedOut";
       state.user = null;
       state.error = null;
@@ -25,7 +25,6 @@ export const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action.payload);
       state.user = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       notify(`Welcome, ${state.user.user.name}`);
@@ -33,7 +32,6 @@ export const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error;
-      console.log("error", action.error);
       notify("Email or Password is wrong", "error");
     });
     builder.addCase(signup.pending, (state, action) => {

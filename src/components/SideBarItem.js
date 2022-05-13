@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const SideBarItem = ({ name, Icon, activeName, onClick }) => {
-  console.log(name, activeName);
   return (
     <li
       onClick={onClick}

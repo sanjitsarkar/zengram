@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiArchive, BiLike, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
@@ -9,11 +9,21 @@ import {
   MdMoreHoriz,
   MdShare,
 } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addPostToArchive,
+  bookmarkPost,
+  deletePost,
+  fetchArchivedPosts,
+  fetchBookmarkedPosts,
+  unBookmarkPost,
+} from "../services/posts/postsService";
 import { timeSince } from "../utils";
 import DropDownOption from "./DropDownOption";
 
 const PostCard = ({ post }) => {
   const {
+    _id,
     postedBy: { profilePictureURL, name },
     createdAt,
     mediaURLs,
@@ -22,8 +32,18 @@ const PostCard = ({ post }) => {
     shares,
     comments,
   } = post;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchBookmarkedPosts());
+    dispatch(fetchArchivedPosts());
+  }, []);
+  const archivedPosts = useSelector((state) => state.archivedPosts?.data);
+  const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
+  const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
+  const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
+
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -67,18 +87,44 @@ const PostCard = ({ post }) => {
   const DropDown = () => {
     return (
       <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
+        {!isPostBookmarked ? (
+          <DropDownOption
+            Icon={MdBookmark}
+            name="Bookmark Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(bookmarkPost(_id));
+            }}
+          />
+        ) : (
+          <DropDownOption
+            Icon={MdBookmark}
+            name="Unbookmark Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(unBookmarkPost(_id));
+            }}
+          />
+        )}
+        <DropDownOption Icon={MdEdit} name="Edit Post" />
         <DropDownOption
-          Icon={MdBookmark}
-          name="Bookmark Post"
-          onClick={() => {}}
+          Icon={BiTrash}
+          name="Delete Post"
+          onClick={() => {
+            setIsOptionClicked(false);
+            dispatch(deletePost(_id));
+          }}
         />
-        <DropDownOption Icon={MdEdit} name="Edit Post" onClick={() => {}} />
-        <DropDownOption Icon={BiTrash} name="Delete Post" onClick={() => {}} />
-        <DropDownOption
-          Icon={BiArchive}
-          name="Archive Post"
-          onClick={() => {}}
-        />
+        {!isPostArchived && (
+          <DropDownOption
+            Icon={BiArchive}
+            name="Archive Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(addPostToArchive(_id));
+            }}
+          />
+        )}
       </div>
     );
   };

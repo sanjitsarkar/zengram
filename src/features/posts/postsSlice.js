@@ -5,6 +5,7 @@ import {
   fetchPosts,
   updatePost,
 } from "../../services/posts/postsService";
+import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -45,7 +46,10 @@ export const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = state.data.filter((post) => post.id !== action.payload);
+        state.data = state.data.filter(
+          (post) => post._id !== action.payload.post._id
+        );
+        notify("Post deleted successfully", "success");
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
@@ -57,11 +61,12 @@ export const postsSlice = createSlice({
       .addCase(updatePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.map((post) => {
-          if (post.id === action.payload.id) {
-            return action.payload;
+          if (post._id === action.payload.post._id) {
+            return action.payload.post;
           }
           return post;
         });
+        notify("Post updated successfully", "success");
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.status = "failed";

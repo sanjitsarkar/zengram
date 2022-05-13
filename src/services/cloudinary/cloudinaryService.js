@@ -23,7 +23,6 @@ export const uploadImages = async (mediaURLs, id) => {
         imageUrls.push(response.secure_url);
       })
     );
-    console.log(imageUrls);
     return imageUrls;
   } catch (err) {
     console.log(err.message);

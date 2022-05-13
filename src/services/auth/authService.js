@@ -2,13 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callApi } from "../../utils";
 export const login = createAsyncThunk("auth/login", async (loginCred) => {
   const { email, password } = loginCred;
-  console.log(email, password);
 
   const response = await callApi("post", "auth/login", false, {
     email,
     password,
   });
-  console.log("response", response);
   return response.data;
 });
 export const signup = createAsyncThunk("auth/signup", async (signupCred) => {

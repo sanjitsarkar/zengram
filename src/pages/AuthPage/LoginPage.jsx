@@ -24,9 +24,8 @@ const LoginPage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log(loginCred);
               dispatch(login(loginCred));
-              // setLoginCred(initialLoginCredState);
+              setLoginCred(initialLoginCredState);
             }}
           >
             <InputSection
