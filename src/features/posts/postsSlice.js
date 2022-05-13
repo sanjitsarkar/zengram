@@ -25,6 +25,7 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload.posts;
+        notify("Post added successfully", "success");
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
