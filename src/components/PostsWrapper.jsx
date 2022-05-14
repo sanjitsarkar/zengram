@@ -2,7 +2,7 @@ import React from "react";
 import Loader from "./Loader";
 import PostCard from "./PostCard";
 
-export const PostsWrapper = ({ posts, children, width = "md:w-5/6" }) => {
+export const PostsWrapper = ({ posts, children, width = "" }) => {
   return (
     <div className={` ${width} flex flex-col gap-4`}>
       {children}

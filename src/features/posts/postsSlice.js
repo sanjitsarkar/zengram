@@ -30,9 +30,6 @@ export const postsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(createPost.pending, (state, action) => {
-        state.status = "loading";
-      })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data.unshift(action.payload?.post);
@@ -42,9 +39,7 @@ export const postsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(deletePost.pending, (state, action) => {
-        state.status = "loading";
-      })
+
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(

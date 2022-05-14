@@ -13,12 +13,20 @@ const Loader = ({ status = "", type = "full" }) => {
         <span className="text-white sm:text-lg text-center">{status}</span>
       </div>
     );
-  else {
+  else if (type === "mini") {
     return (
       <div className="flex items-center justify-center space-x-2   animate-bounce">
         <div className="w-2 h-2 bg-primary rounded-full"></div>
         <div className="w-2 h-2 bg-secondary rounded-full"></div>
         <div className="w-2 h-2 bg-tertiary rounded-full"></div>
+      </div>
+    );
+  } else if (type === "medium") {
+    return (
+      <div className="flex items-center justify-center space-x-2   animate-bounce">
+        <div className="w-5 h-5 bg-primary rounded-full"></div>
+        <div className="w-5 h-5 bg-secondary rounded-full"></div>
+        <div className="w-5 h-5 bg-tertiary rounded-full"></div>
       </div>
     );
   }
