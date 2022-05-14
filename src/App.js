@@ -1,17 +1,27 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { PrivateRoute } from "./components";
 import { HomePage, LoginPage, SignupPage } from "./pages";
+import BookmarkedPage from "./pages/BookmarkedPage";
+import {
+  fetchArchivedPosts,
+  fetchBookmarkedPosts,
+} from "./services/posts/postsService";
 function App() {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, [user]);
+  useEffect(() => {
+    dispatch(fetchBookmarkedPosts());
+    dispatch(fetchArchivedPosts());
+  }, []);
   return (
     <div className="App">
       <Routes>
@@ -20,6 +30,14 @@ function App() {
           element={
             <PrivateRoute>
               <HomePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/bookmarks"
+          element={
+            <PrivateRoute>
+              <BookmarkedPage />
             </PrivateRoute>
           }
         />

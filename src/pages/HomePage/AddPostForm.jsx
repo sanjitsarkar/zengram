@@ -150,7 +150,7 @@ const AddPostForm = () => {
       px-6
       py-2.5
       ${
-        post.content.length === 0 && imgUrls.length === 0
+        post.content.length === 0 && imgUrls.length === 0 && !isLoading
           ? "bg-slate-400"
           : "bg-primary"
       }

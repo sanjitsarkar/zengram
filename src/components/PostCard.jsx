@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BiArchive, BiLike, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
@@ -10,18 +10,17 @@ import {
   MdShare,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   addPostToArchive,
   bookmarkPost,
   deletePost,
-  fetchArchivedPosts,
-  fetchBookmarkedPosts,
   unBookmarkPost,
 } from "../services/posts/postsService";
 import { timeSince } from "../utils";
 import DropDownOption from "./DropDownOption";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, type }) => {
   const {
     _id,
     postedBy: { profilePictureURL, name },
@@ -33,17 +32,13 @@ const PostCard = ({ post }) => {
     comments,
   } = post;
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchBookmarkedPosts());
-    dispatch(fetchArchivedPosts());
-  }, []);
+
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
-
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -87,22 +82,22 @@ const PostCard = ({ post }) => {
   const DropDown = () => {
     return (
       <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
-        {!isPostBookmarked ? (
-          <DropDownOption
-            Icon={MdBookmark}
-            name="Bookmark Post"
-            onClick={() => {
-              setIsOptionClicked(false);
-              dispatch(bookmarkPost(_id));
-            }}
-          />
-        ) : (
+        {type === "bookmarked" || isPostBookmarked ? (
           <DropDownOption
             Icon={MdBookmark}
             name="Unbookmark Post"
             onClick={() => {
               setIsOptionClicked(false);
               dispatch(unBookmarkPost(_id));
+            }}
+          />
+        ) : (
+          <DropDownOption
+            Icon={MdBookmark}
+            name="Bookmark Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(bookmarkPost(_id));
             }}
           />
         )}
@@ -137,7 +132,6 @@ const PostCard = ({ post }) => {
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={profilePictureURL}
             alt="profilePicture"
-            loading="lazy"
           />
           <div className="flex flex-col">
             <span className="text-lightBlue">{name}</span>
@@ -155,7 +149,21 @@ const PostCard = ({ post }) => {
       </div>
       <div className="flex flex-col gap-5">
         <MediaSection />
-        <p className="text-lightBlue leading-relaxed">{content}</p>
+        <p className="text-lightBlue leading-relaxed">
+          {content.split(" ").map((word) => {
+            if (word.startsWith("#"))
+              return (
+                <Link
+                  key={word}
+                  to={`?hashtags=${word.slice(1)}`}
+                  className="text-primary ml-2"
+                >
+                  {word}
+                </Link>
+              );
+            return word;
+          })}
+        </p>
       </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">

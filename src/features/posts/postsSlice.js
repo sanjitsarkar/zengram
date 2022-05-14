@@ -25,7 +25,6 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload.posts;
-        notify("Post added successfully", "success");
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -37,14 +36,13 @@ export const postsSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data.unshift(action.payload.post);
+        notify("Post added successfully", "success");
       })
       .addCase(createPost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(deletePost.pending, (state, action) => {
-        state.status = "loading";
-      })
+
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
