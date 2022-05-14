@@ -149,4 +149,3 @@ export const initialPostState = {
 export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
 export { callApi };
-export const API_URL = "https://zengram.herokuapp.com/api";

@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import archivedPostsReducer from "../features/archivedPosts/archivedPostsSlice";
-import authReducer from "../features/auth/authSlice";
-import bookmarkedPostsReducer from "../features/bookmarkedPosts/bookmarkedPostsSlice";
-import draftPostsReducer from "../features/draftPosts/draftPostsSlice";
-import postsReducer from "../features/posts/postsSlice";
-import storiesReducer from "../features/stories/storiesSlice";
-import userCreatedPostsReducer from "../features/userCreatedPosts/userCreatedPostsSlice";
-import allPostsReducer from "../features/allPosts/allPosts";
+import {
+  allPostsReducer,
+  archivedPostsReducer,
+  authReducer,
+  bookmarkedPostsReducer,
+  draftPostsReducer,
+  postsReducer,
+  storiesReducer,
+  userCreatedPostsReducer,
+} from "../features";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -15,7 +17,7 @@ export const store = configureStore({
     archivedPosts: archivedPostsReducer,
     bookmarkedPosts: bookmarkedPostsReducer,
     draftPosts: draftPostsReducer,
-    allPosts:allPostsReducer,
+    allPosts: allPostsReducer,
     userCreatedPosts: userCreatedPostsReducer,
   },
 });
