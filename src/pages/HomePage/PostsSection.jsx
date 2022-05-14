@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
-import { PostCard } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { PostsWrapper } from "../../components";
+import { fetchPosts } from "../../services/posts/postsService";
 
 const PostsSection = () => {
+  const posts = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
   return (
-    <div className="flex flex-col gap-4">
+    <PostsWrapper posts={posts}>
       <div className="flex gap-4">
         <button className="py-1 px-2 rounded-md shadow-lg bg-primary text-white">
           Trending
@@ -16,12 +23,7 @@ const PostsSection = () => {
           </span>
         </button>
       </div>
-      <div className="flex flex-col gap-4 ">
-        <PostCard />
-        <PostCard />
-        <PostCard />
-      </div>
-    </div>
+    </PostsWrapper>
   );
 };
 
