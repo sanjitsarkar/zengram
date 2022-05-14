@@ -1,5 +1,4 @@
 import axios from "axios";
-import { API_URL } from ".";
 export const callApi = async (
   method,
   endPoint,
@@ -7,7 +6,7 @@ export const callApi = async (
   data = {}
 ) => {
   const token = JSON.parse(localStorage?.getItem("user"))?.token;
-  endPoint = `${API_URL}/${endPoint}`;
+  endPoint = `${process.env.REACT_APP_API_URL}/${endPoint}`;
   switch (method) {
     case "get": {
       return await axios.get(
