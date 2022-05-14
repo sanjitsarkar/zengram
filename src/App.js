@@ -3,8 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { PrivateRoute } from "./components";
-import { HomePage, LoginPage, SignupPage } from "./pages";
-import BookmarkedPage from "./pages/BookmarkedPage";
+import { BookmarkedPage, HomePage, LoginPage, SignupPage } from "./pages";
 import {
   fetchArchivedPosts,
   fetchBookmarkedPosts,
