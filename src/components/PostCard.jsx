@@ -150,18 +150,19 @@ const PostCard = ({ post, type }) => {
       <div className="flex flex-col gap-5">
         <MediaSection />
         <p className="text-lightBlue leading-relaxed">
-          {content.split(" ").map((word) => {
+          {content.split(" ").map((word, i) => {
             if (word.startsWith("#"))
               return (
                 <Link
                   key={word}
                   to={`?hashtags=${word.slice(1)}`}
-                  className="text-primary ml-2"
+                  className={`text-primary ${i === 0 ? "mr-2" : "ml-2"}`}
                 >
                   {word}
                 </Link>
               );
-            return word;
+
+            return word + " ";
           })}
         </p>
       </div>
