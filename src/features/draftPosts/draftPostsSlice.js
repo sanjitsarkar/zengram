@@ -4,6 +4,7 @@ import {
   fetchDraftPosts,
   removePostFromDraft,
 } from "../../services/posts/postsService";
+import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -22,7 +23,7 @@ export const draftPostsSlice = createSlice({
       })
       .addCase(fetchDraftPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.posts;
+        state.data = action.payload?.posts;
       })
       .addCase(fetchDraftPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -33,7 +34,8 @@ export const draftPostsSlice = createSlice({
       })
       .addCase(addPostToDraft.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.unshift(action.payload.post);
+        state.data.unshift(action.payload?.post);
+        notify("Post added to draft successfully", "success");
       })
       .addCase(addPostToDraft.rejected, (state, action) => {
         state.status = "failed";
@@ -45,8 +47,9 @@ export const draftPostsSlice = createSlice({
       .addCase(removePostFromDraft.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
-          (post) => post._id !== action.payload.postId
+          (post) => post?._id !== action.payload?.postId
         );
+        notify("Post removed from draft successfully", "success");
       })
       .addCase(removePostFromDraft.rejected, (state, action) => {
         state.status = "failed";

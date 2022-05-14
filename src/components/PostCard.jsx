@@ -16,12 +16,13 @@ import {
   deletePost,
   fetchArchivedPosts,
   fetchBookmarkedPosts,
+  removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
 import { timeSince } from "../utils";
 import DropDownOption from "./DropDownOption";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, type }) => {
   const {
     _id,
     postedBy: { profilePictureURL, name },
@@ -87,16 +88,7 @@ const PostCard = ({ post }) => {
   const DropDown = () => {
     return (
       <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
-        {!isPostBookmarked ? (
-          <DropDownOption
-            Icon={MdBookmark}
-            name="Bookmark Post"
-            onClick={() => {
-              setIsOptionClicked(false);
-              dispatch(bookmarkPost(_id));
-            }}
-          />
-        ) : (
+        {type === "bokkmarked" || isPostBookmarked ? (
           <DropDownOption
             Icon={MdBookmark}
             name="Unbookmark Post"
@@ -105,8 +97,18 @@ const PostCard = ({ post }) => {
               dispatch(unBookmarkPost(_id));
             }}
           />
+        ) : (
+          <DropDownOption
+            Icon={MdBookmark}
+            name="Bookmark Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(bookmarkPost(_id));
+            }}
+          />
         )}
         <DropDownOption Icon={MdEdit} name="Edit Post" />
+
         <DropDownOption
           Icon={BiTrash}
           name="Delete Post"
@@ -115,13 +117,22 @@ const PostCard = ({ post }) => {
             dispatch(deletePost(_id));
           }}
         />
-        {!isPostArchived && (
+        {type === "archived" || isPostArchived ? (
           <DropDownOption
             Icon={BiArchive}
             name="Archive Post"
             onClick={() => {
               setIsOptionClicked(false);
               dispatch(addPostToArchive(_id));
+            }}
+          />
+        ) : (
+          <DropDownOption
+            Icon={BiArchive}
+            name="Remove from Archive"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(removePostFromArchive(_id));
             }}
           />
         )}

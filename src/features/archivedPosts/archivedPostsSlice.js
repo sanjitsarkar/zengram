@@ -4,6 +4,7 @@ import {
   fetchArchivedPosts,
   removePostFromArchive,
 } from "../../services/posts/postsService";
+import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -22,7 +23,7 @@ export const archivedPostsSlice = createSlice({
       })
       .addCase(fetchArchivedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.posts;
+        state.data = action.payload?.posts;
       })
       .addCase(fetchArchivedPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -33,7 +34,8 @@ export const archivedPostsSlice = createSlice({
       })
       .addCase(addPostToArchive.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.unshift(action.payload.post);
+        state.data.unshift(action.payload?.post);
+        notify("Post added to archive successfully", "success");
       })
       .addCase(addPostToArchive.rejected, (state, action) => {
         state.status = "failed";
@@ -45,8 +47,9 @@ export const archivedPostsSlice = createSlice({
       .addCase(removePostFromArchive.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
-          (post) => post._id !== action.payload.postId
+          (post) => post?._id !== action.payload?.postId
         );
+        notify("Post removed from archive successfully", "success");
       })
       .addCase(removePostFromArchive.rejected, (state, action) => {
         state.status = "failed";
