@@ -1,22 +1,58 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { login, signup } from "../../services/auth/authService";
+import { notify } from "../../utils";
 
 const initialState = {
-  loading: false,
-  data: [],
-  errors: [],
+  status: "idle",
+  user: JSON.parse(localStorage?.getItem("user")),
+  error: null,
 };
-
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action) => {},
-    signup: (state, action) => {},
-    logout: (state, action) => {},
-    getUserInfo: (state, action) => {},
+    logout: (state) => {
+      notify(`Goodbye, ${state.user.user.name}`);
+      state.status = "loggedOut";
+      state.user = null;
+      state.error = null;
+      localStorage.removeItem("user");
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      localStorage.setItem("isLoggedIn", true);
+      notify(`Welcome, ${state.user.user.name}`);
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+      notify("Email or Password is wrong", "error");
+    });
+    builder.addCase(signup.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(signup.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      localStorage.setItem("isLoggedIn", true);
+      notify(`Welcome, ${state.user.user.name}`);
+    });
+    builder.addCase(signup.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+      notify("Email is already taken", "error");
+    });
   },
 });
 
-export const { login, signup, logout, getUserInfo } = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

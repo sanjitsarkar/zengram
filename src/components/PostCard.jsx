@@ -14,7 +14,7 @@ const PostCard = ({
   commentCount = 100,
 }) => {
   return (
-    <div className=" p-6 rounded-lg shadow-sm bg-white  md:w-4/5 gap-4 flex flex-col">
+    <div className=" p-6 rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">
           <img

@@ -8,9 +8,9 @@ const Layout = ({ children }) => {
     <div className="relative">
       <Header />
       <SideBar />
-      <div className="bg-slate-100 min-h-screen top-16 mt-3 relative md:pl-60  p-2 sm:p-4 md:mb-0 mb-36">
+      <section className="bg-slate-100  min-h-screen top-16 mt-3 relative md:pl-60  p-2 sm:p-4 md:mb-0 mb-36">
         {children}
-      </div>
+      </section>
       <Footer />
     </div>
   );

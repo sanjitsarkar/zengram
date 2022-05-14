@@ -1,11 +1,18 @@
 import React from "react";
-import { Layout } from "../../components";
+import { AddPostForm, Layout } from "../../components";
 import PostsSection from "./PostsSection";
+import StorySection from "./StorySection";
 
 const HomePage = () => {
   return (
     <Layout>
-      <PostsSection />
+      <div className="row gap-4 ">
+        <div className="flex flex-col gap-8 md:w-5/6">
+          <StorySection />
+          <AddPostForm />
+          <PostsSection />
+        </div>
+      </div>
     </Layout>
   );
 };
