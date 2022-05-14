@@ -14,7 +14,9 @@ export const PostsWrapper = ({ posts, children, width = "" }) => {
       )}
       <div className="flex flex-col gap-4 ">
         {posts.status === "succeeded" &&
-          posts.data.map((post) => <PostCard key={post._id} post={post} />)}
+          posts.data.map(
+            (post) => post && <PostCard key={post._id} post={post} />
+          )}
       </div>
     </div>
   );
