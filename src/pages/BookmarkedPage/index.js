@@ -4,7 +4,6 @@ import { Layout, PostsWrapper } from "../../components";
 
 const BookmarkedPage = () => {
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts);
-  console.log(bookmarkedPosts);
   return (
     <Layout>
       <PostsWrapper posts={bookmarkedPosts}>
