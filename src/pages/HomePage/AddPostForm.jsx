@@ -60,7 +60,13 @@ const AddPostForm = () => {
           if (Array.from(post.mediaURLs).length > 0) {
             const urls = await uploadImages(post.mediaURLs, user._id);
 
-            const _post = { content: post.content, mediaURLs: urls };
+            const _post = {
+              content: post.content,
+              mediaURLs: urls.map((url) => ({
+                url,
+                type: "image",
+              })),
+            };
             dispatch(createPost(_post));
             setImgUrls([]);
             setIsLoading(false);

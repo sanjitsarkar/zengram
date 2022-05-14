@@ -65,7 +65,7 @@ const PostCard = ({ post, type }) => {
           )}
           <img
             className="w-full object-cover h-72 "
-            src={mediaURLs[activeMediaIndex]}
+            src={mediaURLs[activeMediaIndex].url}
             alt="postImage"
             loading="lazy"
           />
