@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   createPost,
   deletePost,
-  fetchPosts,
+  fetchUserFeedPosts,
   updatePost,
 } from "../../services/posts/postsService";
 import { notify } from "../../utils";
@@ -19,14 +19,14 @@ export const postsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchPosts.pending, (state, action) => {
+      .addCase(fetchUserFeedPosts.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchUserFeedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload.posts;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
+      .addCase(fetchUserFeedPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       })

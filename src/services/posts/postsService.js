@@ -1,9 +1,26 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callApi } from "../../utils";
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const response = await callApi("get", "posts");
-  return response.data;
-});
+export const fetchAllPosts = createAsyncThunk(
+  "posts/fetchAllPosts",
+  async () => {
+    const response = await callApi("get", "posts");
+    return response.data;
+  }
+);
+export const fetchUserFeedPosts = createAsyncThunk(
+  "posts/fetchUserFeedPosts",
+  async (id) => {
+    const response = await callApi("get", `user/${id}/posts`, true);
+    return response.data;
+  }
+);
+export const fetchUserCreatedPosts = createAsyncThunk(
+  "posts/fetchUserCreatedPosts",
+  async () => {
+    const response = await callApi("get", "user/posts", true);
+    return response.data;
+  }
+);
 export const fetchBookmarkedPosts = createAsyncThunk(
   "posts/fetchBookmarkedPosts",
   async () => {

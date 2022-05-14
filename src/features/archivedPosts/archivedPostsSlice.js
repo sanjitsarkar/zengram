@@ -41,20 +41,20 @@ export const archivedPostsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(removePostFromArchive.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(removePostFromArchive.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = state.data.filter(
-          (post) => post._id !== action.payload.postId
-        );
-        notify("Post removed from archive successfully", "success");
-      })
-      .addCase(removePostFromArchive.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      });
+      // .addCase(removePostFromArchive.pending, (state, action) => {
+      //   state.status = "loading";
+      // })
+      // .addCase(removePostFromArchive.fulfilled, (state, action) => {
+      //   state.status = "succeeded";
+      //   state.data = state.data.filter(
+      //     (post) => post._id !== action.payload.postId
+      //   );
+      //   notify("Post removed from archive successfully", "success");
+      // })
+      // .addCase(removePostFromArchive.rejected, (state, action) => {
+      //   state.status = "failed";
+      //   state.error = action.error;
+      // });
   },
 });
 

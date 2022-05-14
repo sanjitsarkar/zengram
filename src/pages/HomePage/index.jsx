@@ -10,7 +10,7 @@ const HomePage = () => {
         <div className="flex flex-col gap-8 md:w-5/6">
           <StorySection />
           <AddPostForm />
-          <PostsSection />
+          <PostsSection type="userFeed" />
         </div>
       </div>
     </Layout>
