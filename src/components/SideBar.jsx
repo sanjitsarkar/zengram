@@ -14,7 +14,9 @@ const SideBar = () => {
           {...item}
           index={i}
           activeName={activeName}
-          onClick={() => setActiveName(activeName)}
+          onClick={() => {
+            setActiveName(item.name);
+          }}
         />
       ))}
     </ul>
