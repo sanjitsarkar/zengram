@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader, PostCard } from "../../components";
+import { PostsWrapper } from "../../components";
 import { fetchPosts } from "../../services/posts/postsService";
 
 const PostsSection = () => {
@@ -11,7 +11,7 @@ const PostsSection = () => {
     dispatch(fetchPosts());
   }, []);
   return (
-    <div className="flex flex-col gap-4">
+    <PostsWrapper posts={posts}>
       <div className="flex gap-4">
         <button className="py-1 px-2 rounded-md shadow-lg bg-primary text-white">
           Trending
@@ -23,19 +23,7 @@ const PostsSection = () => {
           </span>
         </button>
       </div>
-      {posts.status === "loading" && (
-        <Loader status={"Please wait until your posts are loaded"} />
-      )}
-      {posts.status === "succeeded" && posts.data.length === 0 && (
-        <span className="text-center text-base font-medium text-lightBlue">
-          No posts to show
-        </span>
-      )}
-      <div className="flex flex-col gap-4 ">
-        {posts.status === "succeeded" &&
-          posts.data.map((post) => <PostCard key={post._id} post={post} />)}
-      </div>
-    </div>
+    </PostsWrapper>
   );
 };
 
