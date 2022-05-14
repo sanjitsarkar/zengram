@@ -7,9 +7,11 @@ import Layout from "./Layout";
 import LinkButton from "./LinkButton";
 import Loader from "./Loader";
 import PostCard from "./PostCard";
+import { PostsWrapper } from "./PostsWrapper";
 import PrivateRoute from "./PrivateRoute";
 import StoryCard from "./StoryCard";
 export {
+  PostsWrapper,
   Layout,
   PrivateRoute,
   AddPostForm,
