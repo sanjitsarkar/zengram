@@ -3,7 +3,13 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { PrivateRoute } from "./components";
-import { BookmarkedPage, HomePage, LoginPage, SignupPage } from "./pages";
+import {
+  BookmarkedPage,
+  ExplorePage,
+  HomePage,
+  LoginPage,
+  SignupPage,
+} from "./pages";
 import {
   fetchArchivedPosts,
   fetchBookmarkedPosts,
@@ -35,6 +41,14 @@ function App() {
           element={
             <PrivateRoute>
               <BookmarkedPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/explore"
+          element={
+            <PrivateRoute>
+              <ExplorePage />
             </PrivateRoute>
           }
         />

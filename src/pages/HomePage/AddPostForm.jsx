@@ -4,7 +4,7 @@ import { MdClose, MdGif } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Loader } from "../../components";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
-import { createPost } from "../../services/posts/postsService";
+import { createPost, fetchUserFeedPosts } from "../../services/posts/postsService";
 import { initialPostState } from "../../utils";
 const AddPostForm = () => {
   const dispatch = useDispatch();
@@ -79,6 +79,7 @@ const AddPostForm = () => {
 
             setPost(initialPostState);
           }
+          dispatch(fetchUserFeedPosts())
         }}
       >
         <div className="form-group mb-6">

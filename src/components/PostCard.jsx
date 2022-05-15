@@ -23,7 +23,7 @@ import DropDownOption from "./DropDownOption";
 const PostCard = ({ post, type }) => {
   const {
     _id,
-    postedBy: { profilePictureURL, name },
+    postedBy: { profilePictureURL, name, _id: id },
     createdAt,
     mediaURLs,
     content,
@@ -32,13 +32,13 @@ const PostCard = ({ post, type }) => {
     comments,
   } = post;
   const dispatch = useDispatch();
-
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
+  const auth = useSelector((state) => state.auth);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -101,16 +101,20 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        <DropDownOption Icon={MdEdit} name="Edit Post" />
-        <DropDownOption
-          Icon={BiTrash}
-          name="Delete Post"
-          onClick={() => {
-            setIsOptionClicked(false);
-            dispatch(deletePost(_id));
-          }}
-        />
-        {!isPostArchived && (
+        {auth?.user?._id === id && (
+          <DropDownOption Icon={MdEdit} name="Edit Post" />
+        )}
+        {auth?.user?._id === id && (
+          <DropDownOption
+            Icon={BiTrash}
+            name="Delete Post"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(deletePost(_id));
+            }}
+          />
+        )}
+        {!isPostArchived && auth?.user?._id === id && (
           <DropDownOption
             Icon={BiArchive}
             name="Archive Post"
