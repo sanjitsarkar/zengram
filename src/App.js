@@ -13,9 +13,7 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
+    user && navigate("/");
   }, [user]);
   useEffect(() => {
     dispatch(fetchBookmarkedPosts());
