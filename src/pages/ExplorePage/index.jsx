@@ -1,5 +1,4 @@
-import { Layout } from "../../components";
-import PostsSection from "../../components/PostsSection";
+import { Layout, PostsSection } from "../../components";
 
 const ExplorePage = () => {
   return (
