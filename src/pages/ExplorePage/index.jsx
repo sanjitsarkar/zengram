@@ -1,10 +1,10 @@
 import { Layout } from "../../components";
-import PostsSection from "../HomePage/PostsSection";
+import PostsSection from "../../components/PostsSection";
 
 const ExplorePage = () => {
   return (
     <Layout>
-      <PostsSection />
+      <PostsSection type="all" />
     </Layout>
   );
 };

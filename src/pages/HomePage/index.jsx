@@ -1,6 +1,6 @@
 import React from "react";
 import { AddPostForm, Layout } from "../../components";
-import PostsSection from "./PostsSection";
+import PostsSection from "../../components/PostsSection";
 import StorySection from "./StorySection";
 
 const HomePage = () => {

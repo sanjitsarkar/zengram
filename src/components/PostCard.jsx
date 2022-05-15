@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import { BiArchive, BiLike, BiTrash } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
+import { BiArchive, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
   MdArrowForward,
   MdBookmark,
   MdComment,
   MdEdit,
+  MdFavorite,
+  MdFavoriteBorder,
   MdMoreHoriz,
   MdShare,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
   addPostToArchive,
   bookmarkPost,
@@ -31,6 +34,7 @@ const PostCard = ({ post, type }) => {
     shares,
     comments,
   } = post;
+  const [_likes, _setLikes] = useState(likes);
   const dispatch = useDispatch();
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
@@ -127,6 +131,12 @@ const PostCard = ({ post, type }) => {
       </div>
     );
   };
+  const [isPostLiked, setIsPostLiked] = useState(
+    _likes?.some((like) => like === auth?.user?._id)
+  );
+  useEffect(() => {
+    setIsPostLiked(_likes?.some((like) => like === auth?.user?._id));
+  }, [_likes]);
   return (
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
       {isOptionClicked && <DropDown />}
@@ -174,12 +184,48 @@ const PostCard = ({ post, type }) => {
       </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
-          <BiLike
-            size={25}
-            className="fill-primary cursor-pointer order-1 md:-order-1"
-          />
+          {!isPostLiked ? (
+            <MdFavoriteBorder
+              onClick={() => {
+                if (auth?.user?._id !== id) {
+                  dispatch(
+                    likePost({
+                      likedBy: auth?.user?._id,
+                      id: _id,
+                      postedBy: id,
+                    })
+                  );
+                  _setLikes((_prevLikes) => [..._prevLikes, auth?.user?._id]);
+                }
+              }}
+              size={25}
+              className="fill-primary cursor-pointer order-1 md:-order-1"
+            />
+          ) : (
+            <MdFavorite
+              onClick={() => {
+                if (auth?.user?._id !== id) {
+                  dispatch(
+                    dislikePost({
+                      dislikedBy: auth?.user?._id,
+                      id: _id,
+                      postedBy: id,
+                    })
+                  );
+                  _setLikes(_likes.filter((like) => like !== auth?.user?._id));
+                }
+              }}
+              size={25}
+              className="fill-primary cursor-pointer order-1 md:-order-1"
+            />
+          )}
+
           <span className="text-lightBlue ">
-            {likes.length} <span className="hidden md:inline">Likes</span>
+            {_likes.length}{" "}
+            <span className="hidden md:inline">
+              Like
+              {_likes.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
@@ -188,7 +234,11 @@ const PostCard = ({ post, type }) => {
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {comments.length} <span className="hidden md:inline">Comments</span>
+            {comments.length}{" "}
+            <span className="hidden md:inline">
+              Comment
+              {comments.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
@@ -197,7 +247,11 @@ const PostCard = ({ post, type }) => {
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {shares.length} <span className="hidden md:inline">Shares</span>
+            {shares.length}{" "}
+            <span className="hidden md:inline">
+              Share
+              {shares.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
       </div>
