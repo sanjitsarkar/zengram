@@ -2,21 +2,25 @@ import React, { useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsWrapper } from "../../components";
+
 import {
   fetchAllPosts,
   fetchUserFeedPosts,
 } from "../../services/posts/postsService";
+
 
 const PostsSection = ({ type = "all" }) => {
   const posts = useSelector((state) => state.posts);
   const allPosts = useSelector((state) => state.allPosts);
   const dispatch = useDispatch();
   useEffect(() => {
+
     if (type === "userFeed") {
       dispatch(fetchUserFeedPosts());
     } else if (type === "all") {
       dispatch(fetchAllPosts());
     }
+
   }, []);
   return (
     <PostsWrapper posts={type === "all" ? allPosts : posts}>
