@@ -6,6 +6,7 @@ import {
   bookmarkedPostsReducer,
   draftPostsReducer,
   postsReducer,
+  profileReducer,
   storiesReducer,
   userCreatedPostsReducer,
 } from "../features";
@@ -19,5 +20,6 @@ export const store = configureStore({
     draftPosts: draftPostsReducer,
     allPosts: allPostsReducer,
     userCreatedPosts: userCreatedPostsReducer,
+    profile: profileReducer,
   },
 });

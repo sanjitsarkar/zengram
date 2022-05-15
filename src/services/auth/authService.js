@@ -18,3 +18,34 @@ export const signup = createAsyncThunk("auth/signup", async (signupCred) => {
   });
   return response.data;
 });
+
+export const getProfileInfo = createAsyncThunk(
+  "auth/getProfileInfo",
+  async (id) => {
+    const response = await callApi("get", `user/profile/${id}`, true);
+    return response.data;
+  }
+);
+export const updateProfileInfo = createAsyncThunk(
+  "auth/updateProfileInfo",
+  async (profileInfo) => {
+    const response = await callApi("put", "user/profile", true, profileInfo);
+    return response.data;
+  }
+);
+
+export const followUser = createAsyncThunk(
+  "auth/followUser",
+  async (followingId) => {
+    const response = await callApi("put", `user/follow/${followingId}`, true);
+    return response.data;
+  }
+);
+
+export const unfollowUser = createAsyncThunk(
+  "auth/unfollowUser",
+  async (followingId) => {
+    const response = await callApi("put", `user/unfollow/${followingId}`, true);
+    return response.data;
+  }
+);

@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, signup } from "../../services/auth/authService";
+import {
+  followUser,
+  login,
+  signup,
+  unfollowUser,
+} from "../../services/auth/authService";
 import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
   user: JSON.parse(localStorage?.getItem("user")),
+  isLoggedIn: JSON.parse(localStorage?.getItem("isLoggedIn")) || false,
   error: null,
 };
 export const authSlice = createSlice({
@@ -12,11 +18,16 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      notify(`You have been logged out`, "success");
+      notify(`Goodbye, ${state.user.name}`, "success");
       state.status = "loggedOut";
+      state.isLoggedIn = false;
       state.user = null;
       state.error = null;
       localStorage.removeItem("user");
+    },
+    updateUser: (state, action) => {
+      state.user = action.payload.user;
+      localStorage.setItem("user", JSON.stringify(action.payload?.user));
     },
   },
   extraReducers: (builder) => {
@@ -25,9 +36,11 @@ export const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      notify(`Welcome, ${state.user.user.name}`);
+      state.user = action.payload.user;
+      state.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("user", JSON.stringify(action.payload?.user));
+      notify(`Welcome, ${state.user.name}`);
     });
     builder.addCase(login.rejected, (state, action) => {
       state.status = "failed";
@@ -39,18 +52,47 @@ export const authSlice = createSlice({
     });
     builder.addCase(signup.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      notify(`Welcome, ${state.user.user.name}`);
+      state.user = action.payload.user;
+      state.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("user", JSON.stringify(action.payload?.user));
+      notify(`Welcome, ${state.user.name}`);
     });
-    builder.addCase(signup.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error;
-      notify("Email is already taken", "error");
-    });
+    builder
+      .addCase(signup.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+        notify("Email is already taken", "error");
+      })
+
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state?.user?.following?.unshift(action.payload?.followingId);
+        localStorage.setItem("user", JSON.stringify(state?.user));
+        notify(`Followed successfully`);
+      })
+      .addCase(followUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+        notify("Something went wrong", "error");
+      })
+
+      .addCase(unfollowUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user.following = state.user?.following?.filter(
+          (id) => id !== action?.payload?.followingId
+        );
+        localStorage.setItem("user", JSON.stringify(state?.user));
+        notify(`Unfollowed successfully`);
+      })
+      .addCase(unfollowUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+        notify("Something went wrong", "error");
+      });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, updateUser } = authSlice.actions;
 
 export default authSlice.reducer;

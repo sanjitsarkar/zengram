@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SideBarItem = ({ name, Icon, activeName, onClick }) => {
+const SideBarItem = ({ name, Icon, activeName, onClick, _id }) => {
+  let to = `/${name.toLowerCase()}`;
+  if (name === "Home") to = "/";
+  if (name === "Profile") to += `/${_id}`;
   return (
     <li
       onClick={onClick}
@@ -15,7 +18,7 @@ const SideBarItem = ({ name, Icon, activeName, onClick }) => {
             ? "md:border-b-4 border-white border-opacity-50 bg-primary"
             : "md:border-b-4 border-slate-200 bg-white"
         }`}
-        to={`/${name !== "Home" ? name.toLowerCase() : ""}`}
+        to={to}
       >
         {<Icon className="md:text-4xl text-3xl " />}
         <span className="md:text-lg text-sm sm:flex hidden">{name}</span>

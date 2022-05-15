@@ -132,11 +132,13 @@ const PostCard = ({ post, type }) => {
       {isOptionClicked && <DropDown />}
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">
-          <img
-            className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-            src={profilePictureURL}
-            alt="profilePicture"
-          />
+          <Link to={`/profile/${id}`}>
+            <img
+              className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+              src={profilePictureURL}
+              alt="profilePicture"
+            />
+          </Link>
           <div className="flex flex-col">
             <span className="text-lightBlue">{name}</span>
             <span className="text-sm text-lightBlue text-opacity-70">
