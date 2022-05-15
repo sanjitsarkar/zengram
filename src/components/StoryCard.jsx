@@ -1,5 +1,6 @@
 import React from "react";
 import { MdAddCircleOutline } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const StoryCard = ({
   storyThumbnail = "http://res.cloudinary.com/dddfc84ni/image/upload/v1651546264/dl7s7nrhfr1lojeu32gk.jpg",
@@ -7,8 +8,13 @@ const StoryCard = ({
   profileImage = "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG",
   isCreateStory = false,
 }) => {
+  const user = useSelector((state) => state.auth?.user);
+  if (isCreateStory) {
+    profileImage = user.profilePictureURL;
+    profileName = user.name;
+  }
   return (
-    <div className="shadow-md rounded-md bg-white p-4  w-36 gap-4 flex flex-col hover:scale-105 focus:scale-105 ease-in-out transition-transform">
+    <div className="shadow-md rounded-md bg-white p-4  w-40 gap-4 flex flex-col hover:scale-105 focus:scale-105 ease-in-out transition-transform">
       {!isCreateStory ? (
         <img
           src={storyThumbnail}
@@ -33,7 +39,9 @@ const StoryCard = ({
           className="cursor-pointer rounded-full h-6 w-6"
         />
 
-        <span className="text-lightBlue text-sm opacity-80">{profileName}</span>
+        <span className="text-lightBlue text-sm opacity-80 overflow-ellipsis">
+          {profileName}
+        </span>
       </div>
     </div>
   );

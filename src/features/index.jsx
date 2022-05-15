@@ -1,12 +1,12 @@
-import allPostsReducer from "../features/allPosts/allPosts";
-import archivedPostsReducer from "../features/archivedPosts/archivedPostsSlice";
-import authReducer from "../features/auth/authSlice";
-import bookmarkedPostsReducer from "../features/bookmarkedPosts/bookmarkedPostsSlice";
-import draftPostsReducer from "../features/draftPosts/draftPostsSlice";
-import postsReducer from "../features/posts/postsSlice";
-import storiesReducer from "../features/stories/storiesSlice";
-import userCreatedPostsReducer from "../features/userCreatedPosts/userCreatedPostsSlice";
-
+import allPostsReducer from "./allPosts/allPosts";
+import archivedPostsReducer from "./archivedPosts/archivedPostsSlice";
+import authReducer from "./auth/authSlice";
+import bookmarkedPostsReducer from "./bookmarkedPosts/bookmarkedPostsSlice";
+import draftPostsReducer from "./draftPosts/draftPostsSlice";
+import postsReducer from "./posts/postsSlice";
+import profileReducer from "./profile/profileSlice";
+import storiesReducer from "./stories/storiesSlice";
+import userCreatedPostsReducer from "./userCreatedPosts/userCreatedPostsSlice";
 export {
   archivedPostsReducer,
   authReducer,
@@ -16,4 +16,5 @@ export {
   storiesReducer,
   userCreatedPostsReducer,
   allPostsReducer,
+  profileReducer,
 };

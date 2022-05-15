@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { PrivateRoute } from "./components";
+import { useSideBarItem } from "./context/sideBarItemContext";
 import {
   BookmarkedPage,
   ExplorePage,
   HomePage,
   LoginPage,
+  MessagePage,
+  ProfilePage,
   SignupPage,
 } from "./pages";
 import {
@@ -15,12 +18,23 @@ import {
   fetchBookmarkedPosts,
 } from "./services/posts/postsService";
 function App() {
-  const user = useSelector((state) => state.auth.user);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { setActiveName } = useSideBarItem();
+  const location = useLocation();
   useEffect(() => {
-    user && navigate("/");
-  }, [user]);
+    if (location.pathname === "/") {
+      setActiveName("Home");
+    } else {
+      let name = location.pathname.split("/")[1];
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+      setActiveName(name);
+    }
+  }, [location.pathname]);
+  useEffect(() => {
+    isLoggedIn && navigate("/");
+  }, [isLoggedIn]);
   useEffect(() => {
     dispatch(fetchBookmarkedPosts());
     dispatch(fetchArchivedPosts());
@@ -49,6 +63,22 @@ function App() {
           element={
             <PrivateRoute>
               <ExplorePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/messages/"
+          element={
+            <PrivateRoute>
+              <MessagePage />
             </PrivateRoute>
           }
         />

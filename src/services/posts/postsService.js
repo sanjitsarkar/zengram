@@ -16,8 +16,9 @@ export const fetchUserFeedPosts = createAsyncThunk(
 );
 export const fetchUserCreatedPosts = createAsyncThunk(
   "posts/fetchUserCreatedPosts",
-  async () => {
-    const response = await callApi("get", "user/posts", true);
+  async (id) => {
+    const response = await callApi("get", `user/posts?postedBy=${id}`, true);
+
     return response.data;
   }
 );
