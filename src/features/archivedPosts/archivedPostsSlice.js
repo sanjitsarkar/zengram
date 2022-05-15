@@ -41,7 +41,6 @@ export const archivedPostsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-
       .addCase(removePostFromArchive.pending, (state, action) => {
         state.status = "loading";
       })

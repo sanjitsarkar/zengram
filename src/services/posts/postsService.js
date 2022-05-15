@@ -89,7 +89,7 @@ export const addPostToArchive = createAsyncThunk(
   }
 );
 export const removePostFromArchive = createAsyncThunk(
-  "posts/addPostToArchive",
+  "posts/removePostFromArchive",
   async (id) => {
     const response = await callApi("delete", `user/posts/archived/${id}`, true);
     return response.data;
