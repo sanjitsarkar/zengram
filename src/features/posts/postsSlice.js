@@ -24,18 +24,18 @@ export const postsSlice = createSlice({
       })
       .addCase(fetchUserFeedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.posts;
+        state.data = action.payload?.posts;
+
       })
       .addCase(fetchUserFeedPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(createPost.pending, (state, action) => {
-        state.status = "loading";
-      })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.unshift(action.payload.post);
+
+        state.data.unshift(action.payload?.post);
+
         notify("Post added successfully", "success");
       })
       .addCase(createPost.rejected, (state, action) => {
@@ -46,7 +46,7 @@ export const postsSlice = createSlice({
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
-          (post) => post._id !== action.payload.post._id
+          (post) => post?._id !== action.payload?.post._id
         );
         notify("Post deleted successfully", "success");
       })
@@ -60,7 +60,7 @@ export const postsSlice = createSlice({
       .addCase(updatePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.map((post) => {
-          if (post._id === action.payload.post._id) {
+          if (post?._id === action.payload?.post._id) {
             return action.payload.post;
           }
           return post;
