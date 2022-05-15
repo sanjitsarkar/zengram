@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsWrapper } from "../../components";
-import { fetchPosts } from "../../services/posts/postsService";
+import { fetchUserFeedPosts } from "../../services/posts/postsService";
 
 const PostsSection = () => {
   const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchUserFeedPosts());
   }, []);
   return (
     <PostsWrapper posts={posts}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BiArchive, BiLike, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
@@ -10,13 +10,11 @@ import {
   MdShare,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   addPostToArchive,
   bookmarkPost,
   deletePost,
-  fetchArchivedPosts,
-  fetchBookmarkedPosts,
-  removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
 import { timeSince } from "../utils";
@@ -34,17 +32,13 @@ const PostCard = ({ post, type }) => {
     comments,
   } = post;
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchBookmarkedPosts());
-    dispatch(fetchArchivedPosts());
-  }, []);
+
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
-
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -70,8 +64,8 @@ const PostCard = ({ post, type }) => {
             />
           )}
           <img
-            className="w-full object-cover h-72 "
-            src={mediaURLs[activeMediaIndex]}
+            className="w-full object-contain h-72 "
+            src={mediaURLs[activeMediaIndex].url}
             alt="postImage"
             loading="lazy"
           />
@@ -88,7 +82,7 @@ const PostCard = ({ post, type }) => {
   const DropDown = () => {
     return (
       <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
-        {type === "bokkmarked" || isPostBookmarked ? (
+        {type === "bookmarked" || isPostBookmarked ? (
           <DropDownOption
             Icon={MdBookmark}
             name="Unbookmark Post"
@@ -108,7 +102,6 @@ const PostCard = ({ post, type }) => {
           />
         )}
         <DropDownOption Icon={MdEdit} name="Edit Post" />
-
         <DropDownOption
           Icon={BiTrash}
           name="Delete Post"
@@ -117,22 +110,13 @@ const PostCard = ({ post, type }) => {
             dispatch(deletePost(_id));
           }}
         />
-        {type === "archived" || isPostArchived ? (
+        {!isPostArchived && (
           <DropDownOption
             Icon={BiArchive}
             name="Archive Post"
             onClick={() => {
               setIsOptionClicked(false);
               dispatch(addPostToArchive(_id));
-            }}
-          />
-        ) : (
-          <DropDownOption
-            Icon={BiArchive}
-            name="Remove from Archive"
-            onClick={() => {
-              setIsOptionClicked(false);
-              dispatch(removePostFromArchive(_id));
             }}
           />
         )}
@@ -148,7 +132,6 @@ const PostCard = ({ post, type }) => {
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={profilePictureURL}
             alt="profilePicture"
-            loading="lazy"
           />
           <div className="flex flex-col">
             <span className="text-lightBlue">{name}</span>
@@ -166,7 +149,22 @@ const PostCard = ({ post, type }) => {
       </div>
       <div className="flex flex-col gap-5">
         <MediaSection />
-        <p className="text-lightBlue leading-relaxed">{content}</p>
+        <p className="text-lightBlue leading-relaxed">
+          {content.split(" ").map((word, i) => {
+            if (word.startsWith("#"))
+              return (
+                <Link
+                  key={word}
+                  to={`?hashtags=${word.slice(1)}`}
+                  className={`text-primary ${i === 0 ? "mr-2" : "ml-2"}`}
+                >
+                  {word}
+                </Link>
+              );
+
+            return word + " ";
+          })}
+        </p>
       </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">

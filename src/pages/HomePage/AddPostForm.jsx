@@ -60,7 +60,13 @@ const AddPostForm = () => {
           if (Array.from(post.mediaURLs).length > 0) {
             const urls = await uploadImages(post.mediaURLs, user._id);
 
-            const _post = { content: post.content, mediaURLs: urls };
+            const _post = {
+              content: post.content,
+              mediaURLs: urls.map((url) => ({
+                url,
+                type: "image",
+              })),
+            };
             dispatch(createPost(_post));
             setImgUrls([]);
             setIsLoading(false);
@@ -150,7 +156,7 @@ const AddPostForm = () => {
       px-6
       py-2.5
       ${
-        post.content.length === 0 && imgUrls.length === 0
+        post.content.length === 0 && imgUrls.length === 0 && !isLoading
           ? "bg-slate-400"
           : "bg-primary"
       }
