@@ -42,46 +42,13 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <HomePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/bookmarks"
-          element={
-            <PrivateRoute>
-              <BookmarkedPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/explore"
-          element={
-            <PrivateRoute>
-              <ExplorePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile/:id"
-          element={
-            <PrivateRoute>
-              <ProfilePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/messages/"
-          element={
-            <PrivateRoute>
-              <MessagePage />
-            </PrivateRoute>
-          }
-        />
+        <Route element={<PrivateRoute />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/bookmarks" element={<BookmarkedPage />} />
+          <Route path="/explore" element={<ExplorePage />} />SS
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/messages/" element={<MessagePage />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
       </Routes>

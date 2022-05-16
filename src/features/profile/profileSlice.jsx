@@ -15,7 +15,7 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     updateProfile: (state, action) => {
-      state.data = action.payload.profile;
+      state.data = action.payload?.profile;
       localStorage.setItem("user", JSON.stringify(action.payload?.profile));
     },
   },
@@ -26,7 +26,7 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileInfo.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.profile;
+        state.data = action.payload?.profile;
       })
       .addCase(getProfileInfo.rejected, (state, action) => {
         state.status = "failed";
@@ -37,7 +37,7 @@ export const profileSlice = createSlice({
       })
       .addCase(updateProfileInfo.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.profile;
+        state.data = action.payload?.profile;
       })
       .addCase(updateProfileInfo.rejected, (state, action) => {
         state.status = "failed";

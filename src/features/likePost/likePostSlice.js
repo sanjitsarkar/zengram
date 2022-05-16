@@ -17,8 +17,8 @@ export const likePostSlice = createSlice({
         state.status = "loading";
       })
       .addCase(likePost.fulfilled, (state, action) => {
+        notify("Post liked successfully");
         state.status = "succeeded";
-        notify("Post liked successfully", "success");
       })
       .addCase(likePost.rejected, (state, action) => {
         state.status = "failed";
@@ -28,8 +28,8 @@ export const likePostSlice = createSlice({
         state.status = "loading";
       })
       .addCase(dislikePost.fulfilled, (state, action) => {
+        notify("Post disliked successfully");
         state.status = "succeeded";
-        notify("Post disliked successfully", "success");
       })
       .addCase(dislikePost.rejected, (state, action) => {
         state.status = "failed";

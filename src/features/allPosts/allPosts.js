@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllPosts } from "../../services/posts/postsService";
+import {
+  fetchAllPosts,
+  fetchAllTrendingPosts,
+} from "../../services/posts/postsService";
 
 const initialState = {
   status: "idle",
@@ -18,9 +21,20 @@ export const allPostsSlice = createSlice({
       })
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.posts;
+        state.data = action.payload?.posts;
       })
       .addCase(fetchAllPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+      })
+      .addCase(fetchAllTrendingPosts.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllTrendingPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload?.posts;
+      })
+      .addCase(fetchAllTrendingPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       });

@@ -9,7 +9,7 @@ import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
-  user: JSON.parse(localStorage?.getItem("user")),
+  user: JSON.parse(localStorage?.getItem("user")) ?? [],
   isLoggedIn: JSON.parse(localStorage?.getItem("isLoggedIn")) || false,
   error: null,
 };
@@ -20,13 +20,14 @@ export const authSlice = createSlice({
     logout: (state) => {
       notify(`Goodbye, ${state.user.name}`, "success");
       state.status = "loggedOut";
-      state.isLoggedIn = false;
+      localStorage.removeItem("user");
+      localStorage.removeItem("isLoggedIn");
       state.user = null;
       state.error = null;
-      localStorage.removeItem("user");
+      state.isLoggedIn = false;
     },
     updateUser: (state, action) => {
-      state.user = action.payload.user;
+      state.user = action.payload?.user;
       localStorage.setItem("user", JSON.stringify(action.payload?.user));
     },
   },
@@ -36,7 +37,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.user = action.payload.user;
+      state.user = action.payload?.user;
       state.isLoggedIn = true;
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("user", JSON.stringify(action.payload?.user));
@@ -52,7 +53,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(signup.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.user = action.payload.user;
+      state.user = action.payload?.user;
       state.isLoggedIn = true;
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("user", JSON.stringify(action.payload?.user));

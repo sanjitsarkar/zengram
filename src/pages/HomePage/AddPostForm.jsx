@@ -69,6 +69,7 @@ const AddPostForm = () => {
                 url,
                 type: "image",
               })),
+              id: user._id,
             };
             dispatch(createPost(_post));
             setImgUrls([]);
@@ -76,13 +77,13 @@ const AddPostForm = () => {
 
             setPost(initialPostState);
           } else {
-            dispatch(createPost(post));
+            dispatch(createPost({ ...post, id: user._id }));
             setImgUrls([]);
             setIsLoading(false);
 
             setPost(initialPostState);
           }
-          dispatch(fetchUserFeedPosts());
+          dispatch(fetchUserFeedPosts(user?._id));
         }}
       >
         <div className="form-group mb-6">

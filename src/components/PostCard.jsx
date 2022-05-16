@@ -18,9 +18,10 @@ import {
   addPostToArchive,
   bookmarkPost,
   deletePost,
+  removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
-import { timeSince } from "../utils";
+import { notify, timeSince } from "../utils";
 import DropDownOption from "./DropDownOption";
 
 const PostCard = ({ post, type }) => {
@@ -42,7 +43,7 @@ const PostCard = ({ post, type }) => {
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
-  const auth = useSelector((state) => state.auth);
+  const userId = useSelector((state) => state.auth?.user?._id);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -85,7 +86,7 @@ const PostCard = ({ post, type }) => {
   };
   const DropDown = () => {
     return (
-      <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
+      <div className="z-10 rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
         {type === "bookmarked" || isPostBookmarked ? (
           <DropDownOption
             Icon={MdBookmark}
@@ -105,10 +106,8 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {auth?.user?._id === id && (
-          <DropDownOption Icon={MdEdit} name="Edit Post" />
-        )}
-        {auth?.user?._id === id && (
+        {userId === id && <DropDownOption Icon={MdEdit} name="Edit Post" />}
+        {userId === id && (
           <DropDownOption
             Icon={BiTrash}
             name="Delete Post"
@@ -118,7 +117,7 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {!isPostArchived && auth?.user?._id === id && (
+        {!isPostArchived && userId === id && (
           <DropDownOption
             Icon={BiArchive}
             name="Archive Post"
@@ -128,14 +127,24 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
+        {type === "archive" && (
+          <DropDownOption
+            Icon={BiArchive}
+            name="Remove from Archive"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(removePostFromArchive(_id));
+            }}
+          />
+        )}
       </div>
     );
   };
   const [isPostLiked, setIsPostLiked] = useState(
-    _likes?.some((like) => like === auth?.user?._id)
+    _likes?.some((like) => like === userId)
   );
   useEffect(() => {
-    setIsPostLiked(_likes?.some((like) => like === auth?.user?._id));
+    setIsPostLiked(_likes?.some((like) => like === userId));
   }, [_likes]);
   return (
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
@@ -166,7 +175,7 @@ const PostCard = ({ post, type }) => {
       <div className="flex flex-col gap-5">
         <MediaSection />
         <p className="text-lightBlue leading-relaxed">
-          {content.split(" ").map((word, i) => {
+          {content?.split(" ").map((word, i) => {
             if (word.startsWith("#"))
               return (
                 <Link
@@ -187,15 +196,17 @@ const PostCard = ({ post, type }) => {
           {!isPostLiked ? (
             <MdFavoriteBorder
               onClick={() => {
-                if (auth?.user?._id !== id) {
+                if (userId !== id) {
                   dispatch(
                     likePost({
-                      likedBy: auth?.user?._id,
+                      likedBy: userId,
                       id: _id,
                       postedBy: id,
                     })
                   );
-                  _setLikes((_prevLikes) => [..._prevLikes, auth?.user?._id]);
+                  _setLikes((_prevLikes) => [..._prevLikes, userId]);
+                } else {
+                  notify("You can't like your own post", "error");
                 }
               }}
               size={25}
@@ -204,15 +215,17 @@ const PostCard = ({ post, type }) => {
           ) : (
             <MdFavorite
               onClick={() => {
-                if (auth?.user?._id !== id) {
+                if (userId !== id) {
                   dispatch(
                     dislikePost({
-                      dislikedBy: auth?.user?._id,
+                      dislikedBy: userId,
                       id: _id,
                       postedBy: id,
                     })
                   );
-                  _setLikes(_likes.filter((like) => like !== auth?.user?._id));
+                  _setLikes(_likes.filter((like) => like !== userId));
+                } else {
+                  notify("You can't dislike your own post", "error");
                 }
               }}
               size={25}

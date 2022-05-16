@@ -11,3 +11,4 @@ export { default as PostsSection } from "./PostsSection";
 export { default as PostsWrapper } from "./PostsWrapper";
 export { default as PrivateRoute } from "./PrivateRoute";
 export { default as StoryCard } from "./StoryCard";
+export { default as Tab } from "./Tab";

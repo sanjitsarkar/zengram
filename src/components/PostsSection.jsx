@@ -1,36 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsWrapper } from ".";
 import {
   fetchAllPosts,
+  fetchAllTrendingPosts,
   fetchUserFeedPosts,
+  fetchUserFeedTrendingPosts,
 } from "../services/posts/postsService";
+import Tab from "./Tab";
 
 const PostsSection = ({ type = "all" }) => {
   const posts = useSelector((state) => state.posts);
   const user = useSelector((state) => state.auth.user);
   const allPosts = useSelector((state) => state.allPosts);
   const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = useState("Latest");
   useEffect(() => {
     if (type === "userFeed") {
-      dispatch(fetchUserFeedPosts(user._id));
+      if (activeTab === "Latest") {
+        dispatch(fetchUserFeedPosts(user._id));
+      } else if (activeTab === "Trending") {
+        dispatch(fetchUserFeedTrendingPosts());
+      }
     } else if (type === "all") {
-      dispatch(fetchAllPosts());
+      if (activeTab === "Latest") {
+        dispatch(fetchAllPosts());
+      } else if (activeTab === "Trending") {
+        dispatch(fetchAllTrendingPosts());
+      }
     }
-  }, [user, dispatch, type]);
+  }, [user, dispatch, type, activeTab]);
   return (
     <PostsWrapper posts={type === "all" ? allPosts : posts}>
       <div className="flex gap-4">
-        <button className="py-1 px-2 rounded-md shadow-lg bg-primary text-white">
-          Trending
-        </button>
-        <button className=" flex gap-1 items-center py-1 px-3 rounded-md shadow-lg  text-lightBlue bg-white">
-          Latest{" "}
+        <Tab
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          name="Latest"
+          onClick={() => {}}
+        >
           <span>
             <MdArrowDropDown size={20} />
           </span>
-        </button>
+        </Tab>
+        <Tab
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          name="Trending"
+          onClick={() => {}}
+        />
       </div>
     </PostsWrapper>
   );
