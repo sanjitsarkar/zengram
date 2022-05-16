@@ -3,7 +3,6 @@ import { callApi } from "../../utils";
 export const addReply = createAsyncThunk(
   "replies/addReply",
   async (reply, { dispatch }) => {
-    console.log(reply);
     const response = await callApi(
       "post",
       `posts/comments/${reply.commentId}`,

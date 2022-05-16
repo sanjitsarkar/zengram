@@ -19,7 +19,6 @@ const ProfileEditForm = ({ profileInfo }) => {
       className="bg-white p-6 rounded-md m-6 relative  overflow-auto"
       onSubmit={(e) => {
         e.preventDefault();
-        console.log(profileData);
       }}
     >
       <IconButton
