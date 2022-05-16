@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BiImageAdd, BiLocationPlus, BiVideo } from "react-icons/bi";
 import { MdClose, MdGif } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import {
@@ -49,11 +50,13 @@ const AddPostForm = () => {
   return (
     <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
       <div className="flex items-center gap-3 mb-3">
-        <img
-          className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-          src={user.profilePictureURL}
-          alt={user.name}
-        />
+        <Link to={`/profile/${user?.id}`}>
+          <img
+            className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+            src={user.profilePictureURL}
+            alt={user.name}
+          />
+        </Link>
         <span className="text-lightBlue">{user.name}</span>
       </div>
       <form
@@ -131,18 +134,14 @@ const AddPostForm = () => {
                 onChange={(e) => {
                   setPost({ ...post, mediaURLs: e.target.files });
                   Array.from(e.target.files).forEach((file) => {
-                    let reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onloadend = (e) => {
-                      setImgUrls((prevImgUrls) => [
-                        ...prevImgUrls,
-                        {
-                          name: file.name,
-                          lastModified: file.lastModified,
-                          url: reader.result,
-                        },
-                      ]);
-                    };
+                    setImgUrls((prevImgUrls) => [
+                      ...prevImgUrls,
+                      {
+                        name: file.name,
+                        lastModified: file.lastModified,
+                        url: URL.createObjectURL(file),
+                      },
+                    ]);
                   });
                 }}
               />

@@ -2,9 +2,13 @@ import React from "react";
 import { BiEditAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Modal from "../../components/Modal";
+import { useModal } from "../../context/modalContext";
 import { updateUser } from "../../features/auth/authSlice";
 import { updateProfile } from "../../features/profile/profileSlice";
 import { followUser, unfollowUser } from "../../services/auth/authService";
+import { COVER_PHOTO_PLACEHOLDER } from "../../utils";
+import ProfileEditForm from "./ProfileEditForm.jsx";
 
 const ProfileHeader = ({ profile }) => {
   const user = useSelector((state) => state.auth?.user);
@@ -13,15 +17,18 @@ const ProfileHeader = ({ profile }) => {
   );
 
   const dispatch = useDispatch();
+  const { isModalOpen, setIsModalOpen } = useModal();
   const isFollowing = user?.following.includes(profile?._id);
   return (
     <div className="flex flex-col   bg-white  ">
+      {isModalOpen && (
+        <Modal>
+          <ProfileEditForm profileInfo={profile} />
+        </Modal>
+      )}
       <img
         className="h-40 object-cover"
-        src={
-          profile.coverPictureURL ??
-          "https://static.vecteezy.com/system/resources/previews/002/909/206/non_2x/abstract-background-for-landing-pages-banner-placeholder-cover-book-and-print-geometric-pettern-on-screen-gradient-colors-design-vector.jpg"
-        }
+        src={profile.coverPictureURL ?? COVER_PHOTO_PLACEHOLDER}
         alt={profile.name}
       />
       <div className="flex flex-col p-6 ">
@@ -31,7 +38,10 @@ const ProfileHeader = ({ profile }) => {
             src={profile.profilePictureURL}
             alt={profile.name}
           />
-          <BiEditAlt className="cursor-pointer relative md:bottom-8 md:right-6 bottom-8 right-10 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white" />
+          <BiEditAlt
+            onClick={() => setIsModalOpen(true)}
+            className="cursor-pointer relative md:bottom-8 md:right-6 bottom-8 right-10 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
+          />
 
           <div className="sm:ml-6 -mt-16   flex   flex-wrap  md:gap-10  gap-4 justify-around items-center">
             <div className="flex flex-col gap-2">

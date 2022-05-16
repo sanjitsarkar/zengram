@@ -4,9 +4,11 @@ import {
   archivedPostsReducer,
   authReducer,
   bookmarkedPostsReducer,
+  commentsReducer,
   draftPostsReducer,
   postsReducer,
   profileReducer,
+  repliesReducer,
   storiesReducer,
   userCreatedPostsReducer,
 } from "../features";
@@ -21,5 +23,7 @@ export const store = configureStore({
     allPosts: allPostsReducer,
     userCreatedPosts: userCreatedPostsReducer,
     profile: profileReducer,
+    comments: commentsReducer,
+    replies: repliesReducer,
   },
 });

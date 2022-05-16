@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { clearComments } from "../features/comments/commentsSlice";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
   addPostToArchive,
@@ -22,6 +23,7 @@ import {
   unBookmarkPost,
 } from "../services/posts/postsService";
 import { notify, timeSince } from "../utils";
+import CommentsContainer from "./CommentsContainer";
 import DropDownOption from "./DropDownOption";
 
 const PostCard = ({ post, type }) => {
@@ -43,7 +45,16 @@ const PostCard = ({ post, type }) => {
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
+  const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
+  const [_comments, _setComments] = useState(comments);
+  const _commentsData = useSelector((state) => state.comments);
+  useEffect(() => {
+    if (_commentsData.status === "succeeded") {
+      _setComments(_commentsData.data);
+      dispatch(clearComments());
+    }
+  }, [_commentsData]);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -140,6 +151,7 @@ const PostCard = ({ post, type }) => {
       </div>
     );
   };
+
   const [isPostLiked, setIsPostLiked] = useState(
     _likes?.some((like) => like === userId)
   );
@@ -243,14 +255,19 @@ const PostCard = ({ post, type }) => {
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
           <MdComment
+            onClick={() => {
+              setIsCommentClicked(
+                (prevIsCommentClicked) => !prevIsCommentClicked
+              );
+            }}
             size={25}
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {comments.length}{" "}
+            {_comments.length}{" "}
             <span className="hidden md:inline">
               Comment
-              {comments.length > 1 ? "s" : ""}
+              {_comments.length > 1 ? "s" : ""}
             </span>
           </span>
         </div>
@@ -268,6 +285,17 @@ const PostCard = ({ post, type }) => {
           </span>
         </div>
       </div>
+      {isCommentClicked && (
+        <CommentsContainer
+          comments={_comments}
+          setComments={_setComments}
+          postId={_id}
+          userId={userId}
+          onClick={() => {}}
+          postedBy={post.postedBy}
+          profilePictureURL={profilePictureURL}
+        />
+      )}
     </div>
   );
 };

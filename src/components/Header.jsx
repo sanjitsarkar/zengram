@@ -3,6 +3,7 @@ import { BiBell, BiSearch } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { logout } from "../features/auth/authSlice";
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -45,15 +46,17 @@ const Header = () => {
         }  sm:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
       >
         <BiBell className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer" />
-        <img
-          className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
-          src={`${
-            user.profilePictureURL
-              ? user.profilePictureURL
-              : "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"
-          }`}
-          alt={user.name}
-        />
+        <Link to={`/profile/${user?._id}`}>
+          <img
+            className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
+            src={`${
+              user.profilePictureURL
+                ? user.profilePictureURL
+                : "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"
+            }`}
+            alt={user.name}
+          />
+        </Link>
         <FiLogOut
           onClick={() => dispatch(logout())}
           className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer"
