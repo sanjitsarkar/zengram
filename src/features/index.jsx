@@ -1,20 +1,9 @@
-import allPostsReducer from "./allPosts/allPosts";
-import archivedPostsReducer from "./archivedPosts/archivedPostsSlice";
-import authReducer from "./auth/authSlice";
-import bookmarkedPostsReducer from "./bookmarkedPosts/bookmarkedPostsSlice";
-import draftPostsReducer from "./draftPosts/draftPostsSlice";
-import postsReducer from "./posts/postsSlice";
-import profileReducer from "./profile/profileSlice";
-import storiesReducer from "./stories/storiesSlice";
-import userCreatedPostsReducer from "./userCreatedPosts/userCreatedPostsSlice";
-export {
-  archivedPostsReducer,
-  authReducer,
-  bookmarkedPostsReducer,
-  draftPostsReducer,
-  postsReducer,
-  storiesReducer,
-  userCreatedPostsReducer,
-  allPostsReducer,
-  profileReducer,
-};
+export { default as allPostsReducer } from "./allPosts/allPosts";
+export { default as archivedPostsReducer } from "./archivedPosts/archivedPostsSlice";
+export { default as authReducer } from "./auth/authSlice";
+export { default as bookmarkedPostsReducer } from "./bookmarkedPosts/bookmarkedPostsSlice";
+export { default as draftPostsReducer } from "./draftPosts/draftPostsSlice";
+export { default as postsReducer } from "./posts/postsSlice";
+export { default as profileReducer } from "./profile/profileSlice";
+export { default as storiesReducer } from "./stories/storiesSlice";
+export { default as userCreatedPostsReducer } from "./userCreatedPosts/userCreatedPostsSlice";

@@ -1,23 +1,27 @@
-import React, { useState } from "react";
-import { BiArchive, BiLike, BiTrash } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
+import { BiArchive, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
   MdArrowForward,
   MdBookmark,
   MdComment,
   MdEdit,
+  MdFavorite,
+  MdFavoriteBorder,
   MdMoreHoriz,
   MdShare,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
   addPostToArchive,
   bookmarkPost,
   deletePost,
+  removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
-import { timeSince } from "../utils";
+import { notify, timeSince } from "../utils";
 import DropDownOption from "./DropDownOption";
 
 const PostCard = ({ post, type }) => {
@@ -31,6 +35,7 @@ const PostCard = ({ post, type }) => {
     shares,
     comments,
   } = post;
+  const [_likes, _setLikes] = useState(likes);
   const dispatch = useDispatch();
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
@@ -38,7 +43,7 @@ const PostCard = ({ post, type }) => {
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
-  const auth = useSelector((state) => state.auth);
+  const userId = useSelector((state) => state.auth?.user?._id);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -81,7 +86,7 @@ const PostCard = ({ post, type }) => {
   };
   const DropDown = () => {
     return (
-      <div className="rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
+      <div className="z-10 rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16">
         {type === "bookmarked" || isPostBookmarked ? (
           <DropDownOption
             Icon={MdBookmark}
@@ -101,10 +106,8 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {auth?.user?._id === id && (
-          <DropDownOption Icon={MdEdit} name="Edit Post" />
-        )}
-        {auth?.user?._id === id && (
+        {userId === id && <DropDownOption Icon={MdEdit} name="Edit Post" />}
+        {userId === id && (
           <DropDownOption
             Icon={BiTrash}
             name="Delete Post"
@@ -114,7 +117,7 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {!isPostArchived && auth?.user?._id === id && (
+        {!isPostArchived && userId === id && (
           <DropDownOption
             Icon={BiArchive}
             name="Archive Post"
@@ -124,9 +127,25 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
+        {type === "archive" && (
+          <DropDownOption
+            Icon={BiArchive}
+            name="Remove from Archive"
+            onClick={() => {
+              setIsOptionClicked(false);
+              dispatch(removePostFromArchive(_id));
+            }}
+          />
+        )}
       </div>
     );
   };
+  const [isPostLiked, setIsPostLiked] = useState(
+    _likes?.some((like) => like === userId)
+  );
+  useEffect(() => {
+    setIsPostLiked(_likes?.some((like) => like === userId));
+  }, [_likes]);
   return (
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
       {isOptionClicked && <DropDown />}
@@ -156,7 +175,7 @@ const PostCard = ({ post, type }) => {
       <div className="flex flex-col gap-5">
         <MediaSection />
         <p className="text-lightBlue leading-relaxed">
-          {content.split(" ").map((word, i) => {
+          {content?.split(" ").map((word, i) => {
             if (word.startsWith("#"))
               return (
                 <Link
@@ -174,12 +193,52 @@ const PostCard = ({ post, type }) => {
       </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
-          <BiLike
-            size={25}
-            className="fill-primary cursor-pointer order-1 md:-order-1"
-          />
+          {!isPostLiked ? (
+            <MdFavoriteBorder
+              onClick={() => {
+                if (userId !== id) {
+                  dispatch(
+                    likePost({
+                      likedBy: userId,
+                      id: _id,
+                      postedBy: id,
+                    })
+                  );
+                  _setLikes((_prevLikes) => [..._prevLikes, userId]);
+                } else {
+                  notify("You can't like your own post", "error");
+                }
+              }}
+              size={25}
+              className="fill-primary cursor-pointer order-1 md:-order-1"
+            />
+          ) : (
+            <MdFavorite
+              onClick={() => {
+                if (userId !== id) {
+                  dispatch(
+                    dislikePost({
+                      dislikedBy: userId,
+                      id: _id,
+                      postedBy: id,
+                    })
+                  );
+                  _setLikes(_likes.filter((like) => like !== userId));
+                } else {
+                  notify("You can't dislike your own post", "error");
+                }
+              }}
+              size={25}
+              className="fill-primary cursor-pointer order-1 md:-order-1"
+            />
+          )}
+
           <span className="text-lightBlue ">
-            {likes.length} <span className="hidden md:inline">Likes</span>
+            {_likes.length}{" "}
+            <span className="hidden md:inline">
+              Like
+              {_likes.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
@@ -188,7 +247,11 @@ const PostCard = ({ post, type }) => {
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {comments.length} <span className="hidden md:inline">Comments</span>
+            {comments.length}{" "}
+            <span className="hidden md:inline">
+              Comment
+              {comments.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
@@ -197,7 +260,11 @@ const PostCard = ({ post, type }) => {
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {shares.length} <span className="hidden md:inline">Shares</span>
+            {shares.length}{" "}
+            <span className="hidden md:inline">
+              Share
+              {shares.length > 1 ? "s" : ""}
+            </span>
           </span>
         </div>
       </div>

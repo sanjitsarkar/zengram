@@ -18,7 +18,7 @@ export const userCreatedPostsSlice = createSlice({
       })
       .addCase(fetchUserCreatedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.posts;
+        state.data = action.payload?.posts;
       })
       .addCase(fetchUserCreatedPosts.rejected, (state, action) => {
         state.status = "failed";

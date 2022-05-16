@@ -3,6 +3,7 @@ import {
   createPost,
   deletePost,
   fetchUserFeedPosts,
+  fetchUserFeedTrendingPosts,
   updatePost,
 } from "../../services/posts/postsService";
 import { notify } from "../../utils";
@@ -25,9 +26,19 @@ export const postsSlice = createSlice({
       .addCase(fetchUserFeedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload?.posts;
-
       })
       .addCase(fetchUserFeedPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+      })
+      .addCase(fetchUserFeedTrendingPosts.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUserFeedTrendingPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload?.posts;
+      })
+      .addCase(fetchUserFeedTrendingPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       })
@@ -61,7 +72,7 @@ export const postsSlice = createSlice({
         state.status = "succeeded";
         state.data = state.data.map((post) => {
           if (post?._id === action.payload?.post._id) {
-            return action.payload.post;
+            return action.payload?.post;
           }
           return post;
         });

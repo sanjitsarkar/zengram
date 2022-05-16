@@ -86,19 +86,19 @@ const ProfileHeader = ({ profile }) => {
             </div>
             <div className="flex  sm:mt-1 gap-6 text-lightBlue">
               <h1>
-                <span className="font-semibold">{postCount}</span> post
+                <span className="font-semibold mr-2">{postCount} </span> post
                 {postCount > 1 ? "s" : ""}
               </h1>
               <Link to={`/users/${profile._id}/followers`}>
-                <span className="font-semibold">
+                <span className="font-semibold mr-2">
                   {profile.followers.length}
-                </span>{" "}
+                </span>
                 follower{profile.followers.length > 1 ? "s" : ""}
               </Link>
               <Link to={`/users/${profile._id}/following`}>
-                <span className="font-semibold">
+                <span className="font-semibold mr-2">
                   {profile.following.length}
-                </span>{" "}
+                </span>
                 following
               </Link>
             </div>

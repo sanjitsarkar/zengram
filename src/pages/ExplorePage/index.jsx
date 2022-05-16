@@ -1,10 +1,9 @@
-import { Layout } from "../../components";
-import PostsSection from "../HomePage/PostsSection";
+import { Layout, PostsSection } from "../../components";
 
 const ExplorePage = () => {
   return (
     <Layout>
-      <PostsSection />
+      <PostsSection type="all" />
     </Layout>
   );
 };

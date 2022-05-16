@@ -1,26 +1,14 @@
-import AddPostForm from "../pages/HomePage/AddPostForm";
-import AuthButton from "./AuthButton";
-import IconButton from "./IconButton";
-import InputCheckboxSection from "./InputCheckboxSection";
-import InputSection from "./InputSection";
-import Layout from "./Layout";
-import LinkButton from "./LinkButton";
-import Loader from "./Loader";
-import PostCard from "./PostCard";
-import { PostsWrapper } from "./PostsWrapper";
-import PrivateRoute from "./PrivateRoute";
-import StoryCard from "./StoryCard";
-export {
-  PostsWrapper,
-  Layout,
-  PrivateRoute,
-  AddPostForm,
-  PostCard,
-  StoryCard,
-  Loader,
-  InputSection,
-  AuthButton,
-  LinkButton,
-  InputCheckboxSection,
-  IconButton,
-};
+export { default as AddPostForm } from "../pages/HomePage/AddPostForm";
+export { default as AuthButton } from "./AuthButton";
+export { default as IconButton } from "./IconButton";
+export { default as InputCheckboxSection } from "./InputCheckboxSection";
+export { default as InputSection } from "./InputSection";
+export { default as Layout } from "./Layout";
+export { default as LinkButton } from "./LinkButton";
+export { default as Loader } from "./Loader";
+export { default as PostCard } from "./PostCard";
+export { default as PostsSection } from "./PostsSection";
+export { default as PostsWrapper } from "./PostsWrapper";
+export { default as PrivateRoute } from "./PrivateRoute";
+export { default as StoryCard } from "./StoryCard";
+export { default as Tab } from "./Tab";

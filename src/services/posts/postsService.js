@@ -43,8 +43,23 @@ export const fetchArchivedPosts = createAsyncThunk(
     return response.data;
   }
 );
+
+export const fetchUserFeedTrendingPosts = createAsyncThunk(
+  "posts/fetchUserFeedTrendingPosts",
+  async () => {
+    const response = await callApi("get", "posts/trending");
+    return response.data;
+  }
+);
+export const fetchAllTrendingPosts = createAsyncThunk(
+  "posts/fetchAllTrendingPosts",
+  async () => {
+    const response = await callApi("get", "posts/trending");
+    return response.data;
+  }
+);
 export const createPost = createAsyncThunk("posts/createPost", async (post) => {
-  const response = await callApi("post", "posts", true, {
+  const response = await callApi("post", `posts/${post.id}`, true, {
     ...post,
   });
   return response.data;
