@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useModal } from "../context/modalContext";
 import { clearComments } from "../features/comments/commentsSlice";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
@@ -25,6 +26,8 @@ import {
 import { notify, timeSince } from "../utils";
 import CommentsContainer from "./CommentsContainer";
 import DropDownOption from "./DropDownOption";
+import EditPostForm from "./EditPostForm";
+import Modal from "./Modal";
 
 const PostCard = ({ post, type }) => {
   const {
@@ -47,14 +50,16 @@ const PostCard = ({ post, type }) => {
   const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
-  const [_comments, _setComments] = useState(comments);
   const _commentsData = useSelector((state) => state.comments);
+  const { isModalOpen, setIsModalOpen } = useModal();
+  const [isEditOptionClicked, setIsEditOptionClicked] = useState(false);
   useEffect(() => {
     if (_commentsData.status === "succeeded") {
       _setComments(_commentsData.data);
       dispatch(clearComments());
     }
   }, [_commentsData]);
+  const [_comments, _setComments] = useState(comments);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -117,13 +122,23 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {userId === id && <DropDownOption Icon={MdEdit} name="Edit Post" />}
+        {userId === id && (
+          <DropDownOption
+            onClick={() => {
+              setIsModalOpen(true);
+              setIsEditOptionClicked(true);
+            }}
+            Icon={MdEdit}
+            name="Edit Post"
+          />
+        )}
         {userId === id && (
           <DropDownOption
             Icon={BiTrash}
             name="Delete Post"
             onClick={() => {
               setIsOptionClicked(false);
+
               dispatch(deletePost(_id));
             }}
           />
@@ -160,6 +175,11 @@ const PostCard = ({ post, type }) => {
   }, [_likes]);
   return (
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
+      {userId === id && isModalOpen && isEditOptionClicked && (
+        <Modal>
+          <EditPostForm postInfo={post} />
+        </Modal>
+      )}
       {isOptionClicked && <DropDown />}
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">

@@ -14,7 +14,7 @@ const CommentSection = ({ commentInfo, postedBy }) => {
   } = commentInfo;
   const [reply, setReply] = useState("");
   const dispatch = useDispatch();
-  const [showReplies, setShowReplies] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false);
   useEffect(() => {
     dispatch(fetchAllReply(commentInfo._id));
   }, []);
@@ -34,21 +34,41 @@ const CommentSection = ({ commentInfo, postedBy }) => {
             {comment}
           </span>
         </div>
+
         <span
-          className="cursor-pointer text-sm text-lightBlue"
+          className="cursor-pointer w-max text-sm text-lightBlue"
           onClick={() => {
-            setShowReplies(!showReplies);
+            setShowReplyInput(!showReplyInput);
           }}
         >
           Reply
         </span>
+
         <div className="flex flex-col gap-2 ml-4">
-          {replies?.map((reply) => (
-            <Reply replyInfo={reply} key={reply._id} />
-          ))}
+          {replies?.map(
+            (reply) =>
+              reply &&
+              reply.commentId === commentInfo._id && (
+                <Reply replyInfo={reply} key={reply._id} />
+              )
+          )}
         </div>
-        {showReplies && (
-          <div className="flex flex-wrap items-center gap-3 my-4 ml-2">
+
+        {showReplyInput && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              dispatch(
+                addReply({
+                  reply,
+                  repliedBy: user?._id,
+                  commentId: commentInfo._id,
+                })
+              );
+              setReply("");
+            }}
+            className="flex flex-wrap items-center gap-3 my-4 ml-2"
+          >
             <Link to={`/profile/${id}`}>
               <img
                 className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
@@ -56,6 +76,7 @@ const CommentSection = ({ commentInfo, postedBy }) => {
                 alt="profilePicture"
               />
             </Link>
+
             <input
               type="text"
               name=""
@@ -66,22 +87,13 @@ const CommentSection = ({ commentInfo, postedBy }) => {
               className="px-2.5 h-auto py-1 outline-none  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary  w-full sm:w-4/5  rounded-md "
             />
             <button
-              onClick={() => {
-                dispatch(
-                  addReply({
-                    reply,
-                    repliedBy: user?._id,
-                    commentId: commentInfo._id,
-                  })
-                );
-                setReply("");
-              }}
+              type="submit"
               className="px-2.5 py-1.5 bg-primary justify-self-end text-white flex items-center gap-2 rounded-full"
             >
               <span className="text-sm cursor-pointer">Reply</span>
               <MdSend size={15} />
             </button>
-          </div>
+          </form>
         )}
       </div>
     </div>

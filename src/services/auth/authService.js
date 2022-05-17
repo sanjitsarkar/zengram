@@ -29,7 +29,12 @@ export const getProfileInfo = createAsyncThunk(
 export const updateProfileInfo = createAsyncThunk(
   "auth/updateProfileInfo",
   async (profileInfo) => {
-    const response = await callApi("put", "user/profile", true, profileInfo);
+    const response = await callApi(
+      "put",
+      `user/profile/${profileInfo.id}`,
+      true,
+      profileInfo
+    );
     return response.data;
   }
 );

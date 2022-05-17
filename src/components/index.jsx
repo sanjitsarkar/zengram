@@ -1,6 +1,7 @@
 export { default as AddPostForm } from "../pages/HomePage/AddPostForm";
 export { default as AuthButton } from "./AuthButton";
 export { default as CommentSection } from "./CommentSection";
+export { default as EditPostForm } from "./EditPostForm";
 export { default as IconButton } from "./IconButton";
 export { default as InputCheckboxSection } from "./InputCheckboxSection";
 export { default as InputSection } from "./InputSection";

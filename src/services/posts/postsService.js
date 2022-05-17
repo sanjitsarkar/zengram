@@ -46,8 +46,12 @@ export const fetchArchivedPosts = createAsyncThunk(
 
 export const fetchUserFeedTrendingPosts = createAsyncThunk(
   "posts/fetchUserFeedTrendingPosts",
-  async () => {
-    const response = await callApi("get", "posts/trending");
+  async (postedBy) => {
+    const response = await callApi(
+      "get",
+      `user/${postedBy}/posts/trending`,
+      true
+    );
     return response.data;
   }
 );

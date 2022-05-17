@@ -17,7 +17,14 @@ const CommentsContainer = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-wrap items-center gap-3 mb-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          dispatch(addComment({ comment, commentedBy: userId, postId }));
+          setComment("");
+        }}
+        className="flex flex-wrap items-center gap-3 mb-3"
+      >
         <Link to={`/profile/${userId}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
@@ -25,6 +32,7 @@ const CommentsContainer = ({
             alt="profilePicture"
           />
         </Link>
+
         <input
           type="text"
           name=""
@@ -35,16 +43,13 @@ const CommentsContainer = ({
           className="px-2.5 h-auto py-1 outline-none  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-4/5 w-full   rounded-md "
         />
         <button
-          onClick={() => {
-            dispatch(addComment({ comment, commentedBy: userId, postId }));
-            setComment("");
-          }}
+          type="submit"
           className="px-2.5 py-1.5 bg-primary text-white flex items-center gap-2 rounded-full"
         >
           <span className="text-sm">Send</span>
           <MdSend size={15} />
         </button>
-      </div>
+      </form>
       <div className="flex flex-col gap-2 ml-2">
         {comments.length > 0 &&
           comments.map((comment) => (

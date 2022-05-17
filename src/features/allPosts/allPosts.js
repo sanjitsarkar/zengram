@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  deletePost,
   fetchAllPosts,
   fetchAllTrendingPosts,
 } from "../../services/posts/postsService";
@@ -35,6 +36,19 @@ export const allPostsSlice = createSlice({
         state.data = action.payload?.posts;
       })
       .addCase(fetchAllTrendingPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+      })
+      .addCase(deletePost.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = state.data.filter(
+          (post) => post?._id !== action.payload?.post._id
+        );
+      })
+      .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       });

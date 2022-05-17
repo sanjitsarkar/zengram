@@ -1,24 +1,62 @@
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
-import { AuthButton, IconButton } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthButton, IconButton, Loader } from "../../components";
 import { useModal } from "../../context/modalContext";
+import { updateProfileInfo } from "../../services/auth/authService";
+import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import { COVER_PHOTO_PLACEHOLDER } from "../../utils";
 
-const ProfileEditForm = ({ profileInfo }) => {
+const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
+  const user = useSelector((state) => state.auth?.user);
+  const dispatch = useDispatch();
   const initialProfileState = {
     name: profileInfo.name,
     profilePictureURL: profileInfo.profilePictureURL,
     coverPictureURL: profileInfo.coverPictureURL,
     bio: profileInfo.bio,
-    portfolio: profileInfo.website,
+    portfolioUrl: profileInfo.portfolioUrl,
   };
+  const [loading, setLoading] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
+  const [coverImage, setCoverImage] = useState("");
   const { setIsModalOpen } = useModal();
   const [profileData, setProfileData] = useState(initialProfileState);
   return (
     <form
       className="bg-white p-6 rounded-md m-6 relative  overflow-auto"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
+        setLoading(true);
+        const urls = [];
+        if (profileImage) {
+          const _urls = await uploadImages([profileImage], user?._id);
+          urls.push(_urls[0]);
+        }
+        if (coverImage) {
+          const _urls = await uploadImages([coverImage], user?._id);
+          urls.push(_urls[0]);
+        }
+        let _profileInfo;
+        if (urls.length > 0) {
+          _profileInfo = {
+            ...profileData,
+            profilePictureURL: urls[0],
+            coverPictureURL: urls[1],
+            id: user?._id,
+          };
+        } else {
+          _profileInfo = {
+            ...profileData,
+            id: user?._id,
+          };
+        }
+        dispatch(updateProfileInfo(_profileInfo));
+        setProfileData(initialProfileState);
+        setProfileImage("");
+        setCoverImage("");
+        setLoading(false);
+        setIsModalOpen(false);
       }}
     >
       <IconButton
@@ -46,6 +84,7 @@ const ProfileEditForm = ({ profileInfo }) => {
           className="hidden"
           id="profilePic"
           onChange={(e) => {
+            setProfileImage(e.target.files[0]);
             setProfileData({
               ...profileData,
               profilePictureURL: URL.createObjectURL(e.target.files[0]),
@@ -66,6 +105,7 @@ const ProfileEditForm = ({ profileInfo }) => {
           id="coverPic"
           accept="image/*"
           onClick={(e) => {
+            setCoverImage(e.target.files[0]);
             setProfileData({
               ...profileData,
               coverPictureURL: URL.createObjectURL(e.target.files[0]),
@@ -152,9 +192,9 @@ const ProfileEditForm = ({ profileInfo }) => {
           Portfolio Url
         </label>
         <input
-          value={profileData.portfolio}
+          value={profileData.portfolioUrl}
           onChange={(e) =>
-            setProfileData({ ...profileData, portfolio: e.target.value })
+            setProfileData({ ...profileData, portfolioUrl: e.target.value })
           }
           type="url"
           className="form-control
@@ -178,7 +218,7 @@ const ProfileEditForm = ({ profileInfo }) => {
           required
         />
       </div>
-      <AuthButton name="Update Profile" />
+      {!loading ? <AuthButton name="Update Profile" /> : <Loader type="mini" />}
     </form>
   );
 };

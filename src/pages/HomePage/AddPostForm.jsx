@@ -15,10 +15,11 @@ const AddPostForm = () => {
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
   const [imgUrls, setImgUrls] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
-      <div className="p-4 bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
+      <div className="p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
         {imgUrls.map((mediaURL, index) => (
           <div className=" relative  sm:w-60 w-48" key={mediaURL}>
             <MdClose
@@ -49,8 +50,8 @@ const AddPostForm = () => {
   };
   return (
     <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
-      <div className="flex items-center gap-3 mb-3">
-        <Link to={`/profile/${user?.id}`}>
+      <div className="relative flex items-center gap-3 mb-3">
+        <Link to={`/profile/${user?._id}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={user.profilePictureURL}

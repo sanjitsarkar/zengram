@@ -12,7 +12,7 @@ import Tab from "./Tab";
 
 const PostsSection = ({ type = "all" }) => {
   const posts = useSelector((state) => state.posts);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth?.user);
   const allPosts = useSelector((state) => state.allPosts);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("Latest");
@@ -21,7 +21,7 @@ const PostsSection = ({ type = "all" }) => {
       if (activeTab === "Latest") {
         dispatch(fetchUserFeedPosts(user._id));
       } else if (activeTab === "Trending") {
-        dispatch(fetchUserFeedTrendingPosts());
+        dispatch(fetchUserFeedTrendingPosts(user._id));
       }
     } else if (type === "all") {
       if (activeTab === "Latest") {
