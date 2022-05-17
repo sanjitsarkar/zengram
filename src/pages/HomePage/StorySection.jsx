@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Loader, StoryCard } from "../../components";
+import { PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
 const StorySection = () => {
   const stories = useSelector((state) => state.stories);
@@ -11,7 +12,7 @@ const StorySection = () => {
       <StoryCard
         isCreateStory={true}
         profileName={user.name}
-        profileImage={user.profilePictureURL}
+        profileImage={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
       />
       {stories?.status === "loading" && (
         <Loader status={"Please wait until your stories are loaded"} />

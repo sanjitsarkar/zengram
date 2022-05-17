@@ -11,13 +11,12 @@ import ProfileHeader from "./ProfileHeader";
 
 const ProfilePage = () => {
   const profile = useSelector((state) => state.profile);
-
+  const user = useSelector((state) => state.auth?.user);
   const location = useLocation();
   const dispatch = useDispatch();
 
   const userCreatedPosts = useSelector((state) => state.userCreatedPosts);
   const archivedPosts = useSelector((state) => state.archivedPosts);
-
   const [activeTab, setActiveTab] = useState("All Published Posts");
   let pathName = location.pathname.split("/");
   let profileId = pathName[pathName.length - 1];
@@ -31,7 +30,6 @@ const ProfilePage = () => {
       dispatch(fetchArchivedPosts(profileId));
     }
   }, [activeTab, profileId]);
-
   return (
     <Layout>
       {profile.status === "loading" && <Loader type="medium" />}
@@ -40,21 +38,24 @@ const ProfilePage = () => {
           No posts to show
         </span>
       )}
+
       {profile.status === "succeeded" && profile.data && (
         <div className="flex flex-col gap-4 ">
           <ProfileHeader profile={profile?.data} />
-          <div className="flex gap-4 items-center">
-            <Tab
-              name="All Published Posts"
-              setActiveTab={setActiveTab}
-              activeTab={activeTab}
-            />
-            <Tab
-              name="All Archived Posts"
-              setActiveTab={setActiveTab}
-              activeTab={activeTab}
-            />
-          </div>
+          {user?._id === profileId && (
+            <div className="flex gap-4 items-center">
+              <Tab
+                name="All Published Posts"
+                setActiveTab={setActiveTab}
+                activeTab={activeTab}
+              />
+              <Tab
+                name="All Archived Posts"
+                setActiveTab={setActiveTab}
+                activeTab={activeTab}
+              />
+            </div>
+          )}
           <PostsWrapper
             type={activeTab === "All Published Posts" ? "published" : "archive"}
             posts={

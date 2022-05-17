@@ -1,5 +1,7 @@
 export { default as AddPostForm } from "../pages/HomePage/AddPostForm";
 export { default as AuthButton } from "./AuthButton";
+export { default as CommentSection } from "./CommentSection";
+export { default as EditPostForm } from "./EditPostForm";
 export { default as IconButton } from "./IconButton";
 export { default as InputCheckboxSection } from "./InputCheckboxSection";
 export { default as InputSection } from "./InputSection";
@@ -10,5 +12,6 @@ export { default as PostCard } from "./PostCard";
 export { default as PostsSection } from "./PostsSection";
 export { default as PostsWrapper } from "./PostsWrapper";
 export { default as PrivateRoute } from "./PrivateRoute";
+export { default as ReplySection } from "./ReplySection";
 export { default as StoryCard } from "./StoryCard";
 export { default as Tab } from "./Tab";

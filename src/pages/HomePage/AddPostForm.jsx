@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import { BiImageAdd, BiLocationPlus, BiVideo } from "react-icons/bi";
 import { MdClose, MdGif } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import {
   createPost,
   fetchUserFeedPosts,
 } from "../../services/posts/postsService";
-import { initialPostState } from "../../utils";
+import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
+
 const AddPostForm = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
   const [imgUrls, setImgUrls] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
-      <div className="p-4 bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
+      <div className="p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
         {imgUrls.map((mediaURL, index) => (
           <div className=" relative  sm:w-60 w-48" key={mediaURL}>
             <MdClose
@@ -48,12 +51,14 @@ const AddPostForm = () => {
   };
   return (
     <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
-      <div className="flex items-center gap-3 mb-3">
-        <img
-          className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-          src={user.profilePictureURL}
-          alt={user.name}
-        />
+      <div className="relative flex items-center gap-3 mb-3">
+        <Link to={`/profile/${user?._id}`}>
+          <img
+            className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+            src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+            alt={user.name}
+          />
+        </Link>
         <span className="text-lightBlue">{user.name}</span>
       </div>
       <form
@@ -131,18 +136,14 @@ const AddPostForm = () => {
                 onChange={(e) => {
                   setPost({ ...post, mediaURLs: e.target.files });
                   Array.from(e.target.files).forEach((file) => {
-                    let reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onloadend = (e) => {
-                      setImgUrls((prevImgUrls) => [
-                        ...prevImgUrls,
-                        {
-                          name: file.name,
-                          lastModified: file.lastModified,
-                          url: reader.result,
-                        },
-                      ]);
-                    };
+                    setImgUrls((prevImgUrls) => [
+                      ...prevImgUrls,
+                      {
+                        name: file.name,
+                        lastModified: file.lastModified,
+                        url: URL.createObjectURL(file),
+                      },
+                    ]);
                   });
                 }}
               />

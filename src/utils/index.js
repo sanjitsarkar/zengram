@@ -146,6 +146,11 @@ export const initialPostState = {
   content: "",
   mediaURLs: [],
 };
+
+export const COVER_PHOTO_PLACEHOLDER =
+  "https://static.vecteezy.com/system/resources/previews/002/909/206/non_2x/abstract-background-for-landing-pages-banner-placeholder-cover-book-and-print-geometric-pettern-on-screen-gradient-colors-design-vector.jpg";
+export const PROFILE_PIC_PLACEHOLDER =
+  "https://icon-library.com/images/no-profile-pic-icon/no-profile-pic-icon-7.jpg";
 export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
 export { callApi };

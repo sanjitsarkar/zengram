@@ -13,6 +13,8 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useModal } from "../context/modalContext";
+import { clearComments } from "../features/comments/commentsSlice";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
   addPostToArchive,
@@ -21,8 +23,11 @@ import {
   removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
-import { notify, timeSince } from "../utils";
+import { notify, PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
+import CommentsContainer from "./CommentsContainer";
 import DropDownOption from "./DropDownOption";
+import EditPostForm from "./EditPostForm";
+import Modal from "./Modal";
 
 const PostCard = ({ post, type }) => {
   const {
@@ -43,7 +48,19 @@ const PostCard = ({ post, type }) => {
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setactiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
+  const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
+  const _commentsData = useSelector((state) => state.comments);
+  const { isModalOpen, setIsModalOpen } = useModal();
+  const [isEditOptionClicked, setIsEditOptionClicked] = useState(false);
+  const [_comments, _setComments] = useState(comments);
+  const [isCommentAdded, setIsCommentAdded] = useState(false);
+  useEffect(() => {
+    if (isCommentAdded && _commentsData.status === "succeeded") {
+      _setComments(_commentsData.data);
+      dispatch(clearComments());
+    }
+  }, [_commentsData, isCommentAdded]);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -106,13 +123,23 @@ const PostCard = ({ post, type }) => {
             }}
           />
         )}
-        {userId === id && <DropDownOption Icon={MdEdit} name="Edit Post" />}
+        {userId === id && (
+          <DropDownOption
+            onClick={() => {
+              setIsModalOpen(true);
+              setIsEditOptionClicked(true);
+            }}
+            Icon={MdEdit}
+            name="Edit Post"
+          />
+        )}
         {userId === id && (
           <DropDownOption
             Icon={BiTrash}
             name="Delete Post"
             onClick={() => {
               setIsOptionClicked(false);
+
               dispatch(deletePost(_id));
             }}
           />
@@ -140,6 +167,7 @@ const PostCard = ({ post, type }) => {
       </div>
     );
   };
+
   const [isPostLiked, setIsPostLiked] = useState(
     _likes?.some((like) => like === userId)
   );
@@ -148,13 +176,22 @@ const PostCard = ({ post, type }) => {
   }, [_likes]);
   return (
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
+      {userId === id && isModalOpen && isEditOptionClicked && (
+        <Modal>
+          <EditPostForm
+            postInfo={post}
+            setIsEditOptionClicked={setIsEditOptionClicked}
+            setIsOptionClicked={setIsOptionClicked}
+          />
+        </Modal>
+      )}
       {isOptionClicked && <DropDown />}
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">
           <Link to={`/profile/${id}`}>
             <img
               className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-              src={profilePictureURL}
+              src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
               alt="profilePicture"
             />
           </Link>
@@ -243,14 +280,19 @@ const PostCard = ({ post, type }) => {
         </div>
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
           <MdComment
+            onClick={() => {
+              setIsCommentClicked(
+                (prevIsCommentClicked) => !prevIsCommentClicked
+              );
+            }}
             size={25}
             className="fill-primary cursor-pointer order-1 md:-order-1"
           />
           <span className="text-lightBlue">
-            {comments.length}{" "}
+            {_comments.length}{" "}
             <span className="hidden md:inline">
               Comment
-              {comments.length > 1 ? "s" : ""}
+              {_comments.length > 1 ? "s" : ""}
             </span>
           </span>
         </div>
@@ -268,6 +310,18 @@ const PostCard = ({ post, type }) => {
           </span>
         </div>
       </div>
+      {isCommentClicked && (
+        <CommentsContainer
+          setIsCommentAdded={setIsCommentAdded}
+          comments={_comments}
+          setComments={_setComments}
+          postId={_id}
+          userId={userId}
+          onClick={() => {}}
+          postedBy={post.postedBy}
+          profilePictureURL={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+        />
+      )}
     </div>
   );
 };
