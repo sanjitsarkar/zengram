@@ -53,13 +53,14 @@ const PostCard = ({ post, type }) => {
   const _commentsData = useSelector((state) => state.comments);
   const { isModalOpen, setIsModalOpen } = useModal();
   const [isEditOptionClicked, setIsEditOptionClicked] = useState(false);
+  const [_comments, _setComments] = useState(comments);
+  const [isCommentAdded, setIsCommentAdded] = useState(false);
   useEffect(() => {
-    if (_commentsData.status === "succeeded") {
+    if (isCommentAdded && _commentsData.status === "succeeded") {
       _setComments(_commentsData.data);
       dispatch(clearComments());
     }
-  }, [_commentsData]);
-  const [_comments, _setComments] = useState(comments);
+  }, [_commentsData, isCommentAdded]);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setactiveMediaIndex(activeMediaIndex + 1);
@@ -311,6 +312,7 @@ const PostCard = ({ post, type }) => {
       </div>
       {isCommentClicked && (
         <CommentsContainer
+          setIsCommentAdded={setIsCommentAdded}
           comments={_comments}
           setComments={_setComments}
           postId={_id}

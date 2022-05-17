@@ -6,6 +6,7 @@ import { addComment } from "../services/comments/commentsService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 import CommentSection from "./CommentSection";
 const CommentsContainer = ({
+  setIsCommentAdded,
   comments,
   profilePictureURL,
   userId,
@@ -21,6 +22,7 @@ const CommentsContainer = ({
         onSubmit={(e) => {
           e.preventDefault();
           dispatch(addComment({ comment, commentedBy: userId, postId }));
+          setIsCommentAdded(true);
           setComment("");
         }}
         className="flex flex-wrap items-center gap-3 mb-3"
@@ -28,7 +30,7 @@ const CommentsContainer = ({
         <Link to={`/profile/${userId}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-            src={profilePictureURL??PROFILE_PIC_PLACEHOLDER}
+            src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt="profilePicture"
           />
         </Link>
@@ -52,13 +54,15 @@ const CommentsContainer = ({
       </form>
       <div className="flex flex-col gap-2 ml-2">
         {comments.length > 0 &&
-          comments.map((comment) => (
-            <CommentSection
-              commentInfo={comment}
-              postedBy={postedBy}
-              key={comment._id}
-            />
-          ))}
+          comments.map((comment) => {
+            return (
+              <CommentSection
+                commentInfo={comment}
+                postedBy={postedBy}
+                key={comment._id}
+              />
+            );
+          })}
       </div>
     </div>
   );

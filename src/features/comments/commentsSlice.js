@@ -25,7 +25,6 @@ export const commentSlice = createSlice({
       })
       .addCase(addComment.fulfilled, (state, action) => {
         state.status = "succeeded";
-
         state.data = action.payload?.comments?.comments;
         notify("Comment added successfully");
       })

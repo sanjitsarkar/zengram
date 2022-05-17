@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import PostCard from "./PostCard";
 
-const PostsWrapper = ({ posts, children, width = "", type, postType }) => {
+const PostsWrapper = ({ posts, children, width = "", type }) => {
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   let isPostArchived;
   if (type === "archive") {
