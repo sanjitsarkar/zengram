@@ -8,7 +8,11 @@ import { useModal } from "../context/modalContext";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
 import { createPost, fetchUserFeedPosts } from "../services/posts/postsService";
 import { initialPostState } from "../utils";
-const EditPostForm = ({ postInfo }) => {
+const EditPostForm = ({
+  postInfo,
+  setIsEditOptionClicked,
+  setIsOptionClicked,
+}) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(postInfo);
@@ -54,6 +58,8 @@ const EditPostForm = ({ postInfo }) => {
           {postInfo && (
             <IconButton
               onClick={() => {
+                setIsEditOptionClicked(false);
+                setIsOptionClicked(false);
                 setIsModalOpen(false);
               }}
               Icon={MdClose}

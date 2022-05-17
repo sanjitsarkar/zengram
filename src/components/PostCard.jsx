@@ -177,7 +177,11 @@ const PostCard = ({ post, type }) => {
     <div className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col">
       {userId === id && isModalOpen && isEditOptionClicked && (
         <Modal>
-          <EditPostForm postInfo={post} />
+          <EditPostForm
+            postInfo={post}
+            setIsEditOptionClicked={setIsEditOptionClicked}
+            setIsOptionClicked={setIsOptionClicked}
+          />
         </Modal>
       )}
       {isOptionClicked && <DropDown />}
