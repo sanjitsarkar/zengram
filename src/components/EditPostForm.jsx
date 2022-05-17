@@ -69,7 +69,7 @@ const EditPostForm = ({
           <Link to={`/profile/${user?._id}`}>
             <img
               className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-              src={user.profilePictureURL}
+              src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
               alt={user.name}
             />
           </Link>

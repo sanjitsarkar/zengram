@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthButton, IconButton, Loader } from "../../components";
-import { useModal } from "../../context/modalContext";
 import { updateProfileInfo } from "../../services/auth/authService";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
-import { COVER_PHOTO_PLACEHOLDER } from "../../utils";
+import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
-const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
+const ProfileEditForm = ({ profileInfo, setIsEditProfile }) => {
   const user = useSelector((state) => state.auth?.user);
   const dispatch = useDispatch();
   const initialProfileState = {
@@ -20,7 +19,6 @@ const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState("");
   const [coverImage, setCoverImage] = useState("");
-  const { setIsModalOpen } = useModal();
   const [profileData, setProfileData] = useState(initialProfileState);
   return (
     <form
@@ -56,12 +54,12 @@ const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
         setProfileImage("");
         setCoverImage("");
         setLoading(false);
-        setIsModalOpen(false);
+        setIsEditProfile(false);
       }}
     >
       <IconButton
         onClick={() => {
-          setIsModalOpen(false);
+          setIsEditProfile(false);
         }}
         Icon={MdClose}
         className="absolute right-4 top-4 "
@@ -72,7 +70,7 @@ const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
           <h2 className="text-lightBlue mb-4">Profile Photo</h2>
 
           <img
-            src={profileData.profilePictureURL}
+            src={profileData.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt={profileData.name}
             className="  object-cover w-48"
           />
@@ -215,7 +213,6 @@ const ProfileEditForm = ({ profileInfo, setProfileInfo }) => {
           id="portfolio"
           aria-describedby="emailHelp"
           placeholder="Enter Portfolio Url"
-          required
         />
       </div>
       {!loading ? <AuthButton name="Update Profile" /> : <Loader type="mini" />}

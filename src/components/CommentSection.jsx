@@ -3,8 +3,8 @@ import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addReply, fetchAllReply } from "../services/replies/repliesService";
+import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 import Reply from "./ReplySection";
-
 const CommentSection = ({ commentInfo, postedBy }) => {
   const user = useSelector((state) => state.auth?.user);
   const replies = useSelector((state) => state.replies?.data);
@@ -23,7 +23,7 @@ const CommentSection = ({ commentInfo, postedBy }) => {
       <Link to={`/profile/${id}`}>
         <img
           className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-          src={profilePictureURL}
+          src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
           alt="profilePicture"
         />
       </Link>
@@ -72,7 +72,7 @@ const CommentSection = ({ commentInfo, postedBy }) => {
             <Link to={`/profile/${id}`}>
               <img
                 className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-                src={profilePictureURL}
+                src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
                 alt="profilePicture"
               />
             </Link>

@@ -9,7 +9,8 @@ import {
   createPost,
   fetchUserFeedPosts,
 } from "../../services/posts/postsService";
-import { initialPostState } from "../../utils";
+import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
+
 const AddPostForm = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -54,7 +55,7 @@ const AddPostForm = () => {
         <Link to={`/profile/${user?._id}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-            src={user.profilePictureURL}
+            src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt={user.name}
           />
         </Link>

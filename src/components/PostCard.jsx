@@ -23,7 +23,7 @@ import {
   removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
-import { notify, timeSince } from "../utils";
+import { notify, PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
 import CommentsContainer from "./CommentsContainer";
 import DropDownOption from "./DropDownOption";
 import EditPostForm from "./EditPostForm";
@@ -190,7 +190,7 @@ const PostCard = ({ post, type }) => {
           <Link to={`/profile/${id}`}>
             <img
               className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-              src={profilePictureURL}
+              src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
               alt="profilePicture"
             />
           </Link>
@@ -317,7 +317,7 @@ const PostCard = ({ post, type }) => {
           userId={userId}
           onClick={() => {}}
           postedBy={post.postedBy}
-          profilePictureURL={profilePictureURL}
+          profilePictureURL={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
         />
       )}
     </div>

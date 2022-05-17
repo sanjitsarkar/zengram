@@ -5,6 +5,8 @@ import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../features/auth/authSlice";
+import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
@@ -50,8 +52,8 @@ const Header = () => {
           <img
             className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={`${
-              user.profilePictureURL
-                ? user.profilePictureURL
+              user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER
+                ? user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER
                 : "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG}"
             }`}
             alt={user.name}

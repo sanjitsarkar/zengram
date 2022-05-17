@@ -3,8 +3,8 @@ import { MdSend } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addComment } from "../services/comments/commentsService";
+import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 import CommentSection from "./CommentSection";
-
 const CommentsContainer = ({
   comments,
   profilePictureURL,
@@ -28,7 +28,7 @@ const CommentsContainer = ({
         <Link to={`/profile/${userId}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-            src={profilePictureURL}
+            src={profilePictureURL??PROFILE_PIC_PLACEHOLDER}
             alt="profilePicture"
           />
         </Link>

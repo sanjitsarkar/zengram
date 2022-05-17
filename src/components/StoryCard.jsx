@@ -1,6 +1,7 @@
 import React from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 
 const StoryCard = ({
   storyThumbnail = "http://res.cloudinary.com/dddfc84ni/image/upload/v1651546264/dl7s7nrhfr1lojeu32gk.jpg",
@@ -10,7 +11,7 @@ const StoryCard = ({
 }) => {
   const user = useSelector((state) => state.auth?.user);
   if (isCreateStory) {
-    profileImage = user.profilePictureURL;
+    profileImage = user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER;
     profileName = user.name;
   }
   return (
