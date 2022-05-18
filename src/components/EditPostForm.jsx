@@ -22,7 +22,7 @@ const EditPostForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
-      <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
+      <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  ">
         {imgUrls.map((mediaURL, index) => (
           <div className=" relative  sm:w-60 w-48" key={mediaURL}>
             <MdClose
@@ -53,7 +53,14 @@ const EditPostForm = ({
   };
   if (postInfo)
     return (
-      <div className=" w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
+      <div
+        style={{
+          maxWidth: "90vw",
+        }}
+        className="  md:p-6 p-4 rounded-lg shadow-lg bg-white 
+        
+       "
+      >
         <div className="relative flex items-center gap-3 mb-3">
           {postInfo && (
             <IconButton
