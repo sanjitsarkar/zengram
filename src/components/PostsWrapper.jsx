@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import PostCard from "./PostCard";
 
-const PostsWrapper = ({ posts, children, width = "", type, postType }) => {
+const PostsWrapper = ({ posts, children, width = "", type }) => {
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
   let isPostArchived;
   if (type === "archive") {
@@ -12,7 +12,7 @@ const PostsWrapper = ({ posts, children, width = "", type, postType }) => {
     isPostArchived = (id) => archivedPosts?.some((post) => post?._id === id);
   }
   return (
-    <div className={` ${width} flex flex-col gap-4`}>
+  <div className={` ${width} flex flex-col gap-4`}>
       {children}
       {posts.status === "loading" && <Loader type="medium" />}
       {posts.status === "succeeded" && posts.data.length === 0 && (

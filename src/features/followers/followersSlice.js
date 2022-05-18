@@ -18,7 +18,7 @@ export const followersSlice = createSlice({
       })
       .addCase(getFollowers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.followers;
+        state.data = action.payload?.followers?.followers;
       })
       .addCase(getFollowers.rejected, (state, action) => {
         state.status = "failed";

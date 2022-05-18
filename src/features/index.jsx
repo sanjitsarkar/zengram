@@ -9,5 +9,6 @@ export { default as followingReducer } from "./following/followingSlice";
 export { default as postsReducer } from "./posts/postsSlice";
 export { default as profileReducer } from "./profile/profileSlice";
 export { default as repliesReducer } from "./replies/repliesSlice";
+export { default as searchedUsersReducer } from "./searchedUsers/searchedUsersSlice";
 export { default as storiesReducer } from "./stories/storiesSlice";
 export { default as userCreatedPostsReducer } from "./userCreatedPosts/userCreatedPostsSlice";

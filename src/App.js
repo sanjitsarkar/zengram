@@ -59,6 +59,7 @@ function App() {
             path="/users/:profileId/following"
             element={<UsersPage type="following" />}
           />
+          <Route path="/users" element={<UsersPage type="search" />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

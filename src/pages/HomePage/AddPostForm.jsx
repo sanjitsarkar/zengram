@@ -5,13 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
-import {
-  createPost,
-  fetchUserFeedPosts,
-} from "../../services/posts/postsService";
+import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
-const AddPostForm = () => {
+const AddPostForm = ({ ref }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
@@ -87,7 +84,7 @@ const AddPostForm = () => {
 
             setPost(initialPostState);
           }
-          dispatch(fetchUserFeedPosts(user?._id));
+          ref.current.scrollIntoView();
         }}
       >
         <div className="form-group mb-6">

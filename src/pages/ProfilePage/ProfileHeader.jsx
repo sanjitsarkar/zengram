@@ -52,7 +52,12 @@ const ProfileHeader = ({ profile }) => {
               {user?._id !== profile?._id && !isFollowing && (
                 <button
                   onClick={() => {
-                    dispatch(followUser(profile?._id));
+                    dispatch(
+                      followUser({
+                        followingId: profile?._id,
+                        followerId: user._id,
+                      })
+                    );
 
                     const newUser = {
                       ...user,
@@ -73,7 +78,12 @@ const ProfileHeader = ({ profile }) => {
               {user?._id !== profile?._id && isFollowing && (
                 <button
                   onClick={() => {
-                    dispatch(unfollowUser(profile?._id));
+                    dispatch(
+                      unfollowUser({
+                        followingId: profile?._id,
+                        followerId: user._id,
+                      })
+                    );
                     const _user = user;
                     const newUser = {
                       ...user,
@@ -99,7 +109,7 @@ const ProfileHeader = ({ profile }) => {
             </div>
             <div className="flex  sm:mt-1 gap-6 text-lightBlue flex-wrap">
               <h1>
-                <span className="font-semibold mr-2">{postCount} </span> post
+                <span className="font-semibold mr-2">{postCount}</span> post
                 {postCount > 1 ? "s" : ""}
               </h1>
               <Link to={`/users/${profile._id}/followers`}>

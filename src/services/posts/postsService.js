@@ -121,7 +121,6 @@ export const bookmarkPost = createAsyncThunk(
 export const unBookmarkPost = createAsyncThunk(
   "posts/unBookmarkPost",
   async (post) => {
-    console.log("post", post);
     const response = await callApi(
       "delete",
       `user/${post.postedBy}/posts/bookmarked/${post.postId}/`,

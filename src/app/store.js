@@ -11,6 +11,7 @@ import {
   postsReducer,
   profileReducer,
   repliesReducer,
+  searchedUsersReducer,
   storiesReducer,
   userCreatedPostsReducer,
 } from "../features";
@@ -29,5 +30,6 @@ export const store = configureStore({
     replies: repliesReducer,
     following: followingReducer,
     followers: followersReducer,
+    searchedUsers: searchedUsersReducer,
   },
 });
