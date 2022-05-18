@@ -75,9 +75,7 @@ export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
 });
 
 export const updatePost = createAsyncThunk("posts/updatePost", async (post) => {
-  const response = await callApi("put", `posts/${post.id}`, true, {
-    post,
-  });
+  const response = await callApi("put", `posts/${post.id}`, true, { ...post });
   return response.data;
 });
 

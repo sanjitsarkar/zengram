@@ -45,7 +45,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/bookmarks" element={<BookmarkedPage />} />
-          <Route path="/explore" element={<ExplorePage />} />SS
+          <Route path="/explore" element={<ExplorePage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/messages/" element={<MessagePage />} />
         </Route>

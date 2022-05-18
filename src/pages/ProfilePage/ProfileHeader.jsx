@@ -97,7 +97,7 @@ const ProfileHeader = ({ profile }) => {
                 </button>
               )}
             </div>
-            <div className="flex  sm:mt-1 gap-6 text-lightBlue">
+            <div className="flex  sm:mt-1 gap-6 text-lightBlue flex-wrap">
               <h1>
                 <span className="font-semibold mr-2">{postCount} </span> post
                 {postCount > 1 ? "s" : ""}

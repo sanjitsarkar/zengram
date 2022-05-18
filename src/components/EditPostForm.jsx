@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal } from "../context/modalContext";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
-import { createPost, fetchUserFeedPosts } from "../services/posts/postsService";
-import { initialPostState } from "../utils";
+import { fetchUserFeedPosts, updatePost } from "../services/posts/postsService";
+import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
 const EditPostForm = ({
   postInfo,
   setIsEditOptionClicked,
@@ -22,7 +22,7 @@ const EditPostForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
-      <div className="p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
+      <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  ">
         {imgUrls.map((mediaURL, index) => (
           <div className=" relative  sm:w-60 w-48" key={mediaURL}>
             <MdClose
@@ -53,7 +53,14 @@ const EditPostForm = ({
   };
   if (postInfo)
     return (
-      <div className="w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
+      <div
+        style={{
+          maxWidth: "90vw",
+        }}
+        className="  md:p-6 p-4 rounded-lg shadow-lg bg-white 
+        
+       "
+      >
         <div className="relative flex items-center gap-3 mb-3">
           {postInfo && (
             <IconButton
@@ -88,15 +95,20 @@ const EditPostForm = ({
                   url,
                   type: "image",
                 })),
-                id: user._id,
+                id: postInfo._id,
               };
-              dispatch(createPost(_post));
+              dispatch(updatePost(_post));
               setImgUrls([]);
               setIsLoading(false);
 
               setPost(initialPostState);
             } else {
-              dispatch(createPost({ ...post, id: user._id }));
+              dispatch(
+                updatePost({
+                  content: post.content,
+                  id: postInfo._id,
+                })
+              );
               setImgUrls([]);
               setIsLoading(false);
 
@@ -130,7 +142,9 @@ const EditPostForm = ({
               rows={3}
               placeholder="Hey, what's on your mind?"
               value={post.content}
-              onChange={(e) => setPost({ ...post, content: e.target.value })}
+              onChange={(e) => {
+                setPost({ ...post, content: e.target.value });
+              }}
             />
             {imgUrls.length > 0 && <PhotosSetcion />}
           </div>
@@ -138,11 +152,11 @@ const EditPostForm = ({
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div className="flex gap-2 items-center">
               <div className="">
-                <label htmlFor="file">
+                <label htmlFor="postImage">
                   <IconButton Icon={BiImageAdd} />
                 </label>
                 <input
-                  id="file"
+                  id="postImage"
                   style={{ display: "none" }}
                   type={"file"}
                   multiple={true}
@@ -194,7 +208,7 @@ const EditPostForm = ({
       duration-150
       ease-in-out`}
               >
-                Post
+                Update
               </button>
             ) : (
               <Loader type="mini" />
