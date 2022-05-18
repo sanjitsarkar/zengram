@@ -4,6 +4,7 @@ import {
   fetchAllPosts,
   fetchAllTrendingPosts,
 } from "../../services/posts/postsService";
+import { updatePostsContent } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -14,7 +15,11 @@ const initialState = {
 export const allPostsSlice = createSlice({
   name: "allPosts",
   initialState,
-  reducers: {},
+  reducers: {
+    updateAllPosts: (state, action) => {
+      updatePostsContent(state, action);
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchAllPosts.pending, (state, action) => {
@@ -55,4 +60,5 @@ export const allPostsSlice = createSlice({
   },
 });
 
+export const { updateAllPosts } = allPostsSlice.actions;
 export default allPostsSlice.reducer;

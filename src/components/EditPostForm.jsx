@@ -6,12 +6,13 @@ import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal } from "../context/modalContext";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
-import { fetchUserFeedPosts, updatePost } from "../services/posts/postsService";
+import { updatePost } from "../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
 const EditPostForm = ({
   postInfo,
   setIsEditOptionClicked,
   setIsOptionClicked,
+  postType,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -95,7 +96,8 @@ const EditPostForm = ({
                   url,
                   type: "image",
                 })),
-                id: postInfo._id,
+                postId: postInfo._id,
+                postedBy: user?._id,
               };
               dispatch(updatePost(_post));
               setImgUrls([]);
@@ -106,15 +108,17 @@ const EditPostForm = ({
               dispatch(
                 updatePost({
                   content: post.content,
-                  id: postInfo._id,
+                  postId: postInfo._id,
+                  postedBy: user?._id,
                 })
               );
               setImgUrls([]);
               setIsLoading(false);
-
               setPost(initialPostState);
+              setIsEditOptionClicked(false);
+              setIsOptionClicked(false);
+              setIsModalOpen(false);
             }
-            dispatch(fetchUserFeedPosts(user?._id));
           }}
         >
           <div className="form-group mb-6">

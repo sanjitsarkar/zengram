@@ -7,9 +7,10 @@ const BookmarkedPage = () => {
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts);
   const userId = useSelector((state) => state.auth?.user?._id);
   const dispatch = useDispatch();
-useEffect(() => {
-  dispatch(fetchBookmarkedPosts(userId));
-},[])
+
+  useEffect(() => {
+    dispatch(fetchBookmarkedPosts(userId));
+  }, []);
   return (
     <Layout>
       <PostsWrapper posts={bookmarkedPosts} width="md:w-5/6">

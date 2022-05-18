@@ -46,7 +46,7 @@ const PostCard = ({ post, type }) => {
   const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
-  const [activeMediaIndex, setactiveMediaIndex] = useState(0);
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const [isOptionClicked, setIsOptionClicked] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
@@ -55,6 +55,7 @@ const PostCard = ({ post, type }) => {
   const [isEditOptionClicked, setIsEditOptionClicked] = useState(false);
   const [_comments, _setComments] = useState(comments);
   const [isCommentAdded, setIsCommentAdded] = useState(false);
+
   useEffect(() => {
     if (isCommentAdded && _commentsData.status === "succeeded") {
       _setComments(_commentsData.data);
@@ -63,30 +64,30 @@ const PostCard = ({ post, type }) => {
   }, [_commentsData, isCommentAdded]);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
-      setactiveMediaIndex(activeMediaIndex + 1);
+      setActiveMediaIndex(activeMediaIndex + 1);
     } else {
-      setactiveMediaIndex(0);
+      setActiveMediaIndex(0);
     }
   };
   const prevMedia = () => {
     if (activeMediaIndex > 0) {
-      setactiveMediaIndex(activeMediaIndex - 1);
+      setActiveMediaIndex(activeMediaIndex - 1);
     } else {
-      setactiveMediaIndex(mediaURLs.length - 1);
+      setActiveMediaIndex(mediaURLs.length - 1);
     }
   };
   const MediaSection = () => {
     if (mediaURLs.length > 0) {
       return (
-        <div className="flex items-center gap-4 ">
+        <div className="flex items-center gap-4 relative ">
           {mediaURLs.length > 1 && (
             <MdArrowBack
               onClick={prevMedia}
-              className="fill-lightBlue relative left-10 rounded-full cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-10 p-1 shadow-md  transition-all ease-in-out"
+              className="fill-lightBlue absolute -left-5 h-8 w-8 sm:left-0 rounded-full cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white sm:w-10 sm:h-10 p-1 shadow-md  transition-all ease-in-out"
             />
           )}
           <img
-            className="w-full object-contain h-72 "
+            className="w-full object-contain max-h-48 "
             src={mediaURLs[activeMediaIndex].url}
             alt="postImage"
             loading="lazy"
@@ -94,7 +95,7 @@ const PostCard = ({ post, type }) => {
           {mediaURLs.length > 1 && (
             <MdArrowForward
               onClick={nextMedia}
-              className="fill-lightBlue relative right-10 cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-10 p-1 shadow-md rounded-full transition-all ease-in-out"
+              className="fill-lightBlue absolute -right-5 sm:right-0 h-8 w-8 cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white sm:w-10 sm:h-10 p-1 shadow-md rounded-full transition-all ease-in-out"
             />
           )}
         </div>
@@ -110,7 +111,7 @@ const PostCard = ({ post, type }) => {
             name="Unbookmark Post"
             onClick={() => {
               setIsOptionClicked(false);
-              dispatch(unBookmarkPost(_id));
+              dispatch(unBookmarkPost({ postedBy: userId, postId: _id }));
             }}
           />
         ) : (
@@ -119,7 +120,7 @@ const PostCard = ({ post, type }) => {
             name="Bookmark Post"
             onClick={() => {
               setIsOptionClicked(false);
-              dispatch(bookmarkPost(_id));
+              dispatch(bookmarkPost({ postedBy: userId, postId: _id }));
             }}
           />
         )}
@@ -140,7 +141,7 @@ const PostCard = ({ post, type }) => {
             onClick={() => {
               setIsOptionClicked(false);
 
-              dispatch(deletePost(_id));
+              dispatch(deletePost({ postId: _id, postedBy: userId }));
             }}
           />
         )}
@@ -150,7 +151,7 @@ const PostCard = ({ post, type }) => {
             name="Archive Post"
             onClick={() => {
               setIsOptionClicked(false);
-              dispatch(addPostToArchive(_id));
+              dispatch(addPostToArchive({ postId: _id, postedBy: userId }));
             }}
           />
         )}
@@ -160,7 +161,9 @@ const PostCard = ({ post, type }) => {
             name="Remove from Archive"
             onClick={() => {
               setIsOptionClicked(false);
-              dispatch(removePostFromArchive(_id));
+              dispatch(
+                removePostFromArchive({ postId: _id, postedBy: userId })
+              );
             }}
           />
         )}

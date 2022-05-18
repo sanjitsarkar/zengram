@@ -10,12 +10,12 @@ import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 import ProfileEditForm from "./ProfileEditForm.jsx";
 
 const ProfileHeader = ({ profile }) => {
-  const user = useSelector((state) => state.auth?.user);
   const postCount = useSelector(
     (state) => state.userCreatedPosts?.data?.length
   );
   const [isEditProfile, setIsEditProfile] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth?.user);
   const isFollowing = user?.following.includes(profile?._id);
   return (
     <div className="flex flex-col   bg-white  ">
@@ -129,6 +129,8 @@ const ProfileHeader = ({ profile }) => {
             <a
               className="w-fit  px-4 rounded-full py-1.5 bg-slate-700 text-white"
               href={profile.portfolioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Check my portfolio
             </a>

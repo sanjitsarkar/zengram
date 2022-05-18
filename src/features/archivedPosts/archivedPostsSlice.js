@@ -4,7 +4,7 @@ import {
   fetchArchivedPosts,
   removePostFromArchive,
 } from "../../services/posts/postsService";
-import { notify } from "../../utils";
+import { notify, updatePostsContent } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -15,7 +15,11 @@ const initialState = {
 export const archivedPostsSlice = createSlice({
   name: "archivedPosts",
   initialState,
-  reducers: {},
+  reducers: {
+    updateArchivedPosts: (state, action) => {
+      updatePostsContent(state, action);
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchArchivedPosts.pending, (state, action) => {
@@ -23,7 +27,9 @@ export const archivedPostsSlice = createSlice({
       })
       .addCase(fetchArchivedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.posts;
+        state.data = action.payload?.posts?.filter(
+          (post) => post != null && post
+        );
       })
       .addCase(fetchArchivedPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -57,5 +63,7 @@ export const archivedPostsSlice = createSlice({
       });
   },
 });
+
+export const { updateArchivedPosts } = archivedPostsSlice.actions;
 
 export default archivedPostsSlice.reducer;

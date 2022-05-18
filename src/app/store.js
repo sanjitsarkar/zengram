@@ -6,6 +6,8 @@ import {
   bookmarkedPostsReducer,
   commentsReducer,
   draftPostsReducer,
+  followersReducer,
+  followingReducer,
   postsReducer,
   profileReducer,
   repliesReducer,
@@ -25,5 +27,7 @@ export const store = configureStore({
     profile: profileReducer,
     comments: commentsReducer,
     replies: repliesReducer,
+    following: followingReducer,
+    followers: followersReducer,
   },
 });

@@ -59,6 +59,7 @@ export const postsSlice = createSlice({
         state.data = state.data.filter(
           (post) => post?._id !== action.payload?.post._id
         );
+
         notify("Post deleted successfully", "success");
       })
       .addCase(deletePost.rejected, (state, action) => {
@@ -79,6 +80,7 @@ export const postsSlice = createSlice({
         notify("Post updated successfully", "success");
       })
       .addCase(updatePost.rejected, (state, action) => {
+        console.log("action.error", action.error);
         state.status = "failed";
         state.error = action.error;
       });

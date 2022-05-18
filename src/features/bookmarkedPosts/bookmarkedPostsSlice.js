@@ -4,7 +4,7 @@ import {
   fetchBookmarkedPosts,
   unBookmarkPost,
 } from "../../services/posts/postsService";
-import { notify } from "../../utils";
+import { notify, updatePostsContent } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -15,7 +15,11 @@ const initialState = {
 export const bookmarkedPostsSlice = createSlice({
   name: "bookmarkedPosts",
   initialState,
-  reducers: {},
+  reducers: {
+    updateBookmarkedPosts: (state, action) => {
+      updatePostsContent(state, action);
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchBookmarkedPosts.pending, (state, action) => {
@@ -23,7 +27,9 @@ export const bookmarkedPostsSlice = createSlice({
       })
       .addCase(fetchBookmarkedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.posts;
+        state.data = action.payload?.posts?.filter(
+          (post) => post != null && post
+        );
       })
       .addCase(fetchBookmarkedPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -36,7 +42,6 @@ export const bookmarkedPostsSlice = createSlice({
         state.status = "succeeded";
         state.data.unshift(action.payload?.post);
         notify("Post added to bookmarks successfully", "success");
-
       })
       .addCase(bookmarkPost.rejected, (state, action) => {
         state.status = "failed";
@@ -51,14 +56,12 @@ export const bookmarkedPostsSlice = createSlice({
           (post) => post?._id !== action.payload?.postId
         );
         notify("Post removed from bookmarks successfully", "success");
-
       })
       .addCase(unBookmarkPost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
-        
       });
   },
 });
-
+export const { updateBookmarkedPosts } = bookmarkedPostsSlice.actions;
 export default bookmarkedPostsSlice.reducer;

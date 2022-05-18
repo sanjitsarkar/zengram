@@ -131,6 +131,20 @@ export const formatError = (err) => {
   return err.message;
 };
 
+export const updatePostsContent = (state, action) => {
+  if (action?.payload?.post) {
+    state.data = state?.data?.map((post) => {
+      if (post?._id === action.payload?.post?._id) {
+        return action.payload?.post;
+      }
+      return post;
+    });
+  } else if (action?.payload?.postId) {
+    state.data = state?.data.filter(
+      (post) => post?._id !== action.payload?.postId
+    );
+  }
+};
 export const GUEST_CREDENTIAL = {
   email: "johndoe@gmail.com",
   password: "123456",

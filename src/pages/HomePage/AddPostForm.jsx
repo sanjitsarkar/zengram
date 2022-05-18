@@ -73,7 +73,7 @@ const AddPostForm = () => {
                 url,
                 type: "image",
               })),
-              id: user._id,
+              postedBy: user._id,
             };
             dispatch(createPost(_post));
             setImgUrls([]);
@@ -81,7 +81,7 @@ const AddPostForm = () => {
 
             setPost(initialPostState);
           } else {
-            dispatch(createPost({ ...post, id: user._id }));
+            dispatch(createPost({ ...post, postedBy: user._id }));
             setImgUrls([]);
             setIsLoading(false);
 

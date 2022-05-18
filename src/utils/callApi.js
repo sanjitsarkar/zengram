@@ -7,7 +7,9 @@ export const callApi = async (
 ) => {
   const token = JSON.parse(localStorage?.getItem("user"))?.token;
   endPoint = `${process.env.REACT_APP_API_URL}/${endPoint}`;
-  isProtected &&
+
+  token &&
+    isProtected &&
     axios.interceptors.request.use(
       (config) => {
         config.headers.authorization = token;
@@ -17,6 +19,7 @@ export const callApi = async (
         return Promise.reject(error);
       }
     );
+
   switch (method) {
     case "get": {
       return await axios.get(endPoint);

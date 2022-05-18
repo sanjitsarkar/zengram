@@ -54,3 +54,19 @@ export const unfollowUser = createAsyncThunk(
     return response.data;
   }
 );
+
+export const getFollowing = createAsyncThunk(
+  "auth/getFollowing",
+  async (id) => {
+    const response = await callApi("get", `user/${id}/following/`, true);
+    return response.data;
+  }
+);
+
+export const getFollowers = createAsyncThunk(
+  "auth/getFollowers",
+  async (id) => {
+    const response = await callApi("get", `user/${id}/followers/`, true);
+    return response.data;
+  }
+);
