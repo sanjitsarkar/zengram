@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiBell, BiSearch } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSearch } from "../context/searchContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
@@ -16,8 +16,14 @@ const Header = () => {
   const { search, setSearch } = useSearch();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.pathname.includes("users")) {
+      setSearch("");
+    }
+  }, [location.pathname]);
   return (
-    <header className="fixed z-10  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
+    <header className="fixed z-20  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
       <div className="left flex items-center gap-3">
         {!isNavOpen ? (
           <MdMenu
@@ -47,6 +53,7 @@ const Header = () => {
         >
           <BiSearch className="ml-3  text-xl text-dark" />
           <input
+            required
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             type="search"

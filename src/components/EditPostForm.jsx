@@ -19,17 +19,23 @@ const EditPostForm = ({
   const [post, setPost] = useState(postInfo);
   const { setIsModalOpen } = useModal();
   const [imgUrls, setImgUrls] = useState(postInfo?.mediaURLs ?? []);
+  const [uploadedImgUrls, setUploadedImgUrls] = useState(
+    postInfo?.mediaURLs ?? []
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
       <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  ">
         {imgUrls.map((mediaURL, index) => (
-          <div className=" relative  sm:w-60 w-48" key={mediaURL}>
+          <div className=" relative  sm:w-60 w-48" key={mediaURL + index}>
             <MdClose
               onClick={() => {
                 const newImageUrls = imgUrls.filter(
                   (url) => url.url !== mediaURL.url
+                );
+                setUploadedImgUrls((prevUploadedImgUrls) =>
+                  prevUploadedImgUrls.filter((url) => url.url !== mediaURL.url)
                 );
                 const mediaURLs = Array.from(post.mediaURLs).filter(
                   (file) =>
@@ -88,22 +94,18 @@ const EditPostForm = ({
             e.preventDefault();
             setIsLoading(true);
             if (Array.from(post.mediaURLs).length > 0) {
-              const urls = await uploadImages(post.mediaURLs, user._id);
-
+              let urls = await uploadImages(post.mediaURLs, user._id);
+              urls = urls.map((url) => ({
+                url,
+                type: "image",
+              }));
               const _post = {
                 content: post.content,
-                mediaURLs: urls.map((url) => ({
-                  url,
-                  type: "image",
-                })),
+                mediaURLs: [...uploadedImgUrls, ...urls],
                 postId: postInfo._id,
                 postedBy: user?._id,
               };
               dispatch(updatePost(_post));
-              setImgUrls([]);
-              setIsLoading(false);
-
-              setPost(initialPostState);
             } else {
               dispatch(
                 updatePost({
@@ -112,13 +114,13 @@ const EditPostForm = ({
                   postedBy: user?._id,
                 })
               );
-              setImgUrls([]);
-              setIsLoading(false);
-              setPost(initialPostState);
-              setIsEditOptionClicked(false);
-              setIsOptionClicked(false);
-              setIsModalOpen(false);
             }
+            setIsLoading(false);
+            setImgUrls([]);
+            setPost(initialPostState);
+            setIsEditOptionClicked(false);
+            setIsOptionClicked(false);
+            setIsModalOpen(false);
           }}
         >
           <div className="form-group mb-6">

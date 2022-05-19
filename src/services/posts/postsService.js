@@ -157,13 +157,18 @@ export const removePostFromArchive = createAsyncThunk(
 );
 export const addPostToDraft = createAsyncThunk(
   "posts/addPostToDraft",
-  async (post) => {
+  async (post, { dispatch }) => {
     const response = await callApi(
       "put",
       `user/${post.postedBy}/posts/draft`,
       true,
       { ...post }
     );
+    dispatch(updateAllPosts(response?.data));
+    dispatch(updateArchivedPosts(response?.data));
+    dispatch(updateBookmarkedPosts(response?.data));
+    dispatch(updateUserCreatedPosts(response?.data));
+    dispatch(updateDraftPosts(response?.data));
     return response.data;
   }
 );
@@ -175,6 +180,14 @@ export const removePostFromDraft = createAsyncThunk(
       `user/${post.postedBy}/posts/draft/${post.postId}`,
       true
     );
+    return response.data;
+  }
+);
+
+export const searchPostsByHashTag = createAsyncThunk(
+  "posts/searchPostsByHashTag",
+  async (hashTag) => {
+    const response = await callApi("get", `posts/hashtag/${hashTag}`);
     return response.data;
   }
 );

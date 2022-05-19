@@ -17,6 +17,7 @@ const ProfileHeader = ({ profile }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth?.user);
   const isFollowing = user?.following.includes(profile?._id);
+  const isFollower = user?.followers.includes(profile?._id);
   return (
     <div className="flex flex-col   bg-white  ">
       {isEditProfile && (
@@ -72,7 +73,7 @@ const ProfileHeader = ({ profile }) => {
                   }}
                   className="px-4 rounded-full py-1.5 bg-primary text-white "
                 >
-                  Follow
+                  Follow {isFollower ? "Back" : ""}
                 </button>
               )}
               {user?._id !== profile?._id && isFollowing && (

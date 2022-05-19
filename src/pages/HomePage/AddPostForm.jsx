@@ -8,7 +8,7 @@ import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
-const AddPostForm = ({ ref }) => {
+const AddPostForm = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
@@ -84,7 +84,6 @@ const AddPostForm = ({ ref }) => {
 
             setPost(initialPostState);
           }
-          ref.current.scrollIntoView();
         }}
       >
         <div className="form-group mb-6">

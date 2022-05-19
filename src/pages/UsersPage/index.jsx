@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Layout, Loader } from "../../components";
 import { useSearch } from "../../context/searchContext";
 import {
@@ -24,6 +24,7 @@ const UsersPage = ({ type }) => {
   const user = useSelector((state) => state.auth?.user);
   const searchedUsers = useSelector((state) => state.searchedUsers);
   const isFollowing = (id) => user?.following.includes(id);
+  const isFollower = (id) => user?.followers.includes(id);
   useEffect(() => {
     setUsers([]);
     if (type === "followers") {
@@ -36,14 +37,16 @@ const UsersPage = ({ type }) => {
   }, []);
 
   useEffect(() => {
+    if (type === "search") {
+      setUsers(searchedUsers?.data);
+    }
     if (type === "followers") {
       setUsers(followers?.data);
     } else if (type === "following") {
       setUsers(following?.data);
-    } else if (type === "search") {
-      setUsers(searchedUsers?.data);
     }
   }, [followers, following, searchedUsers]);
+
   return (
     <Layout>
       <h1 className="text-lightBlue text-center  mt-8 text-xl font-semibold">
@@ -71,55 +74,55 @@ const UsersPage = ({ type }) => {
             </span>
           )}
         <div className="flex flex-col gap-2  justify-center items-center">
-          {followers.status === "succeeded" ||
-            following.status === "succeeded" ||
-            (searchedUsers.status === "succeeded" &&
-              users &&
-              users.length > 0 &&
-              users.map((_user) => (
-                <div
-                  key={_user._id}
-                  className="p-4 gap-8 rounded-md flex flex-wrap shadow-md justify-between items-center sm:w-96 w-full  bg-white"
+          {users.length > 0 &&
+            users.map((_user) => (
+              <div
+                key={_user._id}
+                className="p-4 gap-8 rounded-md flex flex-wrap shadow-md justify-between items-center sm:w-96 w-full  bg-white"
+              >
+                <Link
+                  to={`/profile/${_user._id}`}
+                  className="flex items-center gap-2"
                 >
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={_user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-                      alt="avatar"
-                      className="rounded-full w-12 h-12 mr-4"
-                    />
-                    <h3 className="text-xl text-lightBlue">{_user.name}</h3>
-                  </div>
-                  {isFollowing(_user._id) ? (
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          unfollowUser({
-                            followingId: _user._id,
-                            followerId: user?._id,
-                          })
-                        );
-                      }}
-                      className="bg-primary text-white rounded-full px-4 py-2"
-                    >
-                      Unfollow
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          followUser({
-                            followingId: _user._id,
-                            followerId: user?._id,
-                          })
-                        );
-                      }}
-                      className="bg-primary text-white rounded-full px-4 py-2"
-                    >
-                      Follow
-                    </button>
-                  )}
-                </div>
-              )))}
+                  <img
+                    src={_user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+                    alt="avatar"
+                    className="rounded-full w-12 h-12 mr-4"
+                  />
+                  <h3 className="text-xl text-lightBlue">{_user.name}</h3>
+                </Link>
+                {_user._id !== user?._id && isFollowing(_user._id) && (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        unfollowUser({
+                          followingId: _user._id,
+                          followerId: user?._id,
+                        })
+                      );
+                    }}
+                    className="bg-primary text-white rounded-full px-4 py-2"
+                  >
+                    Unfollow
+                  </button>
+                )}
+                {_user._id !== user?._id && !isFollowing(_user._id) && (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        followUser({
+                          followingId: _user._id,
+                          followerId: user?._id,
+                        })
+                      );
+                    }}
+                    className="bg-primary text-white rounded-full px-4 py-2"
+                  >
+                    Follow {isFollower ? "Back" : ""}
+                  </button>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </Layout>

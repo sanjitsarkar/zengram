@@ -220,7 +220,7 @@ const PostCard = ({ post, type }) => {
               return (
                 <Link
                   key={word}
-                  to={`?hashtags=${word.slice(1)}`}
+                  to={`/posts?hashtag=${word.slice(1)}`}
                   className={`text-primary ${i === 0 ? "mr-2" : "ml-2"}`}
                 >
                   {word}

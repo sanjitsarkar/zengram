@@ -13,6 +13,7 @@ import {
   ProfilePage,
   SignupPage,
 } from "./pages";
+import SearchedPostsPage from "./pages/SearchedPostPage";
 import UsersPage from "./pages/UsersPage";
 import {
   fetchArchivedPosts,
@@ -60,6 +61,7 @@ function App() {
             element={<UsersPage type="following" />}
           />
           <Route path="/users" element={<UsersPage type="search" />} />
+          <Route path="/posts" element={<SearchedPostsPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

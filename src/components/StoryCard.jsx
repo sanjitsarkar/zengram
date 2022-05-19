@@ -1,7 +1,7 @@
 import React from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { notify, PROFILE_PIC_PLACEHOLDER } from "../utils";
 
 const StoryCard = ({
   storyThumbnail = "http://res.cloudinary.com/dddfc84ni/image/upload/v1651546264/dl7s7nrhfr1lojeu32gk.jpg",
@@ -23,7 +23,12 @@ const StoryCard = ({
           className="cursor-pointer rounded-md h-32 w-full object-cover"
         />
       ) : (
-        <div className="gap-1 cursor-pointer rounded-md h-32 bg-slate-200 grid place-content-center place-items-center">
+        <div
+          onClick={() => {
+            notify("Story adding feature is not available yet!", "error");
+          }}
+          className="gap-1 cursor-pointer rounded-md h-32 bg-slate-200 grid place-content-center place-items-center"
+        >
           <MdAddCircleOutline
             size={40}
             className=" fill-lightBlue opacity-30 hover:fill-primary focus:fill-primary   hover:opacity-100 focus:opacity-100"
