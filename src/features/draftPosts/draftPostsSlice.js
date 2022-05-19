@@ -4,7 +4,7 @@ import {
   fetchDraftPosts,
   removePostFromDraft,
 } from "../../services/posts/postsService";
-import { notify } from "../../utils";
+import { notify, updatePostsContent } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -15,7 +15,11 @@ const initialState = {
 export const draftPostsSlice = createSlice({
   name: "draftPosts",
   initialState,
-  reducers: {},
+  reducers: {
+    updateDraftPosts: (state, action) => {
+      updatePostsContent(state, action);
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchDraftPosts.pending, (state, action) => {
@@ -23,7 +27,9 @@ export const draftPostsSlice = createSlice({
       })
       .addCase(fetchDraftPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.posts;
+        state.data = action.payload?.posts?.filter(
+          (post) => post != null && post
+        );
       })
       .addCase(fetchDraftPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -58,4 +64,5 @@ export const draftPostsSlice = createSlice({
   },
 });
 
+export const { updateDraftPosts } = draftPostsSlice.actions;
 export default draftPostsSlice.reducer;

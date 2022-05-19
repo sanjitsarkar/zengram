@@ -6,29 +6,36 @@ import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal } from "../context/modalContext";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
-import { fetchUserFeedPosts, updatePost } from "../services/posts/postsService";
+import { updatePost } from "../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
 const EditPostForm = ({
   postInfo,
   setIsEditOptionClicked,
   setIsOptionClicked,
+  postType,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(postInfo);
   const { setIsModalOpen } = useModal();
   const [imgUrls, setImgUrls] = useState(postInfo?.mediaURLs ?? []);
+  const [uploadedImgUrls, setUploadedImgUrls] = useState(
+    postInfo?.mediaURLs ?? []
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
       <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  ">
         {imgUrls.map((mediaURL, index) => (
-          <div className=" relative  sm:w-60 w-48" key={mediaURL}>
+          <div className=" relative  sm:w-60 w-48" key={mediaURL + index}>
             <MdClose
               onClick={() => {
                 const newImageUrls = imgUrls.filter(
                   (url) => url.url !== mediaURL.url
+                );
+                setUploadedImgUrls((prevUploadedImgUrls) =>
+                  prevUploadedImgUrls.filter((url) => url.url !== mediaURL.url)
                 );
                 const mediaURLs = Array.from(post.mediaURLs).filter(
                   (file) =>
@@ -87,34 +94,33 @@ const EditPostForm = ({
             e.preventDefault();
             setIsLoading(true);
             if (Array.from(post.mediaURLs).length > 0) {
-              const urls = await uploadImages(post.mediaURLs, user._id);
-
+              let urls = await uploadImages(post.mediaURLs, user._id);
+              urls = urls.map((url) => ({
+                url,
+                type: "image",
+              }));
               const _post = {
                 content: post.content,
-                mediaURLs: urls.map((url) => ({
-                  url,
-                  type: "image",
-                })),
-                id: postInfo._id,
+                mediaURLs: [...uploadedImgUrls, ...urls],
+                postId: postInfo._id,
+                postedBy: user?._id,
               };
               dispatch(updatePost(_post));
-              setImgUrls([]);
-              setIsLoading(false);
-
-              setPost(initialPostState);
             } else {
               dispatch(
                 updatePost({
                   content: post.content,
-                  id: postInfo._id,
+                  postId: postInfo._id,
+                  postedBy: user?._id,
                 })
               );
-              setImgUrls([]);
-              setIsLoading(false);
-
-              setPost(initialPostState);
             }
-            dispatch(fetchUserFeedPosts(user?._id));
+            setIsLoading(false);
+            setImgUrls([]);
+            setPost(initialPostState);
+            setIsEditOptionClicked(false);
+            setIsOptionClicked(false);
+            setIsModalOpen(false);
           }}
         >
           <div className="form-group mb-6">

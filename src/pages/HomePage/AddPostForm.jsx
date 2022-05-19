@@ -5,10 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
-import {
-  createPost,
-  fetchUserFeedPosts,
-} from "../../services/posts/postsService";
+import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
 const AddPostForm = () => {
@@ -73,7 +70,7 @@ const AddPostForm = () => {
                 url,
                 type: "image",
               })),
-              id: user._id,
+              postedBy: user._id,
             };
             dispatch(createPost(_post));
             setImgUrls([]);
@@ -81,13 +78,12 @@ const AddPostForm = () => {
 
             setPost(initialPostState);
           } else {
-            dispatch(createPost({ ...post, id: user._id }));
+            dispatch(createPost({ ...post, postedBy: user._id }));
             setImgUrls([]);
             setIsLoading(false);
 
             setPost(initialPostState);
           }
-          dispatch(fetchUserFeedPosts(user?._id));
         }}
       >
         <div className="form-group mb-6">

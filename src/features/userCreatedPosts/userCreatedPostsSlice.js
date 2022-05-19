@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUserCreatedPosts } from "../../services/posts/postsService";
+import { updatePostsContent } from "../../utils";
 
 const initialState = {
   status: "idle",
@@ -10,7 +11,11 @@ const initialState = {
 export const userCreatedPostsSlice = createSlice({
   name: "userCreatedPosts",
   initialState,
-  reducers: {},
+  reducers: {
+    updateUserCreatedPosts: (state, action) => {
+      updatePostsContent(state, action);
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchUserCreatedPosts.pending, (state, action) => {
@@ -27,4 +32,5 @@ export const userCreatedPostsSlice = createSlice({
   },
 });
 
+export const { updateUserCreatedPosts } = userCreatedPostsSlice.actions;
 export default userCreatedPostsSlice.reducer;

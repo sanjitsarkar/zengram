@@ -30,24 +30,9 @@ export const sideBarItems = [
   },
 ];
 
-export function convertViewCount(viewCount) {
-  return Math.abs(Number(viewCount)) >= 1.0e9
-    ? (Math.abs(Number(viewCount)) / 1.0e9).toFixed(2) + "B"
-    : Math.abs(Number(viewCount)) >= 1.0e6
-    ? (Math.abs(Number(viewCount)) / 1.0e6).toFixed(2) + "M"
-    : Math.abs(Number(viewCount)) >= 1.0e3
-    ? (Math.abs(Number(viewCount)) / 1.0e3).toFixed(2) + "K"
-    : Math.abs(Number(viewCount));
-}
-
-export function toTimestamp(strDate) {
-  let datum = Date.parse(strDate);
-  return datum;
-}
-
 export function timeSince(date) {
   date = new Date(date);
-  let seconds = Math.floor((new Date() - date) / 1000);
+  let seconds = Math.abs(Math.floor((new Date() - date) / 1000));
 
   let interval = seconds / 31536000;
   let res;
@@ -88,6 +73,7 @@ export function timeSince(date) {
   interval = Math.floor(interval);
   res = interval + " second";
   if (interval !== 1) return res + "s";
+  if (interval < 1) return "Just now";
   return res;
 }
 export function convertTimestampToDate(timestamp) {
@@ -115,15 +101,6 @@ export function convertTimestampToDate(timestamp) {
 export const NOT_AVAILABLE_IMAGE_URL =
   "https://booyah.live/ssr/_next/static/images/empty-vod-dark-mode.404178ec.png";
 
-export function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-  return array;
-}
 export const formatError = (err) => {
   if (err.response.data.errors) {
     return err.response.data.errors.join(", ");
@@ -131,6 +108,20 @@ export const formatError = (err) => {
   return err.message;
 };
 
+export const updatePostsContent = (state, action) => {
+  if (action?.payload?.post) {
+    state.data = state?.data?.map((post) => {
+      if (post?._id === action.payload?.post?._id) {
+        return action.payload?.post;
+      }
+      return post;
+    });
+  } else if (action?.payload?.postId) {
+    state.data = state?.data.filter(
+      (post) => post?._id !== action.payload?.postId
+    );
+  }
+};
 export const GUEST_CREDENTIAL = {
   email: "johndoe@gmail.com",
   password: "123456",

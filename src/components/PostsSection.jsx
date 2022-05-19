@@ -16,6 +16,7 @@ const PostsSection = ({ type = "all" }) => {
   const allPosts = useSelector((state) => state.allPosts);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("Latest");
+
   useEffect(() => {
     if (type === "userFeed") {
       if (activeTab === "Latest") {
@@ -32,7 +33,7 @@ const PostsSection = ({ type = "all" }) => {
     }
   }, [user, dispatch, type, activeTab]);
   return (
-    <PostsWrapper posts={type === "all" ? allPosts : posts}>
+    <PostsWrapper posts={type === "all" ? allPosts : posts} postType={type}>
       <div className="flex gap-4">
         <Tab
           activeTab={activeTab}

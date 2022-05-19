@@ -6,9 +6,13 @@ import {
   bookmarkedPostsReducer,
   commentsReducer,
   draftPostsReducer,
+  followersReducer,
+  followingReducer,
   postsReducer,
   profileReducer,
   repliesReducer,
+  searchedPostsReducer,
+  searchedUsersReducer,
   storiesReducer,
   userCreatedPostsReducer,
 } from "../features";
@@ -25,5 +29,9 @@ export const store = configureStore({
     profile: profileReducer,
     comments: commentsReducer,
     replies: repliesReducer,
+    following: followingReducer,
+    followers: followersReducer,
+    searchedUsers: searchedUsersReducer,
+    searchedPosts: searchedPostsReducer,
   },
 });

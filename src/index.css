@@ -5,6 +5,7 @@
     --primary-color: hsl(152, 99%, 35%);
     --primary-color-4: hsla(152, 93%, 40%, 0.6);
     --dark-color-5: hsla(180, 9%, 13%, 0.5);
+    scroll-behavior: smooth;
 }
 body{
     font-family: 'Poppins', sans-serif;

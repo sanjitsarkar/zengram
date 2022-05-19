@@ -57,8 +57,9 @@ export const postsSlice = createSlice({
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
-          (post) => post?._id !== action.payload?.post._id
+          (post) => post?._id !== action.payload?.postId
         );
+
         notify("Post deleted successfully", "success");
       })
       .addCase(deletePost.rejected, (state, action) => {

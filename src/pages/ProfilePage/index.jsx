@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Layout, Loader, PostsWrapper, Tab } from "../../components";
 import { getProfileInfo } from "../../services/auth/authService";
 import {
@@ -12,14 +12,13 @@ import ProfileHeader from "./ProfileHeader";
 const ProfilePage = () => {
   const profile = useSelector((state) => state.profile);
   const user = useSelector((state) => state.auth?.user);
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const userCreatedPosts = useSelector((state) => state.userCreatedPosts);
   const archivedPosts = useSelector((state) => state.archivedPosts);
   const [activeTab, setActiveTab] = useState("All Published Posts");
-  let pathName = location.pathname.split("/");
-  let profileId = pathName[pathName.length - 1];
+  const { profileId } = useParams();
+
   useEffect(() => {
     dispatch(getProfileInfo(profileId));
   }, [profileId]);

@@ -6,6 +6,7 @@ import App from "./App";
 import { store } from "./app/store";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ModalProvider } from "./context/modalContext";
+import { SearchProvider } from "./context/searchContext";
 import { SideBarItemProvider } from "./context/sideBarItemContext";
 import "./index.css";
 
@@ -17,7 +18,9 @@ root.render(
     <Provider store={store}>
       <ModalProvider>
         <SideBarItemProvider>
-          <App />
+          <SearchProvider>
+            <App />
+          </SearchProvider>
         </SideBarItemProvider>
       </ModalProvider>
     </Provider>

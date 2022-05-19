@@ -46,7 +46,7 @@ export const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error;
-      notify("Email or Password is wrong", "error");
+      notify(action.payload, "error");
     });
     builder.addCase(signup.pending, (state, action) => {
       state.status = "loading";
@@ -63,7 +63,7 @@ export const authSlice = createSlice({
       .addCase(signup.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
-        notify("Email is already taken", "error");
+        notify(action.payload, "error");
       })
 
       .addCase(followUser.fulfilled, (state, action) => {

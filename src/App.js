@@ -13,12 +13,14 @@ import {
   ProfilePage,
   SignupPage,
 } from "./pages";
+import SearchedPostsPage from "./pages/SearchedPostPage";
+import UsersPage from "./pages/UsersPage";
 import {
   fetchArchivedPosts,
   fetchBookmarkedPosts,
 } from "./services/posts/postsService";
 function App() {
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { setActiveName } = useSideBarItem();
@@ -36,8 +38,10 @@ function App() {
     isLoggedIn && navigate("/");
   }, [isLoggedIn]);
   useEffect(() => {
-    dispatch(fetchBookmarkedPosts());
-    dispatch(fetchArchivedPosts());
+    if (isLoggedIn) {
+      dispatch(fetchBookmarkedPosts(user?._id));
+      dispatch(fetchArchivedPosts(user?._id));
+    }
   }, []);
   return (
     <div className="App">
@@ -46,8 +50,18 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/bookmarks" element={<BookmarkedPage />} />
           <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/profile/:profileId" element={<ProfilePage />} />
           <Route path="/messages/" element={<MessagePage />} />
+          <Route
+            path="/users/:profileId/followers"
+            element={<UsersPage type="followers" />}
+          />
+          <Route
+            path="/users/:profileId/following"
+            element={<UsersPage type="following" />}
+          />
+          <Route path="/users" element={<UsersPage type="search" />} />
+          <Route path="/posts" element={<SearchedPostsPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

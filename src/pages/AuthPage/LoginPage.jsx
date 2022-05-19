@@ -17,7 +17,7 @@ const LoginPage = () => {
   return (
     <>
       {auth.status === "loading" && (
-        <Loader status={"Please wait until your logged in"} />
+        <Loader status={"Please wait until you are logged in"} />
       )}
       <div className="w-full grid place-content-center  h-screen bg-primary">
         <div className="block p-6 rounded-lg shadow-2xl bg-white sm:w-96 w-fit m-2">

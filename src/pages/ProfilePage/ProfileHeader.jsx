@@ -10,13 +10,14 @@ import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 import ProfileEditForm from "./ProfileEditForm.jsx";
 
 const ProfileHeader = ({ profile }) => {
-  const user = useSelector((state) => state.auth?.user);
   const postCount = useSelector(
     (state) => state.userCreatedPosts?.data?.length
   );
   const [isEditProfile, setIsEditProfile] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth?.user);
   const isFollowing = user?.following.includes(profile?._id);
+  const isFollower = user?.followers.includes(profile?._id);
   return (
     <div className="flex flex-col   bg-white  ">
       {isEditProfile && (
@@ -52,7 +53,12 @@ const ProfileHeader = ({ profile }) => {
               {user?._id !== profile?._id && !isFollowing && (
                 <button
                   onClick={() => {
-                    dispatch(followUser(profile?._id));
+                    dispatch(
+                      followUser({
+                        followingId: profile?._id,
+                        followerId: user._id,
+                      })
+                    );
 
                     const newUser = {
                       ...user,
@@ -67,13 +73,18 @@ const ProfileHeader = ({ profile }) => {
                   }}
                   className="px-4 rounded-full py-1.5 bg-primary text-white "
                 >
-                  Follow
+                  Follow {isFollower ? "Back" : ""}
                 </button>
               )}
               {user?._id !== profile?._id && isFollowing && (
                 <button
                   onClick={() => {
-                    dispatch(unfollowUser(profile?._id));
+                    dispatch(
+                      unfollowUser({
+                        followingId: profile?._id,
+                        followerId: user._id,
+                      })
+                    );
                     const _user = user;
                     const newUser = {
                       ...user,
@@ -99,7 +110,7 @@ const ProfileHeader = ({ profile }) => {
             </div>
             <div className="flex  sm:mt-1 gap-6 text-lightBlue flex-wrap">
               <h1>
-                <span className="font-semibold mr-2">{postCount} </span> post
+                <span className="font-semibold mr-2">{postCount}</span> post
                 {postCount > 1 ? "s" : ""}
               </h1>
               <Link to={`/users/${profile._id}/followers`}>
@@ -129,6 +140,8 @@ const ProfileHeader = ({ profile }) => {
             <a
               className="w-fit  px-4 rounded-full py-1.5 bg-slate-700 text-white"
               href={profile.portfolioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Check my portfolio
             </a>
