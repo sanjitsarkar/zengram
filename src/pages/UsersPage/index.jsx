@@ -73,12 +73,12 @@ const UsersPage = ({ type }) => {
               No {type === "search" ? "users" : type} found
             </span>
           )}
-        <div className="flex flex-col gap-2  justify-center items-center">
+        <div className="flex flex-col gap-2   ">
           {users.length > 0 &&
             users.map((_user) => (
               <div
                 key={_user._id}
-                className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap  shadow-md sm:justify-between items-center min-w-96   bg-white"
+                className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap   shadow-md sm:justify-between sm:items-center min-w-96   bg-white"
               >
                 <Link
                   to={`/profile/${_user._id}`}
