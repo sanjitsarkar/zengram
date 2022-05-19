@@ -78,7 +78,7 @@ const UsersPage = ({ type }) => {
             users.map((_user) => (
               <div
                 key={_user._id}
-                className="p-4 gap-8 rounded-md flex flex-wrap shadow-md justify-between items-center sm:w-96 w-full  bg-white"
+                className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap  shadow-md sm:justify-between items-center min-w-96   bg-white"
               >
                 <Link
                   to={`/profile/${_user._id}`}
