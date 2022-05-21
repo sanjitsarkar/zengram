@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Loader } from "../../components";
 import { signup } from "../../services/auth/authService";
-import { initialSignupCredState } from "../../utils";
+import { initialSignupCredState, notify } from "../../utils";
 
 const SignupPage = () => {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [signupCred, setSignupCred] = useState(initialSignupCredState);
+
   return (
     <>
       {auth.status === "loading" && (
@@ -19,7 +20,12 @@ const SignupPage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              dispatch(signup(signupCred));
+              if (signupCred.password !== signupCred.confirmPassword) {
+                notify("Please confirm your password", "error");
+                return;
+              } else {
+                dispatch(signup(signupCred));
+              }
             }}
           >
             <div className="form-group mb-4">
