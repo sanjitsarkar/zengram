@@ -10,7 +10,9 @@
 
 ## Live Website: [ZenGram](https://zengram.netlify.app/)
 
-## Video Demo:
+## Demo:
+![zengram](https://user-images.githubusercontent.com/8179761/169650144-ab61f77a-b731-4519-914e-f5880c365cd2.gif)
+![zengram2](https://user-images.githubusercontent.com/8179761/169650146-bdce35e4-e35c-4979-b378-f7d5a1b18b48.gif)
 
 ---
 
