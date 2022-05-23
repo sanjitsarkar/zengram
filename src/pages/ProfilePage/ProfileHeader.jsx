@@ -34,7 +34,7 @@ const ProfileHeader = ({ profile }) => {
         alt={profile.name}
       />
       <div className="flex flex-col p-6 ">
-        <div className=" justify-center sm:justify-start  items-center     flex flex-wrap  gap-2  ">
+        <div className=" justify-center h-fit sm:justify-start  items-center     flex flex-wrap  gap-2  ">
           <img
             className="sm:w-32 w-28 h-28 sm:h-32 rounded-full border-8 shadow-sm aspect-square border-white object-cover relative bottom-14 sm:bottom-16  md:left-6 left-0 right-0 "
             src={profile.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
@@ -129,7 +129,7 @@ const ProfileHeader = ({ profile }) => {
           </div>
         </div>
 
-        <div className="sm:ml-6 sm:mt-6 md:mt-2   mt-6   flex gap-4 md:text-left text-center flex-wrap items-center md:justify-between justify-center  text-lightBlue">
+        <div className="sm:ml-6 md:-mt-4    flex flex-col gap-1 sm:text-left text-center flex-wrap   text-lightBlue">
           {profile.bio && (
             <p className="text-lightBlue text-opacity-95">
               {profile.bio ??
@@ -138,12 +138,12 @@ const ProfileHeader = ({ profile }) => {
           )}
           {profile.portfolioUrl && (
             <a
-              className="w-fit  px-4 rounded-full py-1.5 bg-slate-700 text-white"
+              className="sm:w-max text-primary"
               href={profile.portfolioUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Check my portfolio
+              {profile.portfolioUrl}
             </a>
           )}
         </div>
