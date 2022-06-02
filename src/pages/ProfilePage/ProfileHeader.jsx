@@ -47,9 +47,9 @@ const ProfileHeader = ({ profile }) => {
             className="cursor-pointer relative md:bottom-8  bottom-8 right-6 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
           />
 
-          <div className="sm:ml-6 -mt-16   flex   flex-wrap  md:gap-10  gap-4 justify-around items-center">
-            <div className="flex flex-col gap-2">
-              <h1 className=" text-xl text-lightBlue">{profile.name}</h1>
+          <div className="sm:ml-6 -mt-14   flex   flex-wrap  md:gap-10  gap-4 justify-around items-center">
+            <div className="flex flex-col  items-center gap-2">
+              <h1 className=" text-xl  text-lightBlue">{profile.name}</h1>
               {user?._id !== profile?._id && !isFollowing && (
                 <button
                   onClick={() => {
@@ -108,7 +108,7 @@ const ProfileHeader = ({ profile }) => {
                 </button>
               )}
             </div>
-            <div className="flex  sm:mt-1 gap-6 text-lightBlue flex-wrap">
+            <div className="flex  sm:mt-1 sm:gap-6 gap-4 text-lightBlue flex-wrap items-center justify-center ">
               <h1>
                 <span className="font-semibold mr-2">{postCount}</span> post
                 {postCount > 1 ? "s" : ""}

@@ -24,15 +24,19 @@ const PostsWrapper = forwardRef(
         )}
         <div className="flex flex-col gap-4 ">
           {posts.data.map(
-            (post) =>
+            (post, i) =>
               post &&
               !isPostArchived(post._id) && (
-                <PostCard key={post._id} post={post} type={type} />
+                <PostCard
+                  key={post._id}
+                  post={post}
+                  type={type}
+                  ref={i === posts.data.length - 1 ? ref : null}
+                />
               )
           )}
         </div>
         {posts.status === "loading" && <Loader type="medium" />}
-        <div className="loader" ref={ref}></div>
       </div>
     );
   }

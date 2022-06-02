@@ -40,7 +40,6 @@ const UsersPage = ({ type }) => {
     [searchedUsers]
   );
   useEffect(() => {
-    setUsers([]);
     if (type === "followers") {
       dispatch(getFollowers(profileId));
     } else if (type === "following") {
@@ -48,6 +47,7 @@ const UsersPage = ({ type }) => {
     } else if (type === "search") {
       dispatch(searchUsers({ search, skip }));
     }
+    setUsers([]);
   }, [skip, search]);
 
   useEffect(() => {
@@ -76,9 +76,9 @@ const UsersPage = ({ type }) => {
         )}
       </h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-5">
-        {(searchedUsers.status === "succeeded" ||
-          followers.status === "succeeded" ||
-          following.status === "succeeded") &&
+        {(searchedUsers.status !== "loading" ||
+          followers.status !== "loading" ||
+          following.status !== "loading") &&
           users.length === 0 && (
             <span className="text-center text-lg mt-2 font-medium text-lightBlue">
               No {type === "search" ? "users" : type} found
@@ -86,60 +86,111 @@ const UsersPage = ({ type }) => {
           )}
         <div className="flex flex-col gap-2   ">
           {users.length > 0 &&
-            users.map((_user) => (
-              <div
-                key={_user._id}
-                className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap   shadow-md sm:justify-between sm:items-center min-w-96   bg-white"
-              >
-                <Link
-                  to={`/profile/${_user._id}`}
-                  className="flex items-center gap-2"
+            users.map((_user, i) => {
+              if (i === users.length - 1)
+                return (
+                  <div
+                    ref={loaderRef}
+                    key={_user._id}
+                    className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap   shadow-md justify-between sm:items-center min-w-96   bg-white"
+                  >
+                    <Link
+                      to={`/profile/${_user._id}`}
+                      className="flex items-center gap-2"
+                    >
+                      <img
+                        src={_user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+                        alt="avatar"
+                        className="rounded-full w-12 h-12 mr-4"
+                      />
+                      <h3 className="text-xl text-lightBlue">{_user.name}</h3>
+                    </Link>
+                    {_user._id !== user?._id && isFollowing(_user._id) && (
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            unfollowUser({
+                              followingId: _user._id,
+                              followerId: user?._id,
+                            })
+                          );
+                        }}
+                        className="bg-primary text-white rounded-full px-4 py-2"
+                      >
+                        Unfollow
+                      </button>
+                    )}
+                    {_user._id !== user?._id && !isFollowing(_user._id) && (
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            followUser({
+                              followingId: _user._id,
+                              followerId: user?._id,
+                            })
+                          );
+                        }}
+                        className="bg-primary text-white rounded-full px-4 py-2"
+                      >
+                        Follow {isFollower ? "Back" : ""}
+                      </button>
+                    )}
+                  </div>
+                );
+              return (
+                <div
+                  key={_user._id}
+                  className="p-4 sm:gap-8 gap-4 rounded-md flex flex-wrap   shadow-md sm:justify-between sm:items-center min-w-96   bg-white"
                 >
-                  <img
-                    src={_user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-                    alt="avatar"
-                    className="rounded-full w-12 h-12 mr-4"
-                  />
-                  <h3 className="text-xl text-lightBlue">{_user.name}</h3>
-                </Link>
-                {_user._id !== user?._id && isFollowing(_user._id) && (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        unfollowUser({
-                          followingId: _user._id,
-                          followerId: user?._id,
-                        })
-                      );
-                    }}
-                    className="bg-primary text-white rounded-full px-4 py-2"
+                  <Link
+                    to={`/profile/${_user._id}`}
+                    className="flex items-center gap-2"
                   >
-                    Unfollow
-                  </button>
-                )}
-                {_user._id !== user?._id && !isFollowing(_user._id) && (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        followUser({
-                          followingId: _user._id,
-                          followerId: user?._id,
-                        })
-                      );
-                    }}
-                    className="bg-primary text-white rounded-full px-4 py-2"
-                  >
-                    Follow {isFollower ? "Back" : ""}
-                  </button>
-                )}
-              </div>
-            ))}
+                    <img
+                      src={_user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+                      alt="avatar"
+                      className="rounded-full w-12 h-12 mr-4"
+                    />
+                    <h3 className="text-xl text-lightBlue">{_user.name}</h3>
+                  </Link>
+                  {_user._id !== user?._id && isFollowing(_user._id) && (
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          unfollowUser({
+                            followingId: _user._id,
+                            followerId: user?._id,
+                          })
+                        );
+                      }}
+                      className="bg-primary text-white rounded-full px-4 py-2"
+                    >
+                      Unfollow
+                    </button>
+                  )}
+                  {_user._id !== user?._id && !isFollowing(_user._id) && (
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          followUser({
+                            followingId: _user._id,
+                            followerId: user?._id,
+                          })
+                        );
+                      }}
+                      className="bg-primary text-white rounded-full px-4 py-2"
+                    >
+                      Follow {isFollower ? "Back" : ""}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           {(searchedUsers.status === "loading" ||
             followers.status === "loading" ||
             following.status === "loading") && <Loader type="medium" />}
         </div>
       </div>
-      <div className="loader absolute bottom-0" ref={loaderRef}></div>
     </Layout>
   );
 };
