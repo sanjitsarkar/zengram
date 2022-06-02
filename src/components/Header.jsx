@@ -8,7 +8,6 @@ import { useSearch } from "../context/searchContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
-
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
