@@ -19,9 +19,8 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("All Published Posts");
   const { profileId } = useParams();
   const [skip, setSkip] = useState(0);
-  const observer = useRef(); // (*)
+  const observer = useRef();
   const loaderRef = useCallback(
-    // (*)
     (node) => {
       if (
         archivedPosts.status === "loading" ||
