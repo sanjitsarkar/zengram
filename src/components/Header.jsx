@@ -7,13 +7,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSearch } from "../context/searchContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
-import { searchUsers } from "../services/auth/authService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
-  const { search, setSearch } = useSearch();
+  const { search, setSearch, setSkip } = useSearch();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,17 +35,17 @@ const Header = () => {
             onClick={() => setIsNavOpen(false)}
           />
         )}
-        <div className="site-title text-xl sm:inline-block hidden ">
+        <Link to="/" className="site-title text-xl sm:inline-block hidden ">
           <h4>
             Zen
             <span className="text-primary">Gram</span>
           </h4>
-        </div>
+        </Link>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             dispatch(clearSearchedUsers());
-            dispatch(searchUsers(search));
+            setSkip(0);
             navigate("/users?search=" + search);
           }}
           className="input-box ease-in-out transition-all bg-lightBlue bg-opacity-10 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-52 md:w-96  rounded-md flex  items-center"

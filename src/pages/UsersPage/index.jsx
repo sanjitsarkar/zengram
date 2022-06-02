@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Layout, Loader } from "../../components";
@@ -15,9 +15,9 @@ import { PROFILE_PIC_PLACEHOLDER } from "../../utils";
 const UsersPage = ({ type }) => {
   const dispatch = useDispatch();
   const { profileId } = useParams();
-  let _search = useLocation().search;
-  _search = new URLSearchParams(_search).get("search");
-  const { search } = useSearch(_search);
+  let search = useLocation().search;
+  search = new URLSearchParams(search).get("search");
+  const { skip, setSkip } = useSearch();
   const [users, setUsers] = useState([]);
   const followers = useSelector((state) => state.followers);
   const following = useSelector((state) => state.following);
@@ -25,6 +25,20 @@ const UsersPage = ({ type }) => {
   const searchedUsers = useSelector((state) => state.searchedUsers);
   const isFollowing = (id) => user?.following.includes(id);
   const isFollower = (id) => user?.followers.includes(id);
+  const observer = useRef();
+  const loaderRef = useCallback(
+    (node) => {
+      if (searchedUsers.status === "loading") return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setSkip(searchedUsers.data.length);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [searchedUsers]
+  );
   useEffect(() => {
     setUsers([]);
     if (type === "followers") {
@@ -32,9 +46,9 @@ const UsersPage = ({ type }) => {
     } else if (type === "following") {
       dispatch(getFollowing(profileId));
     } else if (type === "search") {
-      if (searchedUsers?.data.length === 0) dispatch(searchUsers(search));
+      dispatch(searchUsers({ search, skip }));
     }
-  }, []);
+  }, [skip, search]);
 
   useEffect(() => {
     if (type === "search") {
@@ -57,14 +71,11 @@ const UsersPage = ({ type }) => {
             <span className="text-lightBlue font-medium">
               Search Results for
             </span>{" "}
-            <span className="text-lightBlue text-opacity-80">{_search}</span>
+            <span className="text-lightBlue text-opacity-80">{search}</span>
           </>
         )}
       </h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-5">
-        {(searchedUsers.status === "loading" ||
-          followers.status === "loading" ||
-          following.status === "loading") && <Loader type="medium" />}
         {(searchedUsers.status === "succeeded" ||
           followers.status === "succeeded" ||
           following.status === "succeeded") &&
@@ -123,8 +134,12 @@ const UsersPage = ({ type }) => {
                 )}
               </div>
             ))}
+          {(searchedUsers.status === "loading" ||
+            followers.status === "loading" ||
+            following.status === "loading") && <Loader type="medium" />}
         </div>
       </div>
+      <div className="loader absolute bottom-0" ref={loaderRef}></div>
     </Layout>
   );
 };

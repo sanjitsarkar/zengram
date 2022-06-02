@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsWrapper } from ".";
+import { clearAllPosts } from "../features/allPosts/allPostsSlice";
+import { clearPosts } from "../features/posts/postsSlice";
 import {
   fetchAllPosts,
   fetchAllTrendingPosts,
@@ -16,24 +18,51 @@ const PostsSection = ({ type = "all" }) => {
   const allPosts = useSelector((state) => state.allPosts);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("Latest");
+  const [skip, setSkip] = useState(0);
+  useEffect(() => {
+    setSkip(0);
+    if (type === "all") dispatch(clearAllPosts());
+    else dispatch(clearPosts());
+  }, [type, activeTab]);
 
   useEffect(() => {
     if (type === "userFeed") {
       if (activeTab === "Latest") {
-        dispatch(fetchUserFeedPosts(user._id));
+        dispatch(fetchUserFeedPosts({ id: user._id, skip }));
       } else if (activeTab === "Trending") {
-        dispatch(fetchUserFeedTrendingPosts(user._id));
+        dispatch(fetchUserFeedTrendingPosts({ id: user._id, skip }));
       }
     } else if (type === "all") {
       if (activeTab === "Latest") {
-        dispatch(fetchAllPosts());
+        dispatch(fetchAllPosts(skip));
       } else if (activeTab === "Trending") {
-        dispatch(fetchAllTrendingPosts());
+        dispatch(fetchAllTrendingPosts(skip));
       }
     }
-  }, [user, dispatch, type, activeTab]);
+  }, [user, dispatch, type, activeTab, skip]);
+
+  const observer = useRef();
+  const loaderRef = useCallback(
+    (node) => {
+      if (allPosts.status === "loading" || posts.status === "loading") return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          if (type === "all") {
+            setSkip(allPosts.data.length);
+          } else setSkip(posts.data.length);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [allPosts, posts]
+  );
   return (
-    <PostsWrapper posts={type === "all" ? allPosts : posts} postType={type}>
+    <PostsWrapper
+      posts={type === "all" ? allPosts : posts}
+      postType={type}
+      ref={loaderRef}
+    >
       <div className="flex gap-4">
         <Tab
           activeTab={activeTab}
