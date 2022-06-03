@@ -1,6 +1,7 @@
 {
   "short_name": "ZenGram",
-  "name": "Connect and share with music enthusiasts",
+  "name": "ZenGram - Connect and share with music enthusiasts",
+  "description":"Connect and share with music enthusiasts",
   "icons": [
     {
       "src": "image/favicon.ico",
@@ -31,6 +32,29 @@
       "sizes": "16x16",
       "type": "image/png"
       
+    }
+  ],
+     "shortcuts": [
+    {
+      "name": "Explore all posts",
+      "short_name": "Explore",
+      "description": "Explore all posts",
+      "url": "/explore",
+      "icons": [{ "src": "image/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Explore bookmarked posts",
+      "short_name": "Bookmarks",
+      "description": "Explore bookmarked posts",
+      "url": "/bookmarks",
+      "icons": [{ "src": "image/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View all messages",
+      "short_name": "Messages",
+      "description": "View all messages",
+      "url": "/messages",
+      "icons": [{ "src": "image/android-chrome-192x192.png", "sizes": "192x192" }]
     }
   ],
   "start_url": ".",
