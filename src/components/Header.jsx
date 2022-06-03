@@ -4,6 +4,7 @@ import { FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import LOGO from "../assets/logo.png";
 import { useSearch } from "../context/searchContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
@@ -34,7 +35,11 @@ const Header = () => {
             onClick={() => setIsNavOpen(false)}
           />
         )}
-        <Link to="/" className="site-title text-xl sm:inline-block hidden ">
+        <Link
+          to="/"
+          className="site-title  text-xl sm:flex gap-2 items-center hidden "
+        >
+          <img src={LOGO} alt="ZenGram" className="w-10" />
           <h4>
             Zen
             <span className="text-primary">Gram</span>
