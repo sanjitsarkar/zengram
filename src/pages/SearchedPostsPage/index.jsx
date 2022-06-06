@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { Layout, PostsWrapper } from "../../components";
 import { searchPostsByHashTag } from "../../services/posts/postsService";
 
-const SearchedPostsPage = () => {
+export const SearchedPostsPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const hashtag = searchParams.get("hashtag");
@@ -46,5 +46,3 @@ const SearchedPostsPage = () => {
     </Layout>
   );
 };
-
-export default SearchedPostsPage;

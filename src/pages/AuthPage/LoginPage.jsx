@@ -11,14 +11,14 @@ import {
 import { login } from "../../services/auth/authService";
 import { GUEST_CREDENTIAL, initialLoginCredState } from "../../utils";
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const dispatch = useDispatch();
   const [loginCred, setLoginCred] = useState(initialLoginCredState);
   const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
   useEffect(() => {
     auth?.isLoggedIn && navigate("/");
-  }, [auth]);
+  }, [auth, navigate]);
   return (
     <>
       {auth.status === "loading" && (
@@ -78,5 +78,3 @@ const LoginPage = () => {
     </>
   );
 };
-
-export default LoginPage;

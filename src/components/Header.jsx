@@ -5,11 +5,11 @@ import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LOGO from "../assets/logo.png";
-import { useSearch } from "../context/searchContext";
+import { useSearch } from "../context";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
-const Header = () => {
+export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const { search, setSearch, setSkip } = useSearch();
@@ -92,5 +92,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;

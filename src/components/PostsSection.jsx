@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { PostsWrapper } from ".";
+import { PostsWrapper, Tab } from ".";
 import { clearAllPosts } from "../features/allPosts/allPostsSlice";
 import { clearPosts } from "../features/posts/postsSlice";
 import {
@@ -10,9 +10,7 @@ import {
   fetchUserFeedPosts,
   fetchUserFeedTrendingPosts,
 } from "../services/posts/postsService";
-import Tab from "./Tab";
-
-const PostsSection = ({ type = "all" }) => {
+export const PostsSection = ({ type = "all" }) => {
   const posts = useSelector((state) => state.posts);
   const user = useSelector((state) => state.auth?.user);
   const allPosts = useSelector((state) => state.allPosts);
@@ -23,7 +21,7 @@ const PostsSection = ({ type = "all" }) => {
     setSkip(0);
     if (type === "all") dispatch(clearAllPosts());
     else dispatch(clearPosts());
-  }, [type, activeTab]);
+  }, [type, activeTab, dispatch]);
 
   useEffect(() => {
     if (type === "userFeed") {
@@ -55,7 +53,7 @@ const PostsSection = ({ type = "all" }) => {
       });
       if (node) observer.current.observe(node);
     },
-    [allPosts, posts]
+    [allPosts, posts, type]
   );
   return (
     <PostsWrapper
@@ -84,5 +82,3 @@ const PostsSection = ({ type = "all" }) => {
     </PostsWrapper>
   );
 };
-
-export default PostsSection;

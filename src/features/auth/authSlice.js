@@ -9,7 +9,7 @@ import { notify } from "../../utils";
 
 const initialState = {
   status: "idle",
-  user: JSON.parse(localStorage?.getItem("user")) ?? [],
+  user: JSON.parse(localStorage?.getItem("user")) ?? null,
   isLoggedIn: JSON.parse(localStorage?.getItem("isLoggedIn")) || false,
   error: null,
 };

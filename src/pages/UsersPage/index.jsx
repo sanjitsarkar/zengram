@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Layout, Loader } from "../../components";
-import { useSearch } from "../../context/searchContext";
+import { useSearch } from "../../context";
 import {
   followUser,
   getFollowers,
@@ -12,7 +12,7 @@ import {
 } from "../../services/auth/authService";
 import { PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
-const UsersPage = ({ type }) => {
+export const UsersPage = ({ type }) => {
   const dispatch = useDispatch();
   const { profileId } = useParams();
   let search = useLocation().search;
@@ -194,5 +194,3 @@ const UsersPage = ({ type }) => {
     </Layout>
   );
 };
-
-export default UsersPage;

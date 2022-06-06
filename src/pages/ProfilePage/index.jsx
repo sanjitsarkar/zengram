@@ -7,9 +7,9 @@ import {
   fetchArchivedPosts,
   fetchUserCreatedPosts,
 } from "../../services/posts/postsService";
-import ProfileHeader from "./ProfileHeader";
+import { ProfileHeader } from "./ProfileHeader";
 
-const ProfilePage = () => {
+export const ProfilePage = () => {
   const profile = useSelector((state) => state.profile);
   const user = useSelector((state) => state.auth?.user);
   const dispatch = useDispatch();
@@ -37,18 +37,18 @@ const ProfilePage = () => {
       });
       if (node) observer.current.observe(node);
     },
-    [userCreatedPosts, archivedPosts]
+    [userCreatedPosts, archivedPosts, activeTab]
   );
   useEffect(() => {
     dispatch(getProfileInfo(profileId));
-  }, [profileId]);
+  }, [profileId, dispatch]);
   useEffect(() => {
     if (activeTab === "All Published Posts") {
       dispatch(fetchUserCreatedPosts({ id: profileId, skip }));
     } else if (activeTab === "All Archived Posts") {
       dispatch(fetchArchivedPosts(profileId));
     }
-  }, [activeTab, profileId]);
+  }, [activeTab, profileId, dispatch, skip]);
   return (
     <Layout>
       {profile.status === "loading" && <Loader type="medium" />}
@@ -90,5 +90,3 @@ const ProfilePage = () => {
     </Layout>
   );
 };
-
-export default ProfilePage;

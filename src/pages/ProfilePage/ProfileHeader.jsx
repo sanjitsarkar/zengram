@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { BiEditAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Modal from "../../components/Modal";
+import { Modal } from "../../components";
 import { updateUser } from "../../features/auth/authSlice";
 import { updateProfile } from "../../features/profile/profileSlice";
 import { followUser, unfollowUser } from "../../services/auth/authService";
 import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
-import ProfileEditForm from "./ProfileEditForm.jsx";
+import { ProfileEditForm } from "./ProfileEditForm";
 
-const ProfileHeader = ({ profile }) => {
+export const ProfileHeader = ({ profile }) => {
   const postCount = useSelector(
     (state) => state.userCreatedPosts?.data?.length
   );
@@ -29,7 +29,7 @@ const ProfileHeader = ({ profile }) => {
         </Modal>
       )}
       <img
-        className="h-40 object-cover"
+        className="sm:h-40 h-32 object-cover"
         src={profile.coverPictureURL ?? COVER_PHOTO_PLACEHOLDER}
         alt={profile.name}
       />
@@ -151,5 +151,3 @@ const ProfileHeader = ({ profile }) => {
     </div>
   );
 };
-
-export default ProfileHeader;

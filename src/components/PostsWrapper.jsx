@@ -1,9 +1,8 @@
 import React, { forwardRef } from "react";
 import { useSelector } from "react-redux";
-import Loader from "./Loader";
-import PostCard from "./PostCard";
+import { Loader, PostCard } from ".";
 
-const PostsWrapper = forwardRef(
+export const PostsWrapper = forwardRef(
   ({ posts, children, width = "", type }, ref) => {
     const archivedPosts = useSelector((state) => state.archivedPosts?.data);
 
@@ -41,5 +40,3 @@ const PostsWrapper = forwardRef(
     );
   }
 );
-
-export default PostsWrapper;

@@ -4,11 +4,11 @@ import { MdClose, MdGif } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
-import { useModal } from "../context/modalContext";
+import { useModal } from "../context";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
 import { updatePost } from "../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
-const EditPostForm = ({
+export const EditPostForm = ({
   postInfo,
   setIsEditOptionClicked,
   setIsOptionClicked,
@@ -224,5 +224,3 @@ const EditPostForm = ({
       </div>
     );
 };
-
-export default EditPostForm;

@@ -5,7 +5,7 @@ import { Loader } from "../../components";
 import { signup } from "../../services/auth/authService";
 import { initialSignupCredState, notify } from "../../utils";
 
-const SignupPage = () => {
+export const SignupPage = () => {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [signupCred, setSignupCred] = useState(initialSignupCredState);
@@ -207,5 +207,3 @@ const SignupPage = () => {
     </>
   );
 };
-
-export default SignupPage;

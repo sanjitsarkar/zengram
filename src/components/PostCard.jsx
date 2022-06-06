@@ -13,7 +13,8 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useModal } from "../context/modalContext";
+import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
+import { useDropDown, useModal } from "../context";
 import { clearComments } from "../features/comments/commentsSlice";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
@@ -24,12 +25,8 @@ import {
   unBookmarkPost,
 } from "../services/posts/postsService";
 import { notify, PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
-import CommentsContainer from "./CommentsContainer";
-import DropDownOption from "./DropDownOption";
-import EditPostForm from "./EditPostForm";
-import Modal from "./Modal";
 
-const PostCard = forwardRef(({ post, type }, ref) => {
+export const PostCard = forwardRef(({ post, type }, ref) => {
   const {
     _id,
     postedBy: { profilePictureURL, name, _id: id },
@@ -47,7 +44,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-  const [isOptionClicked, setIsOptionClicked] = useState(false);
+  const { showDropDown, setShowDropDown } = useDropDown();
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
   const _commentsData = useSelector((state) => state.comments);
@@ -61,7 +58,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
       _setComments(_commentsData.data);
       dispatch(clearComments());
     }
-  }, [_commentsData, isCommentAdded]);
+  }, [_commentsData, isCommentAdded, dispatch]);
   const nextMedia = () => {
     if (activeMediaIndex < mediaURLs.length - 1) {
       setActiveMediaIndex(activeMediaIndex + 1);
@@ -110,7 +107,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={MdBookmark}
             name="Unbookmark Post"
             onClick={() => {
-              setIsOptionClicked(false);
+              setShowDropDown(false);
               dispatch(unBookmarkPost({ postedBy: userId, postId: _id }));
             }}
           />
@@ -119,7 +116,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={MdBookmark}
             name="Bookmark Post"
             onClick={() => {
-              setIsOptionClicked(false);
+              setShowDropDown(false);
               dispatch(bookmarkPost({ postedBy: userId, postId: _id }));
             }}
           />
@@ -139,7 +136,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={BiTrash}
             name="Delete Post"
             onClick={() => {
-              setIsOptionClicked(false);
+              setShowDropDown(false);
 
               dispatch(deletePost({ postId: _id, postedBy: userId }));
             }}
@@ -150,7 +147,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={BiArchive}
             name="Archive Post"
             onClick={() => {
-              setIsOptionClicked(false);
+              setShowDropDown(false);
               dispatch(addPostToArchive({ postId: _id, postedBy: userId }));
             }}
           />
@@ -160,7 +157,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={BiArchive}
             name="Remove from Archive"
             onClick={() => {
-              setIsOptionClicked(false);
+              setShowDropDown(false);
               dispatch(
                 removePostFromArchive({ postId: _id, postedBy: userId })
               );
@@ -176,7 +173,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
   );
   useEffect(() => {
     setIsPostLiked(_likes?.some((like) => like === userId));
-  }, [_likes]);
+  }, [_likes, userId]);
   if (ref)
     return (
       <div
@@ -188,11 +185,11 @@ const PostCard = forwardRef(({ post, type }, ref) => {
             <EditPostForm
               postInfo={post}
               setIsEditOptionClicked={setIsEditOptionClicked}
-              setIsOptionClicked={setIsOptionClicked}
+              setShowDropDown={setShowDropDown}
             />
           </Modal>
         )}
-        {isOptionClicked && <DropDown />}
+        {showDropDown && <DropDown />}
         <div className="flex  justify-between">
           <div className="flex items-center gap-3 mb-3">
             <Link to={`/profile/${id}`}>
@@ -211,7 +208,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
           </div>
           <MdMoreHoriz
             onClick={() =>
-              setIsOptionClicked((prevIsOptionClicked) => !prevIsOptionClicked)
+              setShowDropDown((prevshowDropDown) => !prevshowDropDown)
             }
             className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
           />
@@ -338,11 +335,11 @@ const PostCard = forwardRef(({ post, type }, ref) => {
           <EditPostForm
             postInfo={post}
             setIsEditOptionClicked={setIsEditOptionClicked}
-            setIsOptionClicked={setIsOptionClicked}
+            setShowDropDown={setShowDropDown}
           />
         </Modal>
       )}
-      {isOptionClicked && <DropDown />}
+      {showDropDown && <DropDown />}
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">
           <Link to={`/profile/${id}`}>
@@ -361,7 +358,7 @@ const PostCard = forwardRef(({ post, type }, ref) => {
         </div>
         <MdMoreHoriz
           onClick={() =>
-            setIsOptionClicked((prevIsOptionClicked) => !prevIsOptionClicked)
+            setShowDropDown((prevshowDropDown) => !prevshowDropDown)
           }
           className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
         />
@@ -482,5 +479,3 @@ const PostCard = forwardRef(({ post, type }, ref) => {
     </div>
   );
 });
-
-export default PostCard;
