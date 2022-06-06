@@ -34,9 +34,7 @@ function App() {
       setActiveName(name);
     }
   }, [location.pathname]);
-  useEffect(() => {
-    isLoggedIn && navigate("/");
-  }, [isLoggedIn]);
+
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(fetchBookmarkedPosts(user?._id));

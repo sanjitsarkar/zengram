@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   AuthButton,
   InputCheckboxSection,
@@ -11,9 +12,13 @@ import { login } from "../../services/auth/authService";
 import { GUEST_CREDENTIAL, initialLoginCredState } from "../../utils";
 
 const LoginPage = () => {
-  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [loginCred, setLoginCred] = useState(initialLoginCredState);
+  const auth = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    auth?.isLoggedIn && navigate("/");
+  }, [auth]);
   return (
     <>
       {auth.status === "loading" && (

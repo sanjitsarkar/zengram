@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Layout, Loader, PostsWrapper, Tab } from "../../components";
@@ -18,13 +18,33 @@ const ProfilePage = () => {
   const archivedPosts = useSelector((state) => state.archivedPosts);
   const [activeTab, setActiveTab] = useState("All Published Posts");
   const { profileId } = useParams();
-
+  const [skip, setSkip] = useState(0);
+  const observer = useRef();
+  const loaderRef = useCallback(
+    (node) => {
+      if (
+        archivedPosts.status === "loading" ||
+        userCreatedPosts.status === "loading"
+      )
+        return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          if (activeTab === "All Published Posts") {
+            setSkip(userCreatedPosts.data.length);
+          } else setSkip(archivedPosts.data.length);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [userCreatedPosts, archivedPosts]
+  );
   useEffect(() => {
     dispatch(getProfileInfo(profileId));
   }, [profileId]);
   useEffect(() => {
     if (activeTab === "All Published Posts") {
-      dispatch(fetchUserCreatedPosts(profileId));
+      dispatch(fetchUserCreatedPosts({ id: profileId, skip }));
     } else if (activeTab === "All Archived Posts") {
       dispatch(fetchArchivedPosts(profileId));
     }
@@ -62,7 +82,8 @@ const ProfilePage = () => {
                 ? userCreatedPosts
                 : archivedPosts
             }
-            width="md:w-5/6"
+            ref={loaderRef}
+            width=" w-full"
           />
         </div>
       )}
