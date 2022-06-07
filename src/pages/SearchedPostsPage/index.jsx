@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { Layout, PostsWrapper } from "../../components";
+import { clearSearchedPosts } from "../../features/searchedPosts/searchedPostsSlice";
 import { searchPostsByHashTag } from "../../services/posts/postsService";
 
 export const SearchedPostsPage = () => {
@@ -11,6 +12,9 @@ export const SearchedPostsPage = () => {
   const searchedPosts = useSelector((state) => state.searchedPosts);
   const [skip, setSkip] = useState(0);
   const observer = useRef();
+  useEffect(() => {
+    dispatch(clearSearchedPosts());
+  }, []);
   const loaderRef = useCallback(
     (node) => {
       if (searchedPosts.status === "loading") return;
