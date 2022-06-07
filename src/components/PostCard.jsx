@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
-import { useDropDown, useModal } from "../context";
+import { useModal } from "../context";
 import { clearComments } from "../features/comments/commentsSlice";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
@@ -44,7 +44,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
   const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-  const { showDropDown, setShowDropDown } = useDropDown();
+  const [showDropDown, setShowDropDown] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
   const _commentsData = useSelector((state) => state.comments);

@@ -11,8 +11,7 @@ import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const EditPostForm = ({
   postInfo,
   setIsEditOptionClicked,
-  setIsOptionClicked,
-  postType,
+  setShowDropDown,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -73,7 +72,7 @@ export const EditPostForm = ({
             <IconButton
               onClick={() => {
                 setIsEditOptionClicked(false);
-                setIsOptionClicked(false);
+                setShowDropDown(false);
                 setIsModalOpen(false);
               }}
               Icon={MdClose}
@@ -119,7 +118,7 @@ export const EditPostForm = ({
             setImgUrls([]);
             setPost(initialPostState);
             setIsEditOptionClicked(false);
-            setIsOptionClicked(false);
+            setShowDropDown(false);
             setIsModalOpen(false);
           }}
         >

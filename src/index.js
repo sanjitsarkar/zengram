@@ -5,12 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { store } from "./app/store";
 import { ScrollToTop } from "./components/ScrollToTop";
-import {
-  DropDownProvider,
-  ModalProvider,
-  SearchProvider,
-  SideBarItemProvider,
-} from "./context";
+import { ModalProvider, SearchProvider, SideBarItemProvider } from "./context";
 import "./index.css";
 
 const container = document.getElementById("root");
@@ -22,9 +17,7 @@ root.render(
       <ModalProvider>
         <SideBarItemProvider>
           <SearchProvider>
-            <DropDownProvider>
-              <App />
-            </DropDownProvider>
+            <App />
           </SearchProvider>
         </SideBarItemProvider>
       </ModalProvider>
