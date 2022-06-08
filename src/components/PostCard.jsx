@@ -31,12 +31,13 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
     _id,
     postedBy: { profilePictureURL, name, _id: id },
     createdAt,
-    mediaURLs,
     content,
     likes,
     shares,
     comments,
   } = post;
+  let { mediaURLs } = post;
+  mediaURLs = mediaURLs.filter((media) => media?.url);
   const [_likes, _setLikes] = useState(likes);
   const dispatch = useDispatch();
   const archivedPosts = useSelector((state) => state.archivedPosts?.data);
