@@ -14,7 +14,7 @@ export const SearchedPostsPage = () => {
   const observer = useRef();
   useEffect(() => {
     dispatch(clearSearchedPosts());
-  }, []);
+  }, [dispatch]);
   const loaderRef = useCallback(
     (node) => {
       if (searchedPosts.status === "loading") return;
@@ -30,7 +30,7 @@ export const SearchedPostsPage = () => {
   );
   useEffect(() => {
     dispatch(searchPostsByHashTag({ hashtag, skip }));
-  }, [hashtag, skip]);
+  }, [hashtag, skip, dispatch]);
   return (
     <Layout>
       <h1 className="text-lightBlue text-center  mt-8 text-xl font-semibold">

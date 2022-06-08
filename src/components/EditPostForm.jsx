@@ -21,7 +21,6 @@ export const EditPostForm = ({
   const [uploadedImgUrls, setUploadedImgUrls] = useState(
     postInfo?.mediaURLs ?? []
   );
-
   const [isLoading, setIsLoading] = useState(false);
   const PhotosSetcion = () => {
     return (
@@ -110,6 +109,7 @@ export const EditPostForm = ({
                 updatePost({
                   content: post.content,
                   postId: postInfo._id,
+                  mediaURLs: uploadedImgUrls,
                   postedBy: user?._id,
                 })
               );

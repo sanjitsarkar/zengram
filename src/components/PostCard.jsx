@@ -83,12 +83,14 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
               className="fill-lightBlue absolute -left-5 h-8 w-8 sm:left-0 rounded-full cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white sm:w-10 sm:h-10 p-1 shadow-md  transition-all ease-in-out"
             />
           )}
-          <img
-            className="w-full object-contain max-h-48 "
-            src={mediaURLs[activeMediaIndex].url}
-            alt="postImage"
-            loading="lazy"
-          />
+          {mediaURLs[activeMediaIndex]?.url && (
+            <img
+              className="w-full object-contain max-h-48 "
+              src={mediaURLs[activeMediaIndex]?.url}
+              alt="postImage"
+              loading="lazy"
+            />
+          )}
           {mediaURLs.length > 1 && (
             <MdArrowForward
               onClick={nextMedia}
