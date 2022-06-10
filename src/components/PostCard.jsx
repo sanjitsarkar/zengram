@@ -90,7 +90,6 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
                 className="w-full object-contain max-h-48 "
                 src={mediaURLs[activeMediaIndex]?.url}
                 alt="postImage"
-                loading="lazy"
               />
             </Link>
           )}
@@ -223,18 +222,21 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           <Link
             to={`/posts/${_id}`}
             state={post}
-            className="text-lightBlue leading-relaxed"
+            className="text-lightBlue leading-relaxed break-words flex flex-wrap gap-x-2 gap-y-0.5"
           >
             {content?.split(" ").map((word, i) => {
               if (word.startsWith("#"))
                 return (
-                  <Link
-                    key={word}
-                    to={`/posts?hashtag=${word.slice(1)}`}
-                    className={`text-primary ${i === 0 ? "mr-2" : "ml-2"}`}
-                  >
-                    {word}
-                  </Link>
+                  <>
+                    {" "}
+                    <Link
+                      key={word}
+                      to={`/posts?hashtag=${word.slice(1)}`}
+                      className={`text-primary`}
+                    >
+                      {word}
+                    </Link>
+                  </>
                 );
 
               return word + " ";
@@ -377,7 +379,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
         <Link
           to={`/posts/${_id}`}
           state={post}
-          className="text-lightBlue leading-relaxed"
+          className="text-lightBlue leading-relaxed break-words flex flex-wrap gap-x-2 gap-y-0.5"
         >
           {content?.split(" ").map((word, i) => {
             if (word.startsWith("#"))
@@ -385,7 +387,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
                 <Link
                   key={word}
                   to={`/posts?hashtag=${word.slice(1)}`}
-                  className={`text-primary ${i === 0 ? "mr-2" : "ml-2"}`}
+                  className={`text-primary`}
                 >
                   {word}
                 </Link>

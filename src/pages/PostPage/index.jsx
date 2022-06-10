@@ -20,7 +20,10 @@ export const PostPage = () => {
         </span>
       )}
       <div className="flex flex-col gap-4 ">
-        <PostCard post={state ?? post.data} />
+        {post.status === "succeeded" && post.data && (
+          <PostCard post={post.data} />
+        )}
+        {state && <PostCard post={state} />}
       </div>
       {post.status === "loading" && <Loader type="medium" />}
     </Layout>
