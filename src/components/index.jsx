@@ -13,6 +13,7 @@ export { Layout } from "./Layout";
 export { LinkButton } from "./LinkButton";
 export { Loader } from "./Loader";
 export { Modal } from "./Modal";
+export { NotAvailable } from "./NotAvailable";
 export { PostCard } from "./PostCard";
 export { PostsSection } from "./PostsSection";
 export { PostsWrapper } from "./PostsWrapper";

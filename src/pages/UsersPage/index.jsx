@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Layout, Loader } from "../../components";
+import { Layout, Loader, NotAvailable } from "../../components";
 import { useSearch } from "../../context";
 import {
   followUser,
@@ -80,9 +80,12 @@ export const UsersPage = ({ type }) => {
           followers.status !== "loading" ||
           following.status !== "loading") &&
           users.length === 0 && (
-            <span className="text-center text-lg mt-2 font-medium text-lightBlue">
-              No {type === "search" ? "users" : type} found
-            </span>
+            // <span className="text-center text-lg mt-2 font-medium text-lightBlue">
+            //   No {type === "search" ? "users" : type} found
+            // </span>
+            <NotAvailable
+              title={`No ${type === "search" ? "users" : type} found`}
+            />
           )}
         <div className="flex flex-col gap-2   ">
           {users.length > 0 &&

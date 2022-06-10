@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { useSelector } from "react-redux";
 import { Loader, PostCard } from ".";
+import { NotAvailable } from "./NotAvailable";
 
 export const PostsWrapper = forwardRef(
   ({ posts, children, width = "", type }, ref) => {
@@ -17,9 +18,7 @@ export const PostsWrapper = forwardRef(
         {children}
 
         {posts.status === "succeeded" && posts.data.length === 0 && (
-          <span className="text-center text-base font-medium text-lightBlue">
-            No posts to show
-          </span>
+          <NotAvailable title="No posts found" />
         )}
         <div className="flex flex-col gap-4 ">
           {posts.data.map(
