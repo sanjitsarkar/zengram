@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { searchUsers } from "../../services/auth/authService";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState } from "../../utils";
 
 export const searchedUsersSlice = createSlice({
   name: "searchedUsers",

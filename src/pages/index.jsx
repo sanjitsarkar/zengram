@@ -4,6 +4,7 @@ export { BookmarkedPage } from "./BookmarkedPage";
 export { ExplorePage } from "./ExplorePage";
 export { HomePage } from "./HomePage";
 export { MessagePage } from "./MessagePage";
+export { PostPage } from "./PostPage";
 export { ProfilePage } from "./ProfilePage";
 export { SearchedPostsPage } from "./SearchedPostsPage";
 export { UsersPage } from "./UsersPage";

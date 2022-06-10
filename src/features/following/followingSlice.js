@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getFollowing } from "../../services/auth/authService";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState } from "../../utils";
 
 export const followingSlice = createSlice({
   name: "following",

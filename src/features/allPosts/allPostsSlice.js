@@ -4,13 +4,7 @@ import {
   fetchAllPosts,
   fetchAllTrendingPosts,
 } from "../../services/posts/postsService";
-import { updatePostsContent } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, updatePostsContent } from "../../utils";
 
 export const allPostsSlice = createSlice({
   name: "allPosts",

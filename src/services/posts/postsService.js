@@ -197,8 +197,16 @@ export const searchPostsByHashTag = createAsyncThunk(
   async (data) => {
     const response = await callApi(
       "get",
-      `posts/hashtag/${data.hashtag}?skip=${data.skip}`
+      `posts/hashtag/${data.hashtag}?skip=${data.skip}`,
+      true
     );
+    return response.data;
+  }
+);
+export const fetchPostInfo = createAsyncThunk(
+  "posts/fetchPostInfo",
+  async (id) => {
+    const response = await callApi("get", `posts/${id}`, true);
     return response.data;
   }
 );

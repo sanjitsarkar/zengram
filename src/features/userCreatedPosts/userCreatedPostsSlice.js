@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUserCreatedPosts } from "../../services/posts/postsService";
-import { updatePostsContent } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, updatePostsContent } from "../../utils";
 
 export const userCreatedPostsSlice = createSlice({
   name: "userCreatedPosts",

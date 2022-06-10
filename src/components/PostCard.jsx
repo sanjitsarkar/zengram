@@ -216,7 +216,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
           />
         </div>
-        <div className="flex flex-col gap-5">
+        <Link to={`/posts/${_id}`} className="flex flex-col gap-5">
           <MediaSection />
           <p className="text-lightBlue leading-relaxed">
             {content?.split(" ").map((word, i) => {
@@ -234,7 +234,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
               return word + " ";
             })}
           </p>
-        </div>
+        </Link>
         <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
           <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
             {!isPostLiked ? (
@@ -366,7 +366,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
         />
       </div>
-      <div className="flex flex-col gap-5">
+      <Link to={`/posts/${_id}`} state={post} className="flex flex-col gap-5">
         <MediaSection />
         <p className="text-lightBlue leading-relaxed">
           {content?.split(" ").map((word, i) => {
@@ -384,7 +384,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             return word + " ";
           })}
         </p>
-      </div>
+      </Link>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
           {!isPostLiked ? (
@@ -453,7 +453,11 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             </span>
           </span>
         </div>
-        <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
+        <Link
+          to={`/posts/${_id}`}
+          state={post}
+          className="flex md:gap-3 gap-1 items-center md:flex-row flex-col"
+        >
           <MdShare
             size={25}
             className="fill-primary cursor-pointer order-1 md:-order-1"
@@ -465,7 +469,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
               {shares.length > 1 ? "s" : ""}
             </span>
           </span>
-        </div>
+        </Link>
       </div>
       {isCommentClicked && (
         <CommentsContainer

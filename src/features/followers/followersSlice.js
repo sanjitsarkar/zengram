@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getFollowers } from "../../services/auth/authService";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState } from "../../utils";
 
 export const followersSlice = createSlice({
   name: "followers",

@@ -4,13 +4,7 @@ import {
   fetchArchivedPosts,
   removePostFromArchive,
 } from "../../services/posts/postsService";
-import { notify, updatePostsContent } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { notify, updatePostsContent, initialState } from "../../utils";
 
 export const archivedPostsSlice = createSlice({
   name: "archivedPosts",

@@ -6,13 +6,7 @@ import {
   fetchUserFeedTrendingPosts,
   updatePost,
 } from "../../services/posts/postsService";
-import { notify } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, notify } from "../../utils";
 
 export const postsSlice = createSlice({
   name: "posts",

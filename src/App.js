@@ -10,6 +10,7 @@ import {
   HomePage,
   LoginPage,
   MessagePage,
+  PostPage,
   ProfilePage,
   SearchedPostsPage,
   SignupPage,
@@ -59,6 +60,7 @@ function App() {
           />
           <Route path="/users" element={<UsersPage type="search" />} />
           <Route path="/posts" element={<SearchedPostsPage />} />
+          <Route path="/posts/:id" element={<PostPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

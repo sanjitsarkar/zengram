@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { searchPostsByHashTag } from "../../services/posts/postsService";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState } from "../../utils";
 
 export const searchedPostsSlice = createSlice({
   name: "searchedPosts",
