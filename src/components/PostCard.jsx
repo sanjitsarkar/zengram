@@ -85,12 +85,14 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             />
           )}
           {mediaURLs[activeMediaIndex]?.url && (
-            <img
-              className="w-full object-contain max-h-48 "
-              src={mediaURLs[activeMediaIndex]?.url}
-              alt="postImage"
-              loading="lazy"
-            />
+            <Link to={`/posts/${_id}`} state={post} className="w-full">
+              <img
+                className="w-full object-contain max-h-48 "
+                src={mediaURLs[activeMediaIndex]?.url}
+                alt="postImage"
+                loading="lazy"
+              />
+            </Link>
           )}
           {mediaURLs.length > 1 && (
             <MdArrowForward
@@ -216,9 +218,13 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
           />
         </div>
-        <Link to={`/posts/${_id}`} className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5">
           <MediaSection />
-          <p className="text-lightBlue leading-relaxed">
+          <Link
+            to={`/posts/${_id}`}
+            state={post}
+            className="text-lightBlue leading-relaxed"
+          >
             {content?.split(" ").map((word, i) => {
               if (word.startsWith("#"))
                 return (
@@ -233,8 +239,8 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
 
               return word + " ";
             })}
-          </p>
-        </Link>
+          </Link>
+        </div>
         <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
           <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
             {!isPostLiked ? (
@@ -366,9 +372,13 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
         />
       </div>
-      <Link to={`/posts/${_id}`} state={post} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5">
         <MediaSection />
-        <p className="text-lightBlue leading-relaxed">
+        <Link
+          to={`/posts/${_id}`}
+          state={post}
+          className="text-lightBlue leading-relaxed"
+        >
           {content?.split(" ").map((word, i) => {
             if (word.startsWith("#"))
               return (
@@ -383,8 +393,8 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
 
             return word + " ";
           })}
-        </p>
-      </Link>
+        </Link>
+      </div>
       <div className="flex gap-x-10 gap-y-4 items-center flex-wrap">
         <div className="flex md:gap-3 gap-1 items-center md:flex-row flex-col">
           {!isPostLiked ? (
