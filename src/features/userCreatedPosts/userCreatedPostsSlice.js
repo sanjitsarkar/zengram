@@ -9,6 +9,9 @@ export const userCreatedPostsSlice = createSlice({
     updateUserCreatedPosts: (state, action) => {
       updatePostsContent(state, action);
     },
+    clearUserCreatedPosts: (state) => {
+      state.data = [];
+    },
   },
   extraReducers(builder) {
     builder
@@ -26,5 +29,6 @@ export const userCreatedPostsSlice = createSlice({
   },
 });
 
-export const { updateUserCreatedPosts } = userCreatedPostsSlice.actions;
+export const { updateUserCreatedPosts, clearUserCreatedPosts } =
+  userCreatedPostsSlice.actions;
 export default userCreatedPostsSlice.reducer;

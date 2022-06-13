@@ -4,7 +4,7 @@ import {
   fetchArchivedPosts,
   removePostFromArchive,
 } from "../../services/posts/postsService";
-import { notify, updatePostsContent, initialState } from "../../utils";
+import { initialState, notify, updatePostsContent } from "../../utils";
 
 export const archivedPostsSlice = createSlice({
   name: "archivedPosts",
@@ -12,6 +12,9 @@ export const archivedPostsSlice = createSlice({
   reducers: {
     updateArchivedPosts: (state, action) => {
       updatePostsContent(state, action);
+    },
+    clearArchivedPosts: (state) => {
+      state.data = [];
     },
   },
   extraReducers(builder) {
@@ -58,6 +61,7 @@ export const archivedPostsSlice = createSlice({
   },
 });
 
-export const { updateArchivedPosts } = archivedPostsSlice.actions;
+export const { updateArchivedPosts, clearArchivedPosts } =
+  archivedPostsSlice.actions;
 
 export default archivedPostsSlice.reducer;

@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Layout, Loader, PostsWrapper, Tab } from "../../components";
+import { clearArchivedPosts } from "../../features/archivedPosts/archivedPostsSlice";
+import { clearUserCreatedPosts } from "../../features/userCreatedPosts/userCreatedPostsSlice";
 import { getProfileInfo } from "../../services/auth/authService";
 import {
   fetchArchivedPosts,
@@ -20,6 +22,12 @@ export const ProfilePage = () => {
   const { profileId } = useParams();
   const [skip, setSkip] = useState(0);
   const observer = useRef();
+
+  useEffect(() => {
+    setSkip(0);
+    dispatch(clearArchivedPosts());
+    dispatch(clearUserCreatedPosts());
+  }, [activeTab, dispatch]);
   const loaderRef = useCallback(
     (node) => {
       if (
@@ -49,6 +57,7 @@ export const ProfilePage = () => {
       dispatch(fetchArchivedPosts(profileId));
     }
   }, [activeTab, profileId, dispatch, skip]);
+
   return (
     <Layout>
       {profile.status === "loading" && <Loader type="medium" />}
