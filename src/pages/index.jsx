@@ -1,7 +1,11 @@
-export { default as LoginPage } from "./AuthPage/LoginPage";
-export { default as SignupPage } from "./AuthPage/SignupPage";
-export { default as BookmarkedPage } from "./BookmarkedPage";
-export { default as ExplorePage } from "./ExplorePage";
-export { default as HomePage } from "./HomePage";
-export { default as MessagePage } from "./MessagePage";
-export { default as ProfilePage } from "./ProfilePage";
+export { PageNotFound } from "./404Page";
+export { LoginPage } from "./AuthPage/LoginPage";
+export { SignupPage } from "./AuthPage/SignupPage";
+export { BookmarkedPage } from "./BookmarkedPage";
+export { ExplorePage } from "./ExplorePage";
+export { HomePage } from "./HomePage";
+export { MessagePage } from "./MessagePage";
+export { PostPage } from "./PostPage";
+export { ProfilePage } from "./ProfilePage";
+export { SearchedPostsPage } from "./SearchedPostsPage";
+export { UsersPage } from "./UsersPage";

@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addComment } from "../../services/comments/commentsService";
-import { notify } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, notify } from "../../utils";
 
 export const commentSlice = createSlice({
   name: "comment",

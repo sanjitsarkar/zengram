@@ -8,6 +8,7 @@ import {
   draftPostsReducer,
   followersReducer,
   followingReducer,
+  postReducer,
   postsReducer,
   profileReducer,
   repliesReducer,
@@ -33,5 +34,6 @@ export const store = configureStore({
     followers: followersReducer,
     searchedUsers: searchedUsersReducer,
     searchedPosts: searchedPostsReducer,
+    post: postReducer,
   },
 });

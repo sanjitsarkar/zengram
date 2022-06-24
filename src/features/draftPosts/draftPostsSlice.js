@@ -4,13 +4,7 @@ import {
   fetchDraftPosts,
   removePostFromDraft,
 } from "../../services/posts/postsService";
-import { notify, updatePostsContent } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, notify, updatePostsContent } from "../../utils";
 
 export const draftPostsSlice = createSlice({
   name: "draftPosts",

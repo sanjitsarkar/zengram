@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUserCreatedPosts } from "../../services/posts/postsService";
-import { updatePostsContent } from "../../utils";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState, updatePostsContent } from "../../utils";
 
 export const userCreatedPostsSlice = createSlice({
   name: "userCreatedPosts",
@@ -15,15 +9,18 @@ export const userCreatedPostsSlice = createSlice({
     updateUserCreatedPosts: (state, action) => {
       updatePostsContent(state, action);
     },
+    clearUserCreatedPosts: (state) => {
+      state.data = [];
+    },
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchUserCreatedPosts.pending, (state, action) => {
+      .addCase(fetchUserCreatedPosts.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchUserCreatedPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.posts;
+        state.data = [...state?.data, ...action.payload?.posts];
       })
       .addCase(fetchUserCreatedPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -32,5 +29,6 @@ export const userCreatedPostsSlice = createSlice({
   },
 });
 
-export const { updateUserCreatedPosts } = userCreatedPostsSlice.actions;
+export const { updateUserCreatedPosts, clearUserCreatedPosts } =
+  userCreatedPostsSlice.actions;
 export default userCreatedPostsSlice.reducer;

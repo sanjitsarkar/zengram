@@ -145,3 +145,8 @@ export const PROFILE_PIC_PLACEHOLDER =
 export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
 export { callApi };
+export const initialState = {
+  status: "idle",
+  data: [],
+  error: null,
+};

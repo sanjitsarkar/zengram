@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { searchUsers } from "../../services/auth/authService";
-
-const initialState = {
-  status: "idle",
-  data: [],
-  error: null,
-};
+import { initialState } from "../../utils";
 
 export const searchedUsersSlice = createSlice({
   name: "searchedUsers",
@@ -22,7 +17,7 @@ export const searchedUsersSlice = createSlice({
       })
       .addCase(searchUsers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload?.users;
+        state.data = [...state?.data, ...action.payload?.users];
       })
       .addCase(searchUsers.rejected, (state, action) => {
         state.status = "failed";

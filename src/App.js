@@ -1,27 +1,28 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { PrivateRoute } from "./components";
-import { useSideBarItem } from "./context/sideBarItemContext";
+import { useSideBarItem } from "./context";
 import {
   BookmarkedPage,
   ExplorePage,
   HomePage,
   LoginPage,
   MessagePage,
+  PageNotFound,
+  PostPage,
   ProfilePage,
+  SearchedPostsPage,
   SignupPage,
+  UsersPage,
 } from "./pages";
-import SearchedPostsPage from "./pages/SearchedPostPage";
-import UsersPage from "./pages/UsersPage";
 import {
   fetchArchivedPosts,
   fetchBookmarkedPosts,
 } from "./services/posts/postsService";
 function App() {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { setActiveName } = useSideBarItem();
   const location = useLocation();
@@ -34,9 +35,7 @@ function App() {
       setActiveName(name);
     }
   }, [location.pathname]);
-  useEffect(() => {
-    isLoggedIn && navigate("/");
-  }, [isLoggedIn]);
+
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(fetchBookmarkedPosts(user?._id));
@@ -62,9 +61,11 @@ function App() {
           />
           <Route path="/users" element={<UsersPage type="search" />} />
           <Route path="/posts" element={<SearchedPostsPage />} />
+          <Route path="/posts/:id" element={<PostPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Toaster />
