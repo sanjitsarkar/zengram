@@ -16,7 +16,7 @@ export const draftPostsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchDraftPosts.pending, (state, action) => {
+      .addCase(fetchDraftPosts.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchDraftPosts.fulfilled, (state, action) => {
@@ -29,7 +29,7 @@ export const draftPostsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(addPostToDraft.pending, (state, action) => {
+      .addCase(addPostToDraft.pending, (state) => {
         state.status = "loading";
       })
       .addCase(addPostToDraft.fulfilled, (state, action) => {
@@ -41,7 +41,7 @@ export const draftPostsSlice = createSlice({
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(removePostFromDraft.pending, (state, action) => {
+      .addCase(removePostFromDraft.pending, (state) => {
         state.status = "loading";
       })
       .addCase(removePostFromDraft.fulfilled, (state, action) => {

@@ -6,7 +6,7 @@ import {
   MdMessage,
   MdPerson,
 } from "react-icons/md";
-import { callApi } from "./callApi";
+export { callApi } from "./callApi";
 export const sideBarItems = [
   {
     name: "Home",
@@ -144,9 +144,22 @@ export const PROFILE_PIC_PLACEHOLDER =
   "https://icon-library.com/images/no-profile-pic-icon/no-profile-pic-icon-7.jpg";
 export const notify = (content, type = "success") => toast(content, { type });
 export const initialLoginCredState = { email: "", password: "" };
-export { callApi };
 export const initialState = {
   status: "idle",
   data: [],
   error: null,
+};
+
+export const copyTextToClipboard = (text) => {
+  if (!navigator.clipboard) {
+    return;
+  }
+  navigator.clipboard.writeText(text).then(
+    function () {
+      toast("Copied to clipboard", { type: "success" });
+    },
+    function (err) {
+      toast("Could not copy to clipboard", { type: "error" });
+    }
+  );
 };

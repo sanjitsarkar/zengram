@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader } from "../../components";
 import { signup } from "../../services/auth/authService";
 import { initialSignupCredState, notify } from "../../utils";
+import { AuthInfoSection } from "./AuthInfoSection";
 
 export const SignupPage = () => {
   const auth = useSelector((state) => state.auth);
@@ -18,9 +19,12 @@ export const SignupPage = () => {
       {auth.status === "loading" && (
         <Loader status={"Please wait until you are signed up"} />
       )}
-      <div className="w-full grid place-content-center  h-screen bg-primary">
-        <div className="block p-6 rounded-lg shadow-2xl bg-white sm:w-96 w-fit m-2">
+      <div className="w-full grid place-content-center  h-screen bg-lightBlue bg-opacity-5">
+        <div className="flex flex-row flex-wrap items-center gap-16">
+          <AuthInfoSection />
+
           <form
+            className="block p-6 rounded-lg shadow-2xl bg-white sm:w-96 w-fit m-2"
             onSubmit={(e) => {
               e.preventDefault();
               if (signupCred.password !== signupCred.confirmPassword) {

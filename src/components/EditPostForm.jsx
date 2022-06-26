@@ -1,18 +1,17 @@
+import EmojiPicker from "emoji-picker-react";
 import React, { useState } from "react";
-import { BiImageAdd, BiLocationPlus, BiVideo } from "react-icons/bi";
-import { MdClose, MdGif } from "react-icons/md";
+import { BiImageAdd } from "react-icons/bi";
+import { GrEmoji } from "react-icons/gr";
+import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal } from "../context";
+import { setPostUpdateStatusLoading } from "../features/posts/postsSlice";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
 import { updatePost } from "../services/posts/postsService";
-import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../utils";
-export const EditPostForm = ({
-  postInfo,
-  setIsEditOptionClicked,
-  setShowDropDown,
-}) => {
+import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+export const EditPostForm = ({ postInfo, setShowDropDown }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(postInfo);
@@ -21,10 +20,19 @@ export const EditPostForm = ({
   const [uploadedImgUrls, setUploadedImgUrls] = useState(
     postInfo?.mediaURLs ?? []
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { postUpdateStatus } = useSelector((state) => state.posts);
+
   const PhotosSetcion = () => {
     return (
-      <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  ">
+      <div
+        onClick={(e) => {
+          setIsModalOpen(true);
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  "
+      >
         {imgUrls.map((mediaURL, index) => (
           <div className=" relative  sm:w-60 w-48" key={mediaURL + index}>
             <MdClose
@@ -63,6 +71,7 @@ export const EditPostForm = ({
           maxWidth: "90vw",
         }}
         className="  md:p-6 p-4 rounded-lg shadow-lg bg-white 
+      overflow-y-auto m-4
         
        "
       >
@@ -70,7 +79,6 @@ export const EditPostForm = ({
           {postInfo && (
             <IconButton
               onClick={() => {
-                setIsEditOptionClicked(false);
                 setShowDropDown(false);
                 setIsModalOpen(false);
               }}
@@ -90,15 +98,15 @@ export const EditPostForm = ({
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            setIsLoading(true);
             if (Array.from(post.mediaURLs).length > 0) {
+              dispatch(setPostUpdateStatusLoading());
               let urls = await uploadImages(post.mediaURLs, user._id);
               urls = urls.map((url) => ({
                 url,
                 type: "image",
               }));
               const _post = {
-                content: post.content,
+                content: post.content.trim(),
                 mediaURLs: [...uploadedImgUrls, ...urls],
                 postId: postInfo._id,
                 postedBy: user?._id,
@@ -107,23 +115,20 @@ export const EditPostForm = ({
             } else {
               dispatch(
                 updatePost({
-                  content: post.content,
+                  content: post.content.trim(),
                   postId: postInfo._id,
                   mediaURLs: uploadedImgUrls,
                   postedBy: user?._id,
                 })
               );
             }
-            setIsLoading(false);
-            setImgUrls([]);
-            setPost(initialPostState);
-            setIsEditOptionClicked(false);
-            setShowDropDown(false);
-            setIsModalOpen(false);
+
+            setShowEmojiPicker(false);
           }}
         >
           <div className="form-group mb-6">
             <textarea
+              autoFocus
               className="
         form-control
         block
@@ -154,8 +159,8 @@ export const EditPostForm = ({
             {imgUrls.length > 0 && <PhotosSetcion />}
           </div>
 
-          <div className="flex justify-between items-center flex-wrap gap-4">
-            <div className="flex gap-2 items-center">
+          <div className="flex justify-between items-center flex-wrap gap-4 relative">
+            <div className="flex gap-2 items-center ">
               <div className="">
                 <label htmlFor="postImage">
                   <IconButton Icon={BiImageAdd} />
@@ -181,21 +186,31 @@ export const EditPostForm = ({
                   }}
                 />
               </div>
-              <IconButton Icon={MdGif} />
-              <IconButton Icon={BiVideo} />
-              <IconButton Icon={BiLocationPlus} />
+              <IconButton
+                Icon={GrEmoji}
+                onClick={() => {
+                  setShowEmojiPicker(
+                    (prevShowEmojiPicker) => !prevShowEmojiPicker
+                  );
+                }}
+              />
             </div>
-            {!isLoading ? (
+
+            {postUpdateStatus !== "loading" ? (
               <button
                 type="submit"
-                disabled={post.content.length === 0 && imgUrls.length === 0}
+                disabled={
+                  post.content.trim().length === 0 && imgUrls.length === 0
+                }
                 className={`
       w-full
       md:w-auto
       px-6
       py-2.5
       ${
-        post.content.length === 0 && imgUrls.length === 0 && !isLoading
+        post.content.trim().length === 0 &&
+        imgUrls.length === 0 &&
+        postUpdateStatus !== "loading"
           ? "bg-slate-400"
           : "bg-primary"
       }
@@ -219,6 +234,16 @@ export const EditPostForm = ({
               <Loader type="mini" />
             )}
           </div>
+          {showEmojiPicker && (
+            <div className="mt-5">
+              <EmojiPicker
+                onEmojiClick={(_, data) => {
+                  setPost({ ...post, content: post.content + data.emoji });
+                }}
+                preload={true}
+              />
+            </div>
+          )}
         </form>
       </div>
     );

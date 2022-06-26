@@ -10,18 +10,18 @@ export const searchedPostsSlice = createSlice({
       state.data = [];
     },
   },
-  extraReducers(builder) {
-    builder.addCase(searchPostsByHashTag.pending, (state, action) => {
+  extraReducers: {
+    [searchPostsByHashTag.pending]: (state) => {
       state.status = "loading";
-    });
-    builder.addCase(searchPostsByHashTag.fulfilled, (state, action) => {
+    },
+    [searchPostsByHashTag.fulfilled]: (state, action) => {
       state.status = "succeeded";
       state.data = [...state?.data, ...action.payload?.posts];
-    });
-    builder.addCase(searchPostsByHashTag.rejected, (state, action) => {
+    },
+    [searchPostsByHashTag.rejected]: (state, action) => {
       state.status = "failed";
       state.error = action.error;
-    });
+    },
   },
 });
 

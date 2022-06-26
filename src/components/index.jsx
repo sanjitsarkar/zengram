@@ -18,7 +18,6 @@ export { PostCard } from "./PostCard";
 export { PostsSection } from "./PostsSection";
 export { PostsWrapper } from "./PostsWrapper";
 export { PrivateRoute } from "./PrivateRoute";
-export { ReplySection } from "./ReplySection";
 export { ScrollToTop } from "./ScrollToTop";
 export { SideBar } from "./SideBar";
 export { SideBarItem } from "./SideBarItem";

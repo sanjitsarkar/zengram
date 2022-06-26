@@ -10,19 +10,18 @@ export const searchedUsersSlice = createSlice({
       state.data = [];
     },
   },
-  extraReducers(builder) {
-    builder
-      .addCase(searchUsers.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(searchUsers.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = [...state?.data, ...action.payload?.users];
-      })
-      .addCase(searchUsers.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      });
+  extraReducers: {
+    [searchUsers.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [searchUsers.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.data = [...state?.data, ...action.payload?.users];
+    },
+    [searchUsers.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+    },
   },
 });
 export const { clearSearchedUsers } = searchedUsersSlice.actions;

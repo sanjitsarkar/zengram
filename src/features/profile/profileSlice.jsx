@@ -14,30 +14,29 @@ export const profileSlice = createSlice({
       localStorage.setItem("user", JSON.stringify(action.payload?.profile));
     },
   },
-  extraReducers(builder) {
-    builder
-      .addCase(getProfileInfo.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(getProfileInfo.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = action.payload?.profile;
-      })
-      .addCase(getProfileInfo.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      })
-      .addCase(updateProfileInfo.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(updateProfileInfo.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = action.payload?.profile;
-      })
-      .addCase(updateProfileInfo.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      });
+  extraReducers: {
+    [getProfileInfo.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getProfileInfo.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.data = action.payload?.profile;
+    },
+    [getProfileInfo.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+    },
+    [updateProfileInfo.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [updateProfileInfo.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.data = action.payload?.profile;
+    },
+    [updateProfileInfo.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+    },
   },
 });
 export const { updateProfile } = profileSlice.actions;

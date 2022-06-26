@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiBell, BiSearch } from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import LOGO from "../assets/logo.png";
 import { useSearch } from "../context";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
+import { searchUsers } from "../services/auth/authService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -58,7 +59,10 @@ export const Header = () => {
           <input
             required
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              dispatch(searchUsers());
+            }}
             type="search"
             name=""
             placeholder="Search something..."
@@ -72,7 +76,6 @@ export const Header = () => {
           isNavOpen ? "flex" : "hidden"
         }  sm:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
       >
-        <BiBell className="w-10 h-10 p-2 md:focus:bg-lightBlue sm:hover:bg-lightBlue sm:focus:text-white sm:hover:text-white transition-all ease-in-out rounded-full shadow-md bg-white focus:text-white hover:text-white hover:bg-transparent focus:bg-transparent text-darkBlue cursor-pointer" />
         <Link to={`/profile/${user?._id}`}>
           <img
             className="shadow-sm cursor-pointer rounded-full w-10 h-10 "

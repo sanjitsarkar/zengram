@@ -1,9 +1,12 @@
+import EmojiPicker from "emoji-picker-react";
 import React, { useState } from "react";
-import { BiImageAdd, BiLocationPlus, BiVideo } from "react-icons/bi";
-import { MdClose, MdGif } from "react-icons/md";
+import { BiImageAdd } from "react-icons/bi";
+import { GrEmoji } from "react-icons/gr";
+import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
+import { setPostCreateStatusLoading } from "../../features/posts/postsSlice";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
@@ -13,7 +16,8 @@ export const AddPostForm = () => {
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
   const [imgUrls, setImgUrls] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { postCreateStatus } = useSelector((state) => state.posts);
   const PhotosSetcion = () => {
     return (
       <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
@@ -47,25 +51,24 @@ export const AddPostForm = () => {
   };
   return (
     <div className=" w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
-      <div className="relative flex items-center gap-3 mb-3">
-        <Link to={`/profile/${user?._id}`}>
+        <Link to={`/profile/${user?._id}`} className="relative flex items-center gap-3 mb-3">
           <img
             className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
             src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt={user.name}
           />
-        </Link>
+       
         <span className="text-lightBlue">{user.name}</span>
-      </div>
+         </Link>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          setIsLoading(true);
           if (Array.from(post.mediaURLs).length > 0) {
+            dispatch(setPostCreateStatusLoading());
             const urls = await uploadImages(post.mediaURLs, user._id);
 
             const _post = {
-              content: post.content,
+              content: post.content.trim(),
               mediaURLs: urls.map((url) => ({
                 url,
                 type: "image",
@@ -74,14 +77,18 @@ export const AddPostForm = () => {
             };
             dispatch(createPost(_post));
             setImgUrls([]);
-            setIsLoading(false);
 
             setPost(initialPostState);
           } else {
-            dispatch(createPost({ ...post, postedBy: user._id }));
+            dispatch(
+              createPost({
+                ...post,
+                content: post.content.trim(),
+                postedBy: user._id,
+              })
+            );
             setImgUrls([]);
-            setIsLoading(false);
-
+            setShowEmojiPicker(false);
             setPost(initialPostState);
           }
         }}
@@ -143,21 +150,30 @@ export const AddPostForm = () => {
                 }}
               />
             </div>
-            <IconButton Icon={MdGif} />
-            <IconButton Icon={BiVideo} />
-            <IconButton Icon={BiLocationPlus} />
+            <IconButton
+              Icon={GrEmoji}
+              onClick={() => {
+                setShowEmojiPicker(
+                  (prevShowEmojiPicker) => !prevShowEmojiPicker
+                );
+              }}
+            />
           </div>
-          {!isLoading ? (
+          {postCreateStatus !== "loading" ? (
             <button
               type="submit"
-              disabled={post.content.length === 0 && imgUrls.length === 0}
+              disabled={
+                post.content.trim().length === 0 && imgUrls.length === 0
+              }
               className={`
       w-full
       md:w-auto
       px-6
       py-2.5
       ${
-        post.content.length === 0 && imgUrls.length === 0 && !isLoading
+        post.content.trim().length === 0 &&
+        imgUrls.length === 0 &&
+        postCreateStatus !== "loading"
           ? "bg-slate-400"
           : "bg-primary"
       }
@@ -182,6 +198,16 @@ export const AddPostForm = () => {
           )}
         </div>
       </form>
+      {showEmojiPicker && (
+        <div className="mt-5">
+          <EmojiPicker
+            onEmojiClick={(_, data) => {
+              setPost({ ...post, content: post.content + data.emoji });
+            }}
+            preload={true}
+          />
+        </div>
+      )}
     </div>
   );
 };

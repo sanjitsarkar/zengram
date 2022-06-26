@@ -1,28 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdSend } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CommentSection } from ".";
-import { addComment } from "../services/comments/commentsService";
+import {
+  addComment,
+  updateComment,
+} from "../services/comments/commentsService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { Loader } from "./Loader";
 export const CommentsContainer = ({
   setIsCommentAdded,
+  setIsCommentRemoved,
+  commentCount,
   comments,
   profilePictureURL,
   userId,
   postId,
   postedBy,
+  setSkip,
 }) => {
   const dispatch = useDispatch();
   const [comment, setComment] = useState("");
+  const [commentId, setCommentId] = useState("");
+  const [isEditComment, setIsEditComment] = useState(false);
+  useEffect(() => {
+    setIsCommentAdded(false);
+    setIsCommentRemoved(false);
+  }, []);
 
   return (
     <div className="flex flex-col gap-1">
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (isEditComment) {
+            dispatch(
+              updateComment({
+                comment,
+                commentedBy: userId,
+                postId,
+                _id: commentId,
+              })
+            );
+            setComment("");
+            return;
+          }
           dispatch(addComment({ comment, commentedBy: userId, postId }));
           setIsCommentAdded(true);
+          setIsCommentRemoved(false);
           setComment("");
         }}
         className="flex flex-wrap items-center gap-3 mb-3"
@@ -48,21 +74,38 @@ export const CommentsContainer = ({
           type="submit"
           className="px-2.5 py-1.5 bg-primary text-white flex items-center gap-2 rounded-full"
         >
-          <span className="text-sm">Send</span>
+          <span className="text-sm">{isEditComment ? "Update" : "Send"}</span>
           <MdSend size={15} />
         </button>
       </form>
       <div className="flex flex-col gap-2 ml-2">
-        {comments.length > 0 &&
-          comments.map((comment) => {
+        {comments.status === "loading" && <Loader type="mini" />}
+        {comments.data.length > 0 &&
+          comments.data.map((comment) => {
             return (
               <CommentSection
+                setIsCommentRemoved={setIsCommentRemoved}
+                setIsCommentAdded={setIsCommentAdded}
                 commentInfo={comment}
                 postedBy={postedBy}
                 key={comment._id}
+                setIsEditComment={setIsEditComment}
+                setComment={setComment}
+                setCommentId={setCommentId}
               />
             );
           })}
+
+        {commentCount > 5 && (
+          <div
+            onClick={() => {
+              setSkip((prevSkip) => prevSkip + 5);
+            }}
+            className="text-primary cursor-pointer"
+          >
+            Show more comments
+          </div>
+        )}
       </div>
     </div>
   );

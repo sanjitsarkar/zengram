@@ -7,6 +7,8 @@ import { useSideBarItem } from "./context";
 import {
   BookmarkedPage,
   ExplorePage,
+  FollowersPage,
+  FollowingPage,
   HomePage,
   LoginPage,
   MessagePage,
@@ -53,13 +55,13 @@ function App() {
           <Route path="/messages/" element={<MessagePage />} />
           <Route
             path="/users/:profileId/followers"
-            element={<UsersPage type="followers" />}
+            element={<FollowersPage />}
           />
           <Route
             path="/users/:profileId/following"
-            element={<UsersPage type="following" />}
+            element={<FollowingPage />}
           />
-          <Route path="/users" element={<UsersPage type="search" />} />
+          <Route path="/users" element={<UsersPage />} />
           <Route path="/posts" element={<SearchedPostsPage />} />
           <Route path="/posts/:id" element={<PostPage />} />
         </Route>

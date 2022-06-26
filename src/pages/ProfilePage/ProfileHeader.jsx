@@ -21,7 +21,7 @@ export const ProfileHeader = ({ profile }) => {
   return (
     <div className="flex flex-col   bg-white  ">
       {isEditProfile && (
-        <Modal>
+        <Modal setShowDropDown={setIsEditProfile}>
           <ProfileEditForm
             profileInfo={profile}
             setIsEditProfile={setIsEditProfile}
@@ -40,13 +40,14 @@ export const ProfileHeader = ({ profile }) => {
             src={profile.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt={profile.name}
           />
-          <BiEditAlt
-            onClick={() => {
-              setIsEditProfile(true);
-            }}
-            className="cursor-pointer relative md:bottom-8  bottom-8 right-6 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
-          />
-
+          {user._id === profile._id && (
+            <BiEditAlt
+              onClick={() => {
+                setIsEditProfile(true);
+              }}
+              className="cursor-pointer relative md:bottom-8  bottom-8 right-6 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
+            />
+          )}
           <div className="sm:ml-6 -mt-14   flex   flex-wrap  md:gap-10  gap-4 justify-around items-center">
             <div className="flex flex-col  items-center gap-2">
               <h1 className=" text-xl  text-lightBlue">{profile.name}</h1>

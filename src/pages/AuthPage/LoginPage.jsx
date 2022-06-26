@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  AuthButton,
-  InputCheckboxSection,
-  InputSection,
-  LinkButton,
-  Loader,
-} from "../../components";
+import { AuthButton, InputSection, LinkButton, Loader } from "../../components";
 import { login } from "../../services/auth/authService";
 import { GUEST_CREDENTIAL, initialLoginCredState } from "../../utils";
-
+import { AuthInfoSection } from "./AuthInfoSection";
 export const LoginPage = () => {
   const dispatch = useDispatch();
   const [loginCred, setLoginCred] = useState(initialLoginCredState);
@@ -24,9 +18,11 @@ export const LoginPage = () => {
       {auth.status === "loading" && (
         <Loader status={"Please wait until you are logged in"} />
       )}
-      <div className="w-full grid place-content-center  h-screen bg-primary">
-        <div className="block p-6 rounded-lg shadow-2xl bg-white sm:w-96 w-fit m-2">
+      <div className="w-full grid place-content-center  h-screen bg-lightBlue bg-opacity-5">
+        <div className="flex flex-row flex-wrap items-center gap-16">
+          <AuthInfoSection />
           <form
+            className="block p-6 rounded-lg shadow-2xl bg-white sm:w-96 w-fit m-2"
             onSubmit={(e) => {
               e.preventDefault();
               dispatch(login(loginCred));
@@ -53,10 +49,6 @@ export const LoginPage = () => {
               minLength={6}
             />
 
-            <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-              <InputCheckboxSection label="Remember me" />
-              <LinkButton to="forgot-password" name="Forgot password?" />
-            </div>
             <div className="flex flex-col gap-2">
               <AuthButton name="Log in" />
               <AuthButton

@@ -6,7 +6,7 @@ import { updateDraftPosts } from "../../features/draftPosts/draftPostsSlice";
 import { updateUserCreatedPosts } from "../../features/userCreatedPosts/userCreatedPostsSlice";
 import { callApi } from "../../utils";
 export const fetchAllPosts = createAsyncThunk(
-  "posts/fetchAllPosts",
+  "allPosts/fetchAllPosts",
   async (skip) => {
     const response = await callApi("get", `posts?skip=${skip}`);
     return response.data;
@@ -104,6 +104,7 @@ export const updatePost = createAsyncThunk(
     const response = await callApi("put", `posts/${post.postId}`, true, {
       ...post,
     });
+    // dispatch(updatePostInfo(response?.data));
     dispatch(updateAllPosts(response?.data));
     dispatch(updateArchivedPosts(response?.data));
     dispatch(updateBookmarkedPosts(response?.data));

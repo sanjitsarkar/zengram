@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsWrapper, Tab } from ".";
 import { clearAllPosts } from "../features/allPosts/allPostsSlice";
@@ -67,11 +66,7 @@ export const PostsSection = ({ type = "all" }) => {
           setActiveTab={setActiveTab}
           name="Latest"
           onClick={() => {}}
-        >
-          <span>
-            <MdArrowDropDown size={20} />
-          </span>
-        </Tab>
+        ></Tab>
         <Tab
           activeTab={activeTab}
           setActiveTab={setActiveTab}

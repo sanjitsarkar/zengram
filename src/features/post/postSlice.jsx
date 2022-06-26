@@ -5,6 +5,11 @@ import { initialState } from "../../utils";
 export const postSlice = createSlice({
   initialState,
   name: "post",
+  reducers: {
+    updatePostInfo: (state, action) => {
+      state.data = action?.payload?.post;
+    },
+  },
   extraReducers: {
     [fetchPostInfo.pending]: (state, action) => {
       state.status = "loading";
@@ -19,5 +24,5 @@ export const postSlice = createSlice({
     },
   },
 });
-
+export const { updatePostInfo } = postSlice.actions;
 export default postSlice.reducer;

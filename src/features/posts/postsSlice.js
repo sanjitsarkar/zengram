@@ -15,75 +15,89 @@ export const postsSlice = createSlice({
     clearPosts: (state) => {
       state.data = [];
     },
+    setPostCreateStatusLoading: (state) => {
+      state.postCreateStatus = "loading";
+    },
+    setPostUpdateStatusLoading: (state) => {
+      state.postUpdateStatus = "loading";
+    },
   },
-  extraReducers(builder) {
-    builder
-      .addCase(fetchUserFeedPosts.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(fetchUserFeedPosts.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = [...state?.data, ...action.payload?.posts];
-      })
-      .addCase(fetchUserFeedPosts.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      })
-      .addCase(fetchUserFeedTrendingPosts.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(fetchUserFeedTrendingPosts.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = [...state.data, ...action.payload?.posts];
-      })
-      .addCase(fetchUserFeedTrendingPosts.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      })
-      .addCase(createPost.fulfilled, (state, action) => {
-        state.status = "succeeded";
+  extraReducers: {
+    [fetchUserFeedPosts.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchUserFeedPosts.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.data = [...state?.data, ...action.payload?.posts];
+    },
+    [fetchUserFeedPosts.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+    },
+    [fetchUserFeedTrendingPosts.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchUserFeedTrendingPosts.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.data = [...state.data, ...action.payload?.posts];
+    },
+    [fetchUserFeedTrendingPosts.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error;
+    },
+    [createPost.pending]: (state) => {
+      state.postCreateStatus = "loading";
+    },
+    [createPost.fulfilled]: (state, action) => {
+      state.postCreateStatus = "succeeded";
 
-        state.data.unshift(action.payload?.post);
+      state.data.unshift(action.payload?.post);
 
-        notify("Post added successfully", "success");
-      })
-      .addCase(createPost.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      })
+      notify("Post added successfully", "success");
+    },
+    [createPost.rejected]: (state, action) => {
+      state.postCreateStatus = "failed";
+      state.error = action.error;
+    },
+    [deletePost.pending]: (state) => {
+      state.postDeleteStatus = "loading";
+    },
+    [deletePost.fulfilled]: (state, action) => {
+      state.postDeleteStatus = "succeeded";
+      state.data = state.data.filter(
+        (post) => post?._id !== action.payload?.postId
+      );
 
-      .addCase(deletePost.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = state.data.filter(
-          (post) => post?._id !== action.payload?.postId
-        );
-
-        notify("Post deleted successfully", "success");
-      })
-      .addCase(deletePost.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
-      })
-      .addCase(updatePost.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(updatePost.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = state.data.map((post) => {
-          if (post?._id === action.payload?.post._id) {
-            return action.payload?.post;
-          }
-          return post;
-        });
-        notify("Post updated successfully", "success");
-      })
-      .addCase(updatePost.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error;
+      notify("Post deleted successfully", "success");
+    },
+    [deletePost.rejected]: (state, action) => {
+      state.postDeleteStatus = "failed";
+      state.error = action.error;
+    },
+    [updatePost.pending]: (state) => {
+      state.postUpdateStatus = "loading";
+    },
+    [updatePost.fulfilled]: (state, action) => {
+      state.postUpdateStatus = "succeeded";
+      state.data = state.data.map((post) => {
+        if (post?._id === action.payload?.post._id) {
+          return action.payload?.post;
+        }
+        return post;
       });
+      notify("Post updated successfully", "success");
+    },
+    [updatePost.rejected]: (state, action) => {
+      state.postUpdateStatus = "failed";
+      state.error = action.error;
+    },
   },
 });
 
-export const { clearPosts } = postsSlice.actions;
+export const {
+  clearPosts,
+  setPostCreateStatusLoading,
+  setPostUpdateStatusLoading,
+} = postsSlice.actions;
 
 export default postsSlice.reducer;

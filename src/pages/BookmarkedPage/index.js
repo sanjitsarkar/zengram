@@ -13,7 +13,7 @@ export const BookmarkedPage = () => {
   }, []);
   return (
     <Layout>
-      <PostsWrapper posts={bookmarkedPosts} width="md:w-5/6">
+      <PostsWrapper posts={bookmarkedPosts}>
         <h1 className="text-center text-xl text-lightBlue">Boomarked Posts</h1>
       </PostsWrapper>
     </Layout>

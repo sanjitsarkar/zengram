@@ -22,7 +22,10 @@ body{
         display: none;
     }
 }
-
+.scrollbar-none::-webkit-scrollbar{
+  display: none;
+  
+}
 ::-webkit-scrollbar {
   width: 0.7rem;
   height: 0.7rem;
@@ -40,3 +43,7 @@ body{
   background: var(--primary-color-4);
 }
 
+
+aside.emoji-picker-react{
+width: 100%;
+}

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { updateSuggestedUsers } from "../../features/suggestedUsers/suggestedUsersSlice";
 import { callApi, formatError } from "../../utils";
 export const login = createAsyncThunk(
   "auth/login",
@@ -52,14 +53,18 @@ export const updateProfileInfo = createAsyncThunk(
   }
 );
 
-export const followUser = createAsyncThunk("auth/followUser", async (user) => {
-  const response = await callApi(
-    "put",
-    `user/${user.followerId}/follow/${user.followingId}`,
-    true
-  );
-  return response.data;
-});
+export const followUser = createAsyncThunk(
+  "auth/followUser",
+  async (user, { dispatch }) => {
+    const response = await callApi(
+      "put",
+      `user/${user.followerId}/follow/${user.followingId}`,
+      true
+    );
+    dispatch(updateSuggestedUsers(response.data));
+    return response.data;
+  }
+);
 
 export const unfollowUser = createAsyncThunk(
   "auth/unfollowUser",

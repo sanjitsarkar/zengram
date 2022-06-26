@@ -3,6 +3,8 @@ export { LoginPage } from "./AuthPage/LoginPage";
 export { SignupPage } from "./AuthPage/SignupPage";
 export { BookmarkedPage } from "./BookmarkedPage";
 export { ExplorePage } from "./ExplorePage";
+export { FollowersPage } from "./FollowersPage";
+export { FollowingPage } from "./FollowingPage";
 export { HomePage } from "./HomePage";
 export { MessagePage } from "./MessagePage";
 export { PostPage } from "./PostPage";
