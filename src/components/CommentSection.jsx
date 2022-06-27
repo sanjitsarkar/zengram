@@ -4,7 +4,7 @@ import { MdMoreHoriz } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeComment } from "../services/comments/commentsService";
-import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
 import { DropDownOption } from "./DropDownOption";
 export const CommentSection = ({
   commentInfo,
@@ -19,6 +19,7 @@ export const CommentSection = ({
     _id,
     comment,
     commentedBy: { _id: id, profilePictureURL, name },
+    createdAt,
   } = commentInfo;
   const dispatch = useDispatch();
   const [showDropDown, setShowDropDown] = useState(false);
@@ -46,7 +47,7 @@ export const CommentSection = ({
             setIsEditComment(true);
             setComment(comment);
             setCommentId(_id);
-           
+
             setShowDropDown(false);
           }}
         />
@@ -78,6 +79,9 @@ export const CommentSection = ({
             <span className="text-lightBlue">{name}</span>
             <span className="text-sm text-lightBlue text-opacity-70">
               {comment}
+            </span>
+            <span className="text-xs text-lightBlue text-opacity-60">
+              {timeSince(createdAt)} ago
             </span>
           </div>
           <MdMoreHoriz

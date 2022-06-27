@@ -340,12 +340,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
                       postedBy: id,
                     })
                   );
-                  console.log({
-                    name: "Sanjit Sarkar",
-                    type: "like",
-                    sender: formatUserInfo(user),
-                    reciever: id,
-                  });
+
                   socket.emit("sendNotification", {
                     type: "like",
                     sender: formatUserInfo(user),
