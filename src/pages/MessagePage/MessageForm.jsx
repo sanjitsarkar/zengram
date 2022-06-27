@@ -31,15 +31,7 @@ export const MessageForm = ({ activeConversation }) => {
                 : activeConversation.members[0]._id,
           })
         );
-        console.log({
-          conversationId: activeConversation._id,
-          from: formatUserInfo(user),
-          to:
-            activeConversation.members[0]._id === user._id
-              ? activeConversation.members[1]._id
-              : activeConversation.members[0]._id,
-          message: messageContent,
-        });
+
         socket.emit("sendMessage", {
           conversationId: activeConversation._id,
           from: formatUserInfo(user),
