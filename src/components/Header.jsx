@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiBell, FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
@@ -20,6 +20,15 @@ export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { socket } = useSocket();
+  const dropDownRef = useRef(null);
+  const closeDropDown = (e) => {
+    if (!dropDownRef?.current?.contains(e.target)) {
+      setShowNotification(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", closeDropDown);
+  }, [document, dropDownRef]);
   useEffect(() => {
     if (!location.pathname.includes("users")) {
       setSearch("");
@@ -111,19 +120,22 @@ export const Header = () => {
           />
 
           {showNotification && (
-            <div className="absolute shadow-2xl rounded-md bg-lightBlue top-14 -right-14 w-max flex flex-col gap-1 text-white ">
+            <div
+              ref={dropDownRef}
+              className="absolute shadow-2xl rounded-md bg-lightBlue top-14 -right-14 w-max flex flex-col gap-1 text-white "
+            >
               {notifications.map((notification) => (
                 <Link
                   onClick={() => setShowNotification(false)}
                   to={
                     (notification.type === "message" &&
-                      `/messages/${notification.data}`) ||
+                      `/messages/${notification.payload}`) ||
                     (notification.type === "follow" &&
                       `/profile/${notification.sender._id}`) ||
                     (notification.type === "like" &&
-                      `/posts/${notification.data}`) ||
+                      `/posts/${notification.payload}`) ||
                     (notification.type === "comment" &&
-                      `/posts/${notification.data}`)
+                      `/posts/${notification.payload}`)
                   }
                   className="flex p-3 border-b border-opacity-30 border-white items-center  gap-1"
                 >

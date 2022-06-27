@@ -32,7 +32,7 @@ export const ProfileHeader = ({ profile }) => {
         <Modal setShowDropDown={setShowEditProfileModal}>
           <ProfileEditForm
             profileInfo={profile}
-            setShowEditProfileModal={setShowEditProfileModal}
+            setIsEditProfile={setShowEditProfileModal}
           />
         </Modal>
       )}

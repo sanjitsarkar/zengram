@@ -48,7 +48,7 @@ export const MessageForm = ({ activeConversation }) => {
             activeConversation.members[0]._id === user._id
               ? activeConversation.members[1]._id
               : activeConversation.members[0]._id,
-          data: activeConversation._id,
+          payload: activeConversation._id,
         });
         setShowEmojiPicker(false);
         setMessageContent("");

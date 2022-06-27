@@ -10,6 +10,7 @@ import {
   MdFavorite,
   MdFavoriteBorder,
   MdMoreHoriz,
+  MdPersonAdd,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
 import { useModal, useSocket } from "../context";
 import { useOnlineUsers } from "../context/onlineUsersContext";
 import { clearComments } from "../features/comments/commentsSlice";
+import { followUser, unfollowUser } from "../services/auth/authService";
 import { fetchAllComment } from "../services/comments/commentsService";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
 import {
@@ -68,8 +70,10 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-  const dropDownRef = useRef(null);
   const { socket } = useSocket();
+  const isFollowing = (id) => user?.following.includes(id);
+  const isFollower = (id) => user?.followers.includes(id);
+  const dropDownRef = useRef(null);
   const closeDropDown = (e) => {
     if (!dropDownRef?.current?.contains(e.target)) {
       setShowDropDown(false);
@@ -147,8 +151,40 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
     return (
       <div
         ref={dropDownRef}
-        className="z-10  rounded-md p-1  flex flex-col   bg-slate-600 shadow-xl text-white absolute right-2 top-16"
+        className="z-10 rounded-md p-1  flex flex-col w-max h-max   bg-slate-600 shadow-xl text-white absolute right-2 top-16"
       >
+        {userId !== id && !isFollowing(id) && (
+          <DropDownOption
+            onClick={() => {
+              dispatch(
+                followUser({
+                  followerId: userId,
+                  followingId: id,
+                })
+              );
+              socket.emit("sendNotification", {
+                type: "follow",
+                sender: formatUserInfo(user),
+                reciever: id,
+              });
+              setShowDropDown(false);
+              setIsEditOptionClicked(true);
+            }}
+            Icon={MdPersonAdd}
+            name={isFollower(id) ? "Follow" : "Follow back"}
+          />
+        )}
+        {userId !== id && isFollowing(id) && (
+          <DropDownOption
+            onClick={() => {
+              dispatch(unfollowUser({ followerId: userId, followingId: id }));
+              setShowDropDown(false);
+              setIsEditOptionClicked(true);
+            }}
+            Icon={MdPersonAdd}
+            name="unfollow"
+          />
+        )}
         {userId === id && (
           <DropDownOption
             onClick={() => {
@@ -164,12 +200,11 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             Icon={BiTrash}
             name="Delete Post"
             onClick={() => {
-              setShowDropDown(false);
-
               dispatch(deletePost({ postId: _id, postedBy: userId }));
               if (pathname.includes("posts")) {
                 navigate(-1);
               }
+              setShowDropDown(false);
             }}
           />
         )}
@@ -305,12 +340,19 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
                       postedBy: id,
                     })
                   );
+                  console.log({
+                    name: "Sanjit Sarkar",
+                    type: "like",
+                    sender: formatUserInfo(user),
+                    reciever: id,
+                  });
                   socket.emit("sendNotification", {
                     type: "like",
                     sender: formatUserInfo(user),
                     reciever: id,
                     data: _id,
                   });
+
                   _setLikes((_prevLikes) => [..._prevLikes, userId]);
                 } else {
                   notify("You can't like your own post", "error");

@@ -54,7 +54,7 @@ export const CommentsContainer = ({
             type: "comment",
             sender: formatUserInfo(user),
             reciever: postedBy._id,
-            data: postId,
+            payload: postId,
           });
           setIsCommentRemoved(false);
           setComment("");
