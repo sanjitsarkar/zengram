@@ -33,9 +33,9 @@ export const SuggestionSection = () => {
   }, [skip]);
 
   return (
-    <div className="md:flex flex-col hidden items-center   w-3/12 fixed right-0 h-screen overflow-y-auto scrollbar-none mx-5">
-      <h1 className=" text-lg text-lightBlue ">Suggested People</h1>
-      <div className="flex flex-col gap-4 justify-center items-center mt-5">
+    <div className="md:flex flex-col items-center  p-1 overflow-y-auto scrollbar-none mx-5 ">
+      <h1 className=" text-lg text-lightBlue ">Suggested users</h1>
+      <div className="flex flex-col gap-4 justify-center items-center mt-2">
         {suggestedUsers.status === "loading" && <Loader type="medium" />}
         {suggestedUsers.status !== "loading" &&
           suggestedUsers.data.length === 0 && (

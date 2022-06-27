@@ -3,28 +3,44 @@ import { BiEditAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Modal } from "../../components";
+import { SendMessageForm } from "../../components/SendMessageForm";
+import { useSocket } from "../../context";
 import { updateUser } from "../../features/auth/authSlice";
 import { updateProfile } from "../../features/profile/profileSlice";
 import { followUser, unfollowUser } from "../../services/auth/authService";
-import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
+import {
+  COVER_PHOTO_PLACEHOLDER,
+  formatUserInfo,
+  PROFILE_PIC_PLACEHOLDER,
+} from "../../utils";
 import { ProfileEditForm } from "./ProfileEditForm";
 
 export const ProfileHeader = ({ profile }) => {
   const postCount = useSelector(
     (state) => state.userCreatedPosts?.data?.length
   );
-  const [isEditProfile, setIsEditProfile] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [showSendMessageModal, setShowSendMessageModal] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth?.user);
   const isFollowing = user?.following.includes(profile?._id);
   const isFollower = user?.followers.includes(profile?._id);
+  const { socket } = useSocket();
   return (
     <div className="flex flex-col   bg-white  ">
-      {isEditProfile && (
-        <Modal setShowDropDown={setIsEditProfile}>
+      {showEditProfileModal && (
+        <Modal setShowDropDown={setShowEditProfileModal}>
           <ProfileEditForm
             profileInfo={profile}
-            setIsEditProfile={setIsEditProfile}
+            setShowEditProfileModal={setShowEditProfileModal}
+          />
+        </Modal>
+      )}
+      {showSendMessageModal && (
+        <Modal setShowDropDown={setShowSendMessageModal}>
+          <SendMessageForm
+            profile={profile}
+            setShowSendMessageModal={setShowSendMessageModal}
           />
         </Modal>
       )}
@@ -43,13 +59,13 @@ export const ProfileHeader = ({ profile }) => {
           {user._id === profile._id && (
             <BiEditAlt
               onClick={() => {
-                setIsEditProfile(true);
+                setShowEditProfileModal(true);
               }}
               className="cursor-pointer relative md:bottom-8  bottom-8 right-6 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
             />
           )}
           <div className="sm:ml-6 -mt-14   flex   flex-wrap  md:gap-10  gap-4 justify-around items-center">
-            <div className="flex flex-col  items-center gap-2">
+            <div className="flex   items-center gap-2">
               <h1 className=" text-xl  text-lightBlue">{profile.name}</h1>
               {user?._id !== profile?._id && !isFollowing && (
                 <button
@@ -60,7 +76,11 @@ export const ProfileHeader = ({ profile }) => {
                         followerId: user._id,
                       })
                     );
-
+                    socket.emit("sendNotification", {
+                      type: "follow",
+                      sender: formatUserInfo(user),
+                      reciever: profile._id,
+                    });
                     const newUser = {
                       ...user,
                       following: [...user.following, profile?._id],
@@ -127,6 +147,16 @@ export const ProfileHeader = ({ profile }) => {
                 following
               </Link>
             </div>
+            {user?._id !== profile?._id && (
+              <button
+                onClick={() => {
+                  setShowSendMessageModal(true);
+                }}
+                className="px-4 rounded-full py-1.5 bg-primary text-white "
+              >
+                Send Message
+              </button>
+            )}
           </div>
         </div>
 

@@ -15,10 +15,10 @@ export const NotAvailable = ({
     >
       <img
         src={img}
-        className={`${type === "404" ? "w-80" : "w-48"}`}
+        className={`${type === "404" ? "w-80" : "w-32"}`}
         alt={title}
       />
-      <h2 className="text-center text-xl text-lightBlue">{title}</h2>
+      <h1 className="text-center  text-lightBlue text-lg">{title}</h1>
       {children}
     </div>
   );

@@ -1,9 +1,26 @@
-import React from "react";
-import { Layout, PostsSection } from "../../components";
-import { SuggestionSection } from "../../components/SuggestionSection";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
+import {
+  Layout,
+  OnlineUsers,
+  PostsSection,
+  SuggestionSection,
+} from "../../components";
+import { useOnlineUsers } from "../../context/onlineUsersContext";
 import { AddPostForm } from "./AddPostForm";
 
 export const HomePage = () => {
+  const { onlineUsers } = useOnlineUsers();
+  const { user } = useSelector((state) => state.auth);
+  const _onlineUsers = useMemo(
+    () =>
+      onlineUsers.filter(
+        (_user) =>
+          user.following.some((follower) => _user._id === follower) &&
+          _user._id !== user._id
+      ),
+    [onlineUsers, user]
+  );
   return (
     <Layout>
       <div className="flex gap-0 ">
@@ -11,7 +28,10 @@ export const HomePage = () => {
           <AddPostForm />
           <PostsSection type="userFeed" />
         </div>
-        <SuggestionSection />
+        <div className="md:flex flex-col hidden items-center h-screen gap-2   w-3/12 fixed right-0">
+          {_onlineUsers.length > 0 && <OnlineUsers />}
+          <SuggestionSection />
+        </div>
       </div>
     </Layout>
   );

@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { MdSend } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CommentSection } from ".";
+import { useSocket } from "../context";
 import {
   addComment,
   updateComment,
 } from "../services/comments/commentsService";
-import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { formatUserInfo, PROFILE_PIC_PLACEHOLDER } from "../utils";
 import { Loader } from "./Loader";
 export const CommentsContainer = ({
   setIsCommentAdded,
   setIsCommentRemoved,
   commentCount,
   comments,
-  profilePictureURL,
   userId,
   postId,
   postedBy,
   setSkip,
 }) => {
   const dispatch = useDispatch();
+  const { socket } = useSocket();
+  const user = useSelector((state) => state.auth.user);
   const [comment, setComment] = useState("");
   const [commentId, setCommentId] = useState("");
   const [isEditComment, setIsEditComment] = useState(false);
@@ -48,6 +50,12 @@ export const CommentsContainer = ({
           }
           dispatch(addComment({ comment, commentedBy: userId, postId }));
           setIsCommentAdded(true);
+          socket.emit("sendNotification", {
+            type: "comment",
+            sender: formatUserInfo(user),
+            reciever: postedBy._id,
+            data: postId,
+          });
           setIsCommentRemoved(false);
           setComment("");
         }}
@@ -56,7 +64,7 @@ export const CommentsContainer = ({
         <Link to={`/profile/${userId}`}>
           <img
             className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-            src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+            src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
             alt="profilePicture"
           />
         </Link>
@@ -68,7 +76,7 @@ export const CommentsContainer = ({
           onChange={(e) => setComment(e.target.value)}
           placeholder="Comment something"
           id=""
-          className="px-2.5 h-auto py-1 outline-none  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-4/5 w-full   rounded-md "
+          className="px-2.5 h-auto py-1 outline-none text-lightBlue  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-4/5 w-full   rounded-md "
         />
         <button
           type="submit"

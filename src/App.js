@@ -19,13 +19,7 @@ import {
   SignupPage,
   UsersPage,
 } from "./pages";
-import {
-  fetchArchivedPosts,
-  fetchBookmarkedPosts,
-} from "./services/posts/postsService";
 function App() {
-  const { isLoggedIn, user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const { setActiveName } = useSideBarItem();
   const location = useLocation();
   useEffect(() => {
@@ -38,12 +32,6 @@ function App() {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchBookmarkedPosts(user?._id));
-      dispatch(fetchArchivedPosts(user?._id));
-    }
-  }, []);
   return (
     <div className="App">
       <Routes>
@@ -53,6 +41,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/profile/:profileId" element={<ProfilePage />} />
           <Route path="/messages/" element={<MessagePage />} />
+          <Route path="/messages/:conversationId" element={<MessagePage />} />
           <Route
             path="/users/:profileId/followers"
             element={<FollowersPage />}

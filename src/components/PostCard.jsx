@@ -14,7 +14,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
-import { useModal } from "../context";
+import { useModal, useSocket } from "../context";
+import { useOnlineUsers } from "../context/onlineUsersContext";
 import { clearComments } from "../features/comments/commentsSlice";
 import { fetchAllComment } from "../services/comments/commentsService";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
@@ -25,7 +26,13 @@ import {
   removePostFromArchive,
   unBookmarkPost,
 } from "../services/posts/postsService";
-import { notify, PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
+import {
+  formatUserInfo,
+  notify,
+  PROFILE_PIC_PLACEHOLDER,
+  timeSince,
+} from "../utils";
+import { Status } from "./Status";
 const WORD_LENGTH = 250;
 export const PostCard = forwardRef(({ post, type }, ref) => {
   const {
@@ -57,10 +64,12 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   const [_commentCount, _setCommentCount] = useState(commentCount);
   const [showMore, setShowMore] = useState(false);
   const [wordLength, setWordLength] = useState(WORD_LENGTH);
+  const { onlineUsers } = useOnlineUsers();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
   const dropDownRef = useRef(null);
-
+  const { socket } = useSocket();
   const closeDropDown = (e) => {
     if (!dropDownRef?.current?.contains(e.target)) {
       setShowDropDown(false);
@@ -215,11 +224,13 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
       <div className="flex  justify-between">
         <div className="flex items-center gap-3 mb-3">
           <Link to={`/profile/${id}`}>
-            <img
-              className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-              src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-              alt="profilePicture"
-            />
+            <Status isOnline={onlineUsers.some((_user) => _user._id === id)}>
+              <img
+                className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+                src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+                alt="profilePicture"
+              />
+            </Status>
           </Link>
           <div className="flex flex-col">
             <Link to={`/profile/${id}`}>
@@ -294,6 +305,12 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
                       postedBy: id,
                     })
                   );
+                  socket.emit("sendNotification", {
+                    type: "like",
+                    sender: formatUserInfo(user),
+                    reciever: id,
+                    data: _id,
+                  });
                   _setLikes((_prevLikes) => [..._prevLikes, userId]);
                 } else {
                   notify("You can't like your own post", "error");
@@ -384,7 +401,6 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           postId={_id}
           onClick={() => {}}
           postedBy={post.postedBy}
-          profilePictureURL={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
         />
       )}
     </div>

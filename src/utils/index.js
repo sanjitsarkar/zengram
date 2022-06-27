@@ -163,3 +163,43 @@ export const copyTextToClipboard = (text) => {
     }
   );
 };
+
+export const formatDate = (date) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  date = new Date(date);
+  return (
+    date.toLocaleString("en-US", {
+      hour: "numeric",
+      hour12: true,
+      minute: "numeric",
+    }) +
+    ", " +
+    months[date.getMonth()] +
+    " " +
+    date.getDate() +
+    ", " +
+    date.getFullYear()
+  );
+};
+export const formatUserInfo = (user) => {
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    profilePictureURL: user.profilePictureURL,
+  };
+};
