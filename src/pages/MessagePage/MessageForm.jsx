@@ -1,10 +1,9 @@
-import { IconButton } from "@mui/material";
 import EmojiPicker from "emoji-picker-react";
 import React, { useState } from "react";
 import { GrEmoji } from "react-icons/gr";
 import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader } from "../../components";
+import { IconButton, Loader } from "../../components";
 import { useSocket } from "../../context";
 import { sendMessage } from "../../services/messages/messagesService";
 import { formatUserInfo } from "../../utils";
@@ -32,6 +31,15 @@ export const MessageForm = ({ activeConversation }) => {
                 : activeConversation.members[0]._id,
           })
         );
+        console.log({
+          conversationId: activeConversation._id,
+          from: formatUserInfo(user),
+          to:
+            activeConversation.members[0]._id === user._id
+              ? activeConversation.members[1]._id
+              : activeConversation.members[0]._id,
+          message: messageContent,
+        });
         socket.emit("sendMessage", {
           conversationId: activeConversation._id,
           from: formatUserInfo(user),
@@ -92,7 +100,7 @@ export const MessageForm = ({ activeConversation }) => {
             setMessageContent(e.target.value);
           }}
         />
-        <div className="flex justify-between items-center  gap-4 ">
+        <div className="flex justify-between items-center  gap-4 relative">
           <div className="flex gap-2 items-center">
             <IconButton
               Icon={GrEmoji}
@@ -104,7 +112,7 @@ export const MessageForm = ({ activeConversation }) => {
             />
           </div>
           {showEmojiPicker && (
-            <div className="mt-5  w-48">
+            <div className=" absolute top-14 w-fit right-10">
               <EmojiPicker
                 onEmojiClick={(_, data) => {
                   setMessageContent(messageContent + data.emoji);

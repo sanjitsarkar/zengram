@@ -28,7 +28,6 @@ export const Messages = ({ activeConversation, setActiveConversation }) => {
       );
     });
     socket.on("getDeleteMessage", ({ messageId }) => {
-      console.log("messageId", messageId);
       dispatch(
         deleteMessage({
           messageId,
