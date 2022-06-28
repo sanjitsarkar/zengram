@@ -1,14 +1,18 @@
+import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useState } from "react";
+import { GrEmoji } from "react-icons/gr";
 import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CommentSection } from ".";
 import { useSocket } from "../context";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import {
   addComment,
   updateComment,
 } from "../services/comments/commentsService";
 import { formatUserInfo, PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { IconButton } from "./IconButton";
 import { Loader } from "./Loader";
 export const CommentsContainer = ({
   setIsCommentAdded,
@@ -26,6 +30,8 @@ export const CommentsContainer = ({
   const [comment, setComment] = useState("");
   const [commentId, setCommentId] = useState("");
   const [isEditComment, setIsEditComment] = useState(false);
+  const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
+
   useEffect(() => {
     setIsCommentAdded(false);
     setIsCommentRemoved(false);
@@ -61,30 +67,88 @@ export const CommentsContainer = ({
         }}
         className="flex flex-wrap items-center gap-3 mb-3"
       >
-        <Link to={`/profile/${userId}`}>
-          <img
-            className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
-            src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-            alt="profilePicture"
+        <div className="flex justify-between items-center  px-2.5 flex-wrap  py-1 outline-none text-lightBlue  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary  w-full   rounded-md ">
+          <Link to={`/profile/${userId}`}>
+            <img
+              className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
+              src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+              alt="profilePicture"
+            />
+          </Link>
+          <input
+            type="text"
+            name=""
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Comment something"
+            id=""
+            className=" h-auto bg-transparent outline-none  border-none w-9/12   "
+            required
           />
-        </Link>
-
-        <input
-          type="text"
-          name=""
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="Comment something"
-          id=""
-          className="px-2.5 h-auto py-1 outline-none text-lightBlue  ease-in-out transition-all bg-lightBlue bg-opacity-5 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-4/5 w-full   rounded-md "
-        />
-        <button
-          type="submit"
-          className="px-2.5 py-1.5 bg-primary text-white flex items-center gap-2 rounded-full"
-        >
-          <span className="text-sm">{isEditComment ? "Update" : "Send"}</span>
-          <MdSend size={15} />
-        </button>
+          <div className="flex  items-center  gap-2 relative">
+            <div className="flex gap-2 items-center z-10">
+              <IconButton
+                Icon={GrEmoji}
+                onClick={() => {
+                  setShowEmojiPicker(
+                    (prevShowEmojiPicker) => !prevShowEmojiPicker
+                  );
+                }}
+              />
+            </div>
+            {showEmojiPicker && (
+              <div
+                className=" absolute top-14 w-fit right-10"
+                ref={dropDownRef}
+              >
+                <EmojiPicker
+                  onEmojiClick={(_, data) => {
+                    setComment(comment + data.emoji);
+                  }}
+                  preload={true}
+                />
+              </div>
+            )}
+            {comments.status !== "loading" ? (
+              <button
+                type="submit"
+                disabled={comment.trim().length === 0}
+                className={`
+      w-full
+      md:w-auto
+      flex gap-1 items-center
+      rounded-full
+      px-3
+      py-2
+      ${
+        comment.trim().length === 0 && comments.status !== "loading"
+          ? "bg-slate-400"
+          : "bg-primary"
+      }
+      text-white
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      rounded
+      shadow-md
+      hover:bg-primary-700 hover:shadow-lg
+      focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0
+      active:bg-primary-800 active:shadow-lg
+      transition
+      duration-150
+      ease-in-out`}
+              >
+                <span className="text-sm">
+                  {isEditComment ? "Update" : "Send"}
+                </span>
+                <MdSend size={15} />
+              </button>
+            ) : (
+              <Loader type="mini" />
+            )}
+          </div>
+        </div>
       </form>
       <div className="flex flex-col gap-2 ml-2">
         {comments.status === "loading" && <Loader type="mini" />}

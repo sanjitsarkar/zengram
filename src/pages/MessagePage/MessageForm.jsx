@@ -5,16 +5,17 @@ import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Loader } from "../../components";
 import { useSocket } from "../../context";
+import { useDropDown } from "../../hooks/useCloseDropDown";
 import { sendMessage } from "../../services/messages/messagesService";
 import { formatUserInfo } from "../../utils";
 
 export const MessageForm = ({ activeConversation }) => {
   const dispatch = useDispatch();
   const { socket } = useSocket();
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const [messageContent, setMessageContent] = useState("");
   const messages = useSelector((state) => state.messages);
+  const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
 
   return (
     <form
@@ -104,7 +105,7 @@ export const MessageForm = ({ activeConversation }) => {
             />
           </div>
           {showEmojiPicker && (
-            <div className=" absolute top-14 w-fit right-10">
+            <div className=" absolute top-14 w-fit right-10" ref={dropDownRef}>
               <EmojiPicker
                 onEmojiClick={(_, data) => {
                   setMessageContent(messageContent + data.emoji);

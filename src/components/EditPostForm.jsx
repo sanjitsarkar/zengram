@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal } from "../context";
 import { setPostUpdateStatusLoading } from "../features/posts/postsSlice";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
 import { updatePost } from "../services/posts/postsService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
@@ -20,7 +21,8 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
   const [uploadedImgUrls, setUploadedImgUrls] = useState(
     postInfo?.mediaURLs ?? []
   );
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
+
   const { postUpdateStatus } = useSelector((state) => state.posts);
 
   const PhotosSetcion = () => {
@@ -235,7 +237,7 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
             )}
           </div>
           {showEmojiPicker && (
-            <div className="mt-5">
+            <div className="mt-5" ref={dropDownRef}>
               <EmojiPicker
                 onEmojiClick={(_, data) => {
                   setPost({ ...post, content: post.content + data.emoji });

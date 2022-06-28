@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { Layout, Loader, NotAvailable } from "../../components";
+import { Layout, NotAvailable, UserListLoader } from "../../components";
 import { UserList } from "../../components/UserList";
 import { useSearch } from "../../context";
 import { clearSearchedUsers } from "../../features/searchedUsers/searchedUsersSlice";
@@ -43,7 +43,7 @@ export const UsersPage = () => {
         <span className="text-lightBlue text-opacity-80">{search}</span>
       </h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-5">
-        {searchedUsers.status === "loading" && <Loader type="medium" />}
+        {searchedUsers.status === "loading" && <UserListLoader />}
         {searchedUsers.status === "succeeded" &&
           searchedUsers.data.length === 0 && (
             <NotAvailable title={`No user found`} />

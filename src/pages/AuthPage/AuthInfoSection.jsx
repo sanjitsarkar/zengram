@@ -2,7 +2,7 @@ import React from "react";
 import LOGO from "../../assets/logo.png";
 export const AuthInfoSection = () => {
   return (
-    <div className="flex flex-col  items-center gap-6">
+    <div className="sm:flex flex-col hidden  items-center gap-6">
       <div className="flex gap-1 items-center">
         <img src={LOGO} alt="ZenGram" className="w-24" />
         <h1 className="md:text-4xl hidden md:block   text-lightBlue font-semibold">

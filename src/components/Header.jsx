@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiBell, FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
@@ -8,27 +8,20 @@ import LOGO from "../assets/logo.png";
 import { useSearch, useSocket } from "../context";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import { searchUsers } from "../services/auth/authService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const [notifications, setNotifications] = useState([]);
-  const [showNotification, setShowNotification] = useState(false);
   const { search, setSearch, setSkip } = useSearch();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { socket } = useSocket();
-  const dropDownRef = useRef(null);
-  const closeDropDown = (e) => {
-    if (!dropDownRef?.current?.contains(e.target)) {
-      setShowNotification(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("mousedown", closeDropDown);
-  }, [document, dropDownRef]);
+  const [dropDownRef, showNotification, setShowNotification] = useDropDown();
+
   useEffect(() => {
     if (!location.pathname.includes("users")) {
       setSearch("");

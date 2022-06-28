@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { setPostCreateStatusLoading } from "../../features/posts/postsSlice";
+import { useDropDown } from "../../hooks/useCloseDropDown";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";
@@ -16,8 +17,9 @@ export const AddPostForm = () => {
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(initialPostState);
   const [imgUrls, setImgUrls] = useState([]);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { postCreateStatus } = useSelector((state) => state.posts);
+  const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
+
   const PhotosSetcion = () => {
     return (
       <div className=" p-4 relative bg-slate-200 grid photos  grid-flow-col-dense auto-cols-min gap-4 overflow-auto  w-full">
@@ -51,15 +53,18 @@ export const AddPostForm = () => {
   };
   return (
     <div className=" w-full md:p-6 p-4 rounded-lg shadow-lg bg-white   ">
-        <Link to={`/profile/${user?._id}`} className="relative flex items-center gap-3 mb-3">
-          <img
-            className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
-            src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-            alt={user.name}
-          />
-       
+      <Link
+        to={`/profile/${user?._id}`}
+        className="relative flex items-center gap-3 mb-3"
+      >
+        <img
+          className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+          src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+          alt={user.name}
+        />
+
         <span className="text-lightBlue">{user.name}</span>
-         </Link>
+      </Link>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -199,7 +204,7 @@ export const AddPostForm = () => {
         </div>
       </form>
       {showEmojiPicker && (
-        <div className="mt-5">
+        <div className="mt-5" ref={dropDownRef}>
           <EmojiPicker
             onEmojiClick={(_, data) => {
               setPost({ ...post, content: post.content + data.emoji });

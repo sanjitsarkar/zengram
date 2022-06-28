@@ -7,6 +7,7 @@ export { default as conversationsReducer } from "./conversations/conversationsSl
 export { default as draftPostsReducer } from "./draftPosts/draftPostsSlice";
 export { default as followersReducer } from "./followers/followersSlice";
 export { default as followingReducer } from "./following/followingSlice";
+export { default as likePostReducer } from "./likePost/likePostSlice";
 export { default as messagesReducer } from "./messages/messagesSlice";
 export { default as postReducer } from "./post/postSlice";
 export { default as postsReducer } from "./posts/postsSlice";

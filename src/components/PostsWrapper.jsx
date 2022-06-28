@@ -1,7 +1,8 @@
 import React, { forwardRef } from "react";
 import { useSelector } from "react-redux";
-import { Loader, PostCard } from ".";
+import { PostCard } from ".";
 import { NotAvailable } from "./NotAvailable";
+import { PostLoader } from "./PostLoader";
 
 export const PostsWrapper = forwardRef(
   ({ posts, children, width = "", type }, ref) => {
@@ -34,7 +35,7 @@ export const PostsWrapper = forwardRef(
               )
           )}
         </div>
-        {posts.status === "loading" && <Loader type="medium" />}
+        {posts.status === "loading" && <PostLoader />}
       </div>
     );
   }

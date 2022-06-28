@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { MdMoreHoriz } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import { removeComment } from "../services/comments/commentsService";
 import { PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
 import { DropDownOption } from "./DropDownOption";
+const WORD_LENGTH = 250;
 export const CommentSection = ({
   commentInfo,
   setIsCommentRemoved,
@@ -22,17 +24,9 @@ export const CommentSection = ({
     createdAt,
   } = commentInfo;
   const dispatch = useDispatch();
-  const [showDropDown, setShowDropDown] = useState(false);
-
-  const dropDownRef = useRef(null);
-  const closeDropDown = (e) => {
-    if (!dropDownRef?.current?.contains(e.target)) {
-      setShowDropDown(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("mousedown", closeDropDown);
-  }, [document, dropDownRef]);
+  const [dropDownRef, showDropDown, setShowDropDown] = useDropDown();
+  const [showMore, setShowMore] = useState(false);
+  const [wordLength, setWordLength] = useState(WORD_LENGTH);
   const DropDown = () => {
     return (
       <div
@@ -73,12 +67,46 @@ export const CommentSection = ({
           alt="profilePicture"
         />
       </Link>
-      <div className="flex flex-col gap-1 w-full sm:min-w-max ">
-        <div className="relative flex justify-between bg-lightBlue bg-opacity-5 p-2.5 rounded-md   w-full  sm:min-w-max">
-          <div className="flex flex-col">
+      <div className="flex flex-col flex-wrap gap-1 w-full ">
+        <div className="relative flex flex-wrap justify-between bg-lightBlue bg-opacity-5 p-2.5 rounded-md     min-w-fit w-full">
+          <div className="flex flex-col flex-wrap">
             <span className="text-lightBlue">{name}</span>
-            <span className="text-sm text-lightBlue text-opacity-70">
-              {comment}
+            <span className="text-sm text-lightBlue text-opacity-70 break-words">
+              {comment
+                ?.substr(0, wordLength)
+                ?.split(" ")
+                .map((word, i) => {
+                  if (word.startsWith("#"))
+                    return (
+                      <>
+                        {" "}
+                        <Link
+                          key={word}
+                          to={`/posts?hashtag=${word.slice(1)}`}
+                          className={`text-primary`}
+                        >
+                          {word}
+                        </Link>
+                      </>
+                    );
+
+                  return word + " ";
+                })}
+              {comment.length > WORD_LENGTH && (
+                <div
+                  onClick={() => {
+                    setShowMore(!showMore);
+                    if (showMore) {
+                      setWordLength(WORD_LENGTH);
+                    } else {
+                      setWordLength(comment.length);
+                    }
+                  }}
+                  className="text-primary cursor-pointer"
+                >
+                  Show {!showMore ? "more" : "less"}
+                </div>
+              )}
             </span>
             <span className="text-xs text-lightBlue text-opacity-60">
               {timeSince(createdAt)} ago

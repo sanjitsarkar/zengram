@@ -6,16 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
 import { useModal, useSocket } from "../context";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import { sendMessage } from "../services/messages/messagesService";
 import { formatUserInfo, PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const SendMessageForm = ({ profile, setShowSendMessageModal }) => {
   const messages = useSelector((state) => state.messages);
   const { socket } = useSocket();
   const dispatch = useDispatch();
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const { isModalOpen, setIsModalOpen } = useModal();
   const [messageContent, setMessageContent] = useState("");
+  const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
 
   return (
     <div
@@ -148,7 +149,7 @@ export const SendMessageForm = ({ profile, setShowSendMessageModal }) => {
           )}
         </div>
         {showEmojiPicker && (
-          <div className="mt-5">
+          <div className="mt-5" ref={dropDownRef}>
             <EmojiPicker
               onEmojiClick={(_, data) => {
                 setMessageContent(messageContent + data.emoji);

@@ -10,9 +10,11 @@ export const suggestedUsersSlice = createSlice({
       state.data = [];
     },
     updateSuggestedUsers: (state, action) => {
-      state.data = state?.data?.filter(
-        (user) => user?._id !== action.payload?.followingId
-      );
+     
+        state.data = state?.data?.filter(
+          (user) => user?._id !== action.payload?.followingId
+        );
+     
     },
   },
   extraReducers: (builder) => {

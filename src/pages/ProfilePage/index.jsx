@@ -60,7 +60,11 @@ export const ProfilePage = () => {
 
   return (
     <Layout>
-      {profile.status === "loading" && <Loader type="medium" />}
+      {profile.status === "loading" && (
+        <div className="mt-24">
+          <Loader type="medium" />
+        </div>
+      )}
       {profile.status === "succeeded" && !profile.data && (
         <span className="text-center text-base font-medium text-lightBlue">
           No posts to show

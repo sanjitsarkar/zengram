@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Layout, Loader, NotAvailable } from "../../components";
+import { Layout, Loader, NotAvailable, UserListLoader } from "../../components";
 import { UserList } from "../../components/UserList";
 import { useSearch } from "../../context";
 import { clearFollowers } from "../../features/followers/followersSlice";
@@ -42,7 +42,7 @@ export const FollowersPage = ({ type }) => {
         Your followers
       </h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-5">
-        {followers.status === "loading" && <Loader type="medium" />}
+        {followers.status === "loading" && <UserListLoader/>}
         {followers.status === "succeeded" && followers.data.length === 0 && (
           <NotAvailable title={`No Followers found`} />
         )}

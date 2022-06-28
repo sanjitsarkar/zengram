@@ -9,6 +9,7 @@ import {
   draftPostsReducer,
   followersReducer,
   followingReducer,
+  likePostReducer,
   messagesReducer,
   postReducer,
   postsReducer,
@@ -37,5 +38,6 @@ export const store = configureStore({
     post: postReducer,
     conversations: conversationsReducer,
     messages: messagesReducer,
+    likedPost: likePostReducer,
   },
 });

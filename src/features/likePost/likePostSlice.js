@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { dislikePost, likePost } from "../../services/likePost/likePostService";
 import { initialState, notify } from "../../utils";
 
 export const likePostSlice = createSlice({
-  name: "likePost",
+  name: "likedPost",
   initialState,
   reducers: {},
   extraReducers: {

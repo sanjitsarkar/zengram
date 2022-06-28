@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSuggestedUsers } from "../features/suggestedUsers/suggestedUsersSlice";
 import { searchUsers } from "../services/auth/authService";
-import { Loader } from "./Loader";
 import { NotAvailable } from "./NotAvailable";
 import { UserList } from "./UserList";
+import { UserListLoader } from "./UserListLoader";
 
 export const SuggestionSection = () => {
   const suggestedUsers = useSelector((state) => state.suggestedUsers);
@@ -36,7 +36,7 @@ export const SuggestionSection = () => {
     <div className="md:flex flex-col items-center  p-1 overflow-y-auto scrollbar-none mx-5 ">
       <h1 className=" text-lg text-lightBlue ">Suggested users</h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-2">
-        {suggestedUsers.status === "loading" && <Loader type="medium" />}
+        {suggestedUsers.status === "loading" && <UserListLoader />}
         {suggestedUsers.status !== "loading" &&
           suggestedUsers.data.length === 0 && (
             <NotAvailable title={`No suggested user available`} />

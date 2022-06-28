@@ -15,6 +15,11 @@ export const postsSlice = createSlice({
     clearPosts: (state) => {
       state.data = [];
     },
+    updatePosts: (state, action) => {
+      state.data = state?.data?.filter(
+        (post) => post.postedBy._id !== action.payload?._id
+      );
+    },
     setPostCreateStatusLoading: (state) => {
       state.postCreateStatus = "loading";
     },
@@ -98,6 +103,7 @@ export const {
   clearPosts,
   setPostCreateStatusLoading,
   setPostUpdateStatusLoading,
+  updatePosts,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

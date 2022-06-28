@@ -19,8 +19,8 @@ export const SignupPage = () => {
       {auth.status === "loading" && (
         <Loader status={"Please wait until you are signed up"} />
       )}
-      <div className="w-full grid md:place-content-center place-content-start  min-h-screen bg-lightBlue bg-opacity-5">
-        <div className="flex flex-row flex-wrap items-center justify-center md:gap-8  mt-6 md:mt-0 gap-4">
+      <div className="w-full grid place-content-center md:place-content-center sm:place-content-start     min-h-screen bg-lightBlue bg-opacity-5">
+        <div className="flex flex-row flex-wrap items-center justify-center md:gap-16   sm:mt-10 md:mt-0 gap-4">
           <AuthInfoSection />
 
           <form

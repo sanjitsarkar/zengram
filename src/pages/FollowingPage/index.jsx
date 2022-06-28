@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Layout, Loader, NotAvailable } from "../../components";
+import { Layout, NotAvailable, UserListLoader } from "../../components";
 import { UserList } from "../../components/UserList";
 import { useSearch } from "../../context";
 import { clearFollowing } from "../../features/following/followingSlice";
@@ -42,7 +42,7 @@ export const FollowingPage = () => {
         Your following
       </h1>
       <div className="flex flex-col gap-4 justify-center items-center mt-5">
-        {following.status === "loading" && <Loader type="medium" />}
+        {following.status === "loading" && <UserListLoader />}
         {following.status === "succeeded" && following.data.length === 0 && (
           <NotAvailable title={`There is not following`} />
         )}

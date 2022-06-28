@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { BiArchive, BiTrash } from "react-icons/bi";
 import {
   MdArrowBack,
@@ -18,6 +18,7 @@ import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
 import { useModal, useSocket } from "../context";
 import { useOnlineUsers } from "../context/onlineUsersContext";
 import { clearComments } from "../features/comments/commentsSlice";
+import { useDropDown } from "../hooks/useCloseDropDown";
 import { followUser, unfollowUser } from "../services/auth/authService";
 import { fetchAllComment } from "../services/comments/commentsService";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
@@ -34,6 +35,7 @@ import {
   PROFILE_PIC_PLACEHOLDER,
   timeSince,
 } from "../utils";
+import { Loader } from "./Loader";
 import { Status } from "./Status";
 const WORD_LENGTH = 250;
 export const PostCard = forwardRef(({ post, type }, ref) => {
@@ -49,12 +51,17 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   mediaURLs = mediaURLs.filter((media) => media?.url);
   const [_likes, _setLikes] = useState(likes);
   const dispatch = useDispatch();
-  const archivedPosts = useSelector((state) => state.archivedPosts?.data);
-  const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts?.data);
-  const isPostBookmarked = bookmarkedPosts?.some((post) => post?._id === _id);
-  const isPostArchived = archivedPosts?.some((post) => post?._id === _id);
+  const archivedPosts = useSelector((state) => state.archivedPosts);
+  const bookmarkedPosts = useSelector((state) => state.bookmarkedPosts);
+  const likedPost = useSelector((state) => state.likedPost);
+  const following = useSelector((state) => state.following);
+  const followers = useSelector((state) => state.followers);
+
+  const isPostBookmarked = bookmarkedPosts?.data?.some(
+    (post) => post?._id === _id
+  );
+  const isPostArchived = archivedPosts?.data?.some((post) => post?._id === _id);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-  const [showDropDown, setShowDropDown] = useState(false);
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
   const comments = useSelector((state) => state.comments);
@@ -73,16 +80,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   const { socket } = useSocket();
   const isFollowing = (id) => user?.following.includes(id);
   const isFollower = (id) => user?.followers.includes(id);
-  const dropDownRef = useRef(null);
-  const closeDropDown = (e) => {
-    if (!dropDownRef?.current?.contains(e.target)) {
-      setShowDropDown(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("mousedown", closeDropDown);
-  }, [document, dropDownRef]);
-
+  const [dropDownRef, showDropDown, setShowDropDown] = useDropDown();
   useEffect(() => {
     if (isCommentClicked) {
       dispatch(clearComments());
@@ -246,6 +244,10 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
       ref={ref}
       className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col "
     >
+      {(bookmarkedPosts.status === "loading" ||
+        likedPost.status === "loading" ||
+        followers.status === "loading" ||
+        following.status === "loading") && <Loader />}
       {userId === id && isModalOpen && isEditOptionClicked && (
         <Modal setShowDropDown={setIsModalOpen}>
           <EditPostForm
