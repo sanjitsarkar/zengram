@@ -12,6 +12,7 @@ import {
   SideBarItemProvider,
   SocketProvider,
 } from "./context";
+import { VideoSteamingContextProvider } from "./context/videoSteamingContext";
 import "./index.css";
 
 const container = document.getElementById("root");
@@ -21,15 +22,17 @@ root.render(
     <ScrollToTop />
     <Provider store={store}>
       <SocketProvider>
-        <OnlineUsersProvider>
-          <ModalProvider>
-            <SideBarItemProvider>
-              <SearchProvider>
-                <App />
-              </SearchProvider>
-            </SideBarItemProvider>
-          </ModalProvider>
-        </OnlineUsersProvider>
+        <VideoSteamingContextProvider>
+          <OnlineUsersProvider>
+            <ModalProvider>
+              <SideBarItemProvider>
+                <SearchProvider>
+                  <App />
+                </SearchProvider>
+              </SideBarItemProvider>
+            </ModalProvider>
+          </OnlineUsersProvider>
+        </VideoSteamingContextProvider>
       </SocketProvider>
     </Provider>
   </BrowserRouter>

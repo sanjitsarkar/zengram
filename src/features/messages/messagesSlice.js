@@ -34,7 +34,6 @@ export const messagesSlice = createSlice({
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data.push(action.payload?.message);
-        notify("Message added successfully");
       })
       .addCase(sendMessage.rejected, (state, action) => {
         state.status = "failed";

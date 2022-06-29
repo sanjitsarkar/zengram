@@ -65,7 +65,7 @@ export const commentSlice = createSlice({
     },
     [fetchAllComment.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.data = [...state?.data, ...action.payload?.comments];
+      state.data = [...state?.data, ...action?.payload?.comments];
     },
     [fetchAllComment.rejected]: (state, action) => {
       state.status = "failed";

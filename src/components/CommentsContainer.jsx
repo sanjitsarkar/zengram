@@ -168,10 +168,10 @@ export const CommentsContainer = ({
             );
           })}
 
-        {commentCount > 5 && (
+        {commentCount > 5 && comments.status === "succeeded" && (
           <div
             onClick={() => {
-              setSkip((prevSkip) => prevSkip + 5);
+              setSkip(comments.data.length);
             }}
             className="text-primary cursor-pointer"
           >

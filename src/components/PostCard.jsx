@@ -88,6 +88,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
     }
   }, [isCommentClicked]);
   useEffect(() => {
+    console.log("skip", skip);
     dispatch(fetchAllComment({ _id, skip }));
   }, [skip]);
   useEffect(() => {
