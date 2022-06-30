@@ -6,6 +6,7 @@ export const PostLoader = (props) => (
     speed={2}
     className="w-full p-2 rounded-lg shadow-sm bg-white h-fit"
     backgroundColor="#f3f3f3"
+    
     foregroundColor="#23394E"
     foregroundOpacity={0.2}
     {...props}

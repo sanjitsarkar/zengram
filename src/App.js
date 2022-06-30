@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { PrivateRoute } from "./components";
 import { useSideBarItem } from "./context";
@@ -19,9 +18,26 @@ import {
   SignupPage,
   UsersPage,
 } from "./pages";
+import { VideoChatPage } from "./pages/VideoChatPage";
 function App() {
   const { setActiveName } = useSideBarItem();
   const location = useLocation();
+  // const [modalRef, showModal, setShowModal] = useDropDown();
+  // const { notifications } = useNotification();
+  // const {
+  //   call,
+  //   callAccepted,
+  //   callEnded,
+  //   leaveCall,
+  //   answerCall,
+  //   callUser,
+  //   myVideoRef,
+  //   userVideoRef,
+  //   initiateVideoCall,
+  //   setIsCalling,
+  //   isCalling,
+  //   stream,
+  // } = useVideoCall(true);
   useEffect(() => {
     if (location.pathname === "/") {
       setActiveName("Home");
@@ -34,6 +50,36 @@ function App() {
 
   return (
     <div className="App">
+      {/* {call.isCallRecieving && !callAccepted && (
+        <Modal setShowDropDown={setShowModal}>
+          <div className="flex gap-3 flex-col items-center flex-wrap justify-center">
+            <h1 className="text-white text-xl text-center">
+              <span className="font-bold"> {call.from.name} </span> is
+              calling...
+            </h1>
+            <button></button>
+            <button
+              onClick={Navigate(
+                "/videochat/" + call.from._id + "?isRecievingCall=true"
+              )}
+              className="px-4 rounded-full py-1.5 bg-primary text-white flex gap-1.5 items-center"
+            >
+              <MdCall size={20} />
+              <span>Answer</span>
+            </button>
+            <button
+              onClick={() => {
+                leaveCall(call.from._id);
+                setShowModal(false);
+              }}
+              className="px-4 rounded-full py-1.5 bg-tertiary text-white flex gap-1.5 items-center"
+            >
+              <MdCallEnd size={20} />
+              <span>Decline</span>
+            </button>
+          </div>
+        </Modal>
+      )} */}
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<HomePage />} />
@@ -41,6 +87,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/profile/:profileId" element={<ProfilePage />} />
           <Route path="/messages/" element={<MessagePage />} />
+          <Route path="/videochat/:to" element={<VideoChatPage />} />
           <Route path="/messages/:conversationId" element={<MessagePage />} />
           <Route
             path="/users/:profileId/followers"

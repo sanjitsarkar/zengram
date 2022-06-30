@@ -203,3 +203,66 @@ export const formatUserInfo = (user) => {
     profilePictureURL: user.profilePictureURL,
   };
 };
+
+// stop both mic and camera
+export const stopBothVideoAndAudio = (stream) => {
+  stream?.getTracks()?.forEach((track) => {
+    if (track?.readyState == "live") {
+      track?.stop();
+    }
+  });
+};
+
+// // stop only camera
+// export const stopVideoOnly = (stream) => {
+//   stream?.getTracks()?.forEach((track) => {
+//     if (track?.readyState == "live" && track?.kind === "video") {
+//       track?.stop();
+//     }
+//   });
+// };
+
+// // stop only mic
+// export const stopAudioOnly = (stream) => {
+//   stream?.getTracks()?.forEach((track) => {
+//     if (track?.readyState == "live" && track?.kind === "audio") {
+//       track?.stop();
+//     }
+//   });
+// };
+// // stop both mic and camera
+// export const startBothVideoAndAudio = (stream) => {
+//   stream?.getTracks()?.forEach((track) => {
+//     if (track?.readyState == "live") {
+//       track?.start();
+//     }
+//   });
+// };
+export const toggleVideo = (localStream, type) => {
+  if (localStream != null && localStream.getVideoTracks().length > 0) {
+    localStream.getVideoTracks()[0].enabled = type;
+  }
+};
+
+export const toggleMic = (localStream, type) => {
+  if (localStream != null && localStream.getAudioTracks().length > 0) {
+    localStream.getAudioTracks()[0].enabled = type;
+  }
+};
+// // stop only camera
+// export const startVideoOnly = (stream) => {
+//   stream?.getTracks()?.forEach((track) => {
+//     if (track?.readyState == "live" && track?.kind === "video") {
+//       track?.start();
+//     }
+//   });
+// };
+
+// // stop only mic
+// export const startAudioOnly = (stream) => {
+//   stream?.getTracks()?.forEach((track) => {
+//     if (track?.readyState == "live" && track?.kind === "audio") {
+//       track?.start();
+//     }
+//   });
+// };

@@ -5,7 +5,8 @@ import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LOGO from "../assets/logo.png";
-import { useSearch, useSocket } from "../context";
+import { useSearch } from "../context";
+import { useNotification } from "../context/notificationContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
 import { useDropDown } from "../hooks/useCloseDropDown";
@@ -14,12 +15,11 @@ import { PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
-  const [notifications, setNotifications] = useState([]);
   const { search, setSearch, setSkip } = useSearch();
+  const { notifications } = useNotification();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { socket } = useSocket();
   const [dropDownRef, showNotification, setShowNotification] = useDropDown();
 
   useEffect(() => {
@@ -27,11 +27,7 @@ export const Header = () => {
       setSearch("");
     }
   }, [location.pathname]);
-  useEffect(() => {
-    socket.on("getNotification", ({ type, sender }) => {
-      setNotifications((prev) => [...prev, { type, sender }]);
-    });
-  }, [socket]);
+
   return (
     <header className="fixed z-20  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
       <div className="left flex items-center gap-3">
@@ -117,8 +113,9 @@ export const Header = () => {
               ref={dropDownRef}
               className="absolute shadow-2xl rounded-md bg-lightBlue top-14 -right-14 w-max flex flex-col gap-1 text-white "
             >
-              {notifications.map((notification) => (
+              {notifications.map((notification, i) => (
                 <Link
+                  key={i}
                   onClick={() => setShowNotification(false)}
                   to={
                     (notification.type === "message" &&
@@ -128,7 +125,9 @@ export const Header = () => {
                     (notification.type === "like" &&
                       `/posts/${notification.payload}`) ||
                     (notification.type === "comment" &&
-                      `/posts/${notification.payload}`)
+                      `/posts/${notification.payload}`) ||
+                    (notification.type === "call" &&
+                      `/videochat/${notification.sender._id}?isRecievingCall=true`)
                   }
                   className="flex p-3 border-b border-opacity-30 border-white items-center  gap-1"
                 >
@@ -144,6 +143,9 @@ export const Header = () => {
                   )}
                   {notification.type === "like" && (
                     <span className="text-xs"> liked your post</span>
+                  )}
+                  {notification.type === "call" && (
+                    <span className="text-xs">is calling you</span>
                   )}
                 </Link>
               ))}
