@@ -34,19 +34,21 @@ export const ProfileHeader = ({ profile }) => {
   const ProfileTitle = () => {
     return (
       <div className="flex  flex-col md:flex-row justify-center md:justify-start  items-center gap-3">
-        <img
-          className=" w-28 h-28  rounded-full border-8 shadow-sm aspect-square border-white object-cover "
-          src={profile.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
-          alt={profile.name}
-        />
-        {user._id === profile._id && (
-          <BiEditAlt
-            onClick={() => {
-              setShowEditProfileModal(true);
-            }}
-            className="cursor-pointer relative md:bottom-8  bottom-8 right-6 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
+        <div className="relative">
+          <img
+            className=" w-28 h-28  rounded-full border-4 shadow-sm aspect-square border-primary object-cover "
+            src={profile.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
+            alt={profile.name}
           />
-        )}
+          {user._id === profile._id && (
+            <BiEditAlt
+              onClick={() => {
+                setShowEditProfileModal(true);
+              }}
+              className="cursor-pointer absolute top-2 right-0 p-2 w-10 h-10 rounded-full shadow-md bg-lightBlue fill-white"
+            />
+          )}
+        </div>
         <div className="flex flex-wrap gap-3 items-center">
           <h1 className=" text-xl  text-lightBlue">{profile.name}</h1>
           {user?._id !== profile?._id && !isFollowing && (
@@ -133,24 +135,23 @@ export const ProfileHeader = ({ profile }) => {
     );
   };
   const ProfileBio = () => {
-    <div className="   flex flex-col md:items-center gap-1 md:text-left text-center flex-wrap   text-lightBlue">
-      {profile.bio && (
-        <p className="text-lightBlue text-opacity-95">
-          {profile.bio ??
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis,earum."}
-        </p>
-      )}
-      {profile.portfolioUrl && (
-        <a
-          className="sm:w-max text-primary"
-          href={profile.portfolioUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {profile.portfolioUrl}
-        </a>
-      )}
-    </div>;
+    return (
+      <div className="   flex flex-col md:items-start items-center gap-1 md:text-left text-center flex-wrap   text-lightBlue">
+        {profile.bio && (
+          <p className="text-lightBlue text-opacity-95">{profile.bio}</p>
+        )}
+        {profile.portfolioUrl && (
+          <a
+            className="sm:w-max text-primary"
+            href={profile.portfolioUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {profile.portfolioUrl}
+          </a>
+        )}
+      </div>
+    );
   };
   const ProfileActions = () => {
     return (
@@ -207,11 +208,12 @@ export const ProfileHeader = ({ profile }) => {
         alt={profile.name}
       />
       <div className="flex flex-col gap-2 md:justify-start justify-center p-6 ">
-        <div className="flex flex-col flex-wrap md:flex-row items-center justify-center md:justify-start gap-6">
+        <div className="flex flex-col flex-wrap md:flex-row items-center justify-center md:justify-start gap-1 md:gap-6">
           <ProfileTitle />
           <ProfileStats />
           <ProfileActions />
         </div>
+
         <ProfileBio />
       </div>
     </div>

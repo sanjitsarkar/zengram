@@ -105,7 +105,10 @@ export const MessageForm = ({ activeConversation }) => {
             />
           </div>
           {showEmojiPicker && (
-            <div className=" absolute top-14 w-fit right-10" ref={dropDownRef}>
+            <div
+              className=" absolute bottom-16 w-56 right-10"
+              ref={dropDownRef}
+            >
               <EmojiPicker
                 onEmojiClick={(_, data) => {
                   setMessageContent(messageContent + data.emoji);

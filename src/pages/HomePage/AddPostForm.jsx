@@ -58,7 +58,7 @@ export const AddPostForm = () => {
         className="relative flex items-center gap-3 mb-3"
       >
         <img
-          className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+          className=" shadow-sm cursor-pointer rounded-full w-10 h-10 object-cover "
           src={user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
           alt={user.name}
         />

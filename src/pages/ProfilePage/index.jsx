@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Layout, Loader, PostsWrapper, Tab } from "../../components";
+import {
+  Layout,
+  Loader,
+  NotAvailable,
+  PostsWrapper,
+  Tab,
+} from "../../components";
 import { clearArchivedPosts } from "../../features/archivedPosts/archivedPostsSlice";
 import { clearUserCreatedPosts } from "../../features/userCreatedPosts/userCreatedPostsSlice";
 import { getProfileInfo } from "../../services/auth/authService";
@@ -66,9 +72,7 @@ export const ProfilePage = () => {
         </div>
       )}
       {profile.status === "succeeded" && !profile.data && (
-        <span className="text-center text-base font-medium text-lightBlue">
-          No posts to show
-        </span>
+        <NotAvailable title="Profile is not available"></NotAvailable>
       )}
 
       {profile.status === "succeeded" && profile.data && (

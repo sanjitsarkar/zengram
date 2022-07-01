@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthButton, IconButton, Loader } from "../../components";
@@ -8,6 +8,7 @@ import { COVER_PHOTO_PLACEHOLDER, PROFILE_PIC_PLACEHOLDER } from "../../utils";
 
 export const ProfileEditForm = ({ profileInfo, setIsEditProfile }) => {
   const user = useSelector((state) => state.auth?.user);
+  const profileUpdateStatus = useSelector((state) => state.profile?.status);
   const dispatch = useDispatch();
   const initialProfileState = {
     name: profileInfo.name,
@@ -16,17 +17,23 @@ export const ProfileEditForm = ({ profileInfo, setIsEditProfile }) => {
     bio: profileInfo.bio,
     portfolioUrl: profileInfo.portfolioUrl,
   };
+  const [isUpdadted, setIsUpdadted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [profileData, setProfileData] = useState(initialProfileState);
+  useEffect(() => {
+    if (profileUpdateStatus === "succeeded" && isUpdadted) {
+      setIsEditProfile(false);
+    }
+  }, [profileUpdateStatus]);
   return (
     <form
       className="bg-white p-6 rounded-md m-6 relative  overflow-auto"
       onSubmit={async (e) => {
         e.preventDefault();
-        setLoading(true);
         const urls = [];
+        setLoading(true);
         if (profileImage) {
           const _urls = await uploadImages([profileImage], user?._id);
           urls.push(_urls[0]);
@@ -54,7 +61,7 @@ export const ProfileEditForm = ({ profileInfo, setIsEditProfile }) => {
         setProfileImage("");
         setCoverImage("");
         setLoading(false);
-        setIsEditProfile(false);
+        setIsUpdadted(true);
       }}
     >
       <IconButton
@@ -215,7 +222,11 @@ export const ProfileEditForm = ({ profileInfo, setIsEditProfile }) => {
           placeholder="Enter Portfolio Url"
         />
       </div>
-      {!loading ? <AuthButton name="Update Profile" /> : <Loader type="mini" />}
+      {!profileUpdateStatus === "loading" || loading ? (
+        <Loader type="mini" />
+      ) : (
+        <AuthButton name="Update Profile" />
+      )}
     </form>
   );
 };

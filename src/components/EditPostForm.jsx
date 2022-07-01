@@ -1,5 +1,5 @@
 import EmojiPicker from "emoji-picker-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { GrEmoji } from "react-icons/gr";
 import { MdClose } from "react-icons/md";
@@ -18,11 +18,12 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
   const [post, setPost] = useState(postInfo);
   const { setIsModalOpen } = useModal();
   const [imgUrls, setImgUrls] = useState(postInfo?.mediaURLs ?? []);
+  const [mediaURLs, setMediaURLs] = useState([]);
   const [uploadedImgUrls, setUploadedImgUrls] = useState(
     postInfo?.mediaURLs ?? []
   );
   const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
-
+  const [isUpdadted, setIsUpdadted] = useState(false);
   const { postUpdateStatus } = useSelector((state) => state.posts);
 
   const PhotosSetcion = () => {
@@ -66,11 +67,17 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
       </div>
     );
   };
+  useEffect(() => {
+    if (postUpdateStatus === "succeeded" && isUpdadted) {
+      setIsModalOpen(false);
+    }
+  }, [postUpdateStatus, isUpdadted]);
   if (postInfo)
     return (
       <div
         style={{
           maxWidth: "90vw",
+          minWidth: "40rem",
         }}
         className="  md:p-6 p-4 rounded-lg shadow-lg bg-white 
       overflow-y-auto m-4
@@ -100,9 +107,9 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            if (Array.from(post.mediaURLs).length > 0) {
+            if (Array.from(mediaURLs).length > 0) {
               dispatch(setPostUpdateStatusLoading());
-              let urls = await uploadImages(post.mediaURLs, user._id);
+              let urls = await uploadImages(mediaURLs, user._id);
               urls = urls.map((url) => ({
                 url,
                 type: "image",
@@ -124,7 +131,7 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
                 })
               );
             }
-
+            setIsUpdadted(true);
             setShowEmojiPicker(false);
           }}
         >
@@ -174,7 +181,7 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
                   multiple={true}
                   accept="image/*"
                   onChange={(e) => {
-                    setPost({ ...post, mediaURLs: e.target.files });
+                    setMediaURLs(e.target.files);
                     Array.from(e.target.files).forEach((file) => {
                       setImgUrls((prevImgUrls) => [
                         ...prevImgUrls,

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { MdMoreHoriz } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDropDown } from "../hooks/useCloseDropDown";
 import { removeComment } from "../services/comments/commentsService";
 import { PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
 import { DropDownOption } from "./DropDownOption";
+
 const WORD_LENGTH = 250;
 export const CommentSection = ({
   commentInfo,
@@ -27,6 +28,7 @@ export const CommentSection = ({
   const [dropDownRef, showDropDown, setShowDropDown] = useDropDown();
   const [showMore, setShowMore] = useState(false);
   const [wordLength, setWordLength] = useState(WORD_LENGTH);
+  const user = useSelector((state) => state.auth.user);
   const DropDown = () => {
     return (
       <div
@@ -62,7 +64,7 @@ export const CommentSection = ({
     <div className="flex flex-wrap  gap-2 item-center  ">
       <Link to={`/profile/${id}`}>
         <img
-          className=" shadow-sm cursor-pointer rounded-full w-8 h-8 "
+          className=" shadow-xl border-lightBlue border-opacity-30 border cursor-pointer rounded-full w-8 h-8 "
           src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
           alt="profilePicture"
         />
@@ -71,7 +73,7 @@ export const CommentSection = ({
         <div className="relative flex flex-wrap justify-between bg-lightBlue bg-opacity-5 p-2.5 rounded-md     min-w-fit w-full">
           <div className="flex flex-col flex-wrap">
             <span className="text-lightBlue">{name}</span>
-            <span className="text-sm text-lightBlue text-opacity-70 break-words">
+            <span className="text-sm text-lightBlue text-opacity-80 break-words">
               {comment
                 ?.substr(0, wordLength)
                 ?.split(" ")
@@ -112,12 +114,14 @@ export const CommentSection = ({
               {timeSince(createdAt)} ago
             </span>
           </div>
-          <MdMoreHoriz
-            onClick={() =>
-              setShowDropDown((prevshowDropDown) => !prevshowDropDown)
-            }
-            className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-6 h-6 p-1 shadow-md rounded-md transition-all ease-in-out"
-          />
+          {commentInfo.commentedBy._id === user._id && (
+            <MdMoreHoriz
+              onClick={() =>
+                setShowDropDown((prevshowDropDown) => !prevshowDropDown)
+              }
+              className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-6 h-6 p-1 shadow-md rounded-md transition-all ease-in-out"
+            />
+          )}
           {showDropDown && <DropDown />}
         </div>
       </div>

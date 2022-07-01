@@ -15,7 +15,7 @@ export const PostsWrapper = forwardRef(
       isPostArchived = (id) => archivedPosts?.some((post) => post?._id === id);
     }
     return (
-      <div className={` ${width} flex flex-col gap-4`}>
+      <div className={` ${width} flex flex-col gap-4`} >
         {children}
 
         {posts.status === "succeeded" && posts.data.length === 0 && (

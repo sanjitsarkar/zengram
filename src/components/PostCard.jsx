@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { BiArchive, BiTrash } from "react-icons/bi";
+import { isValidURL } from "../utils";
 import {
   MdArrowBack,
   MdArrowForward,
@@ -88,7 +89,6 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
     }
   }, [isCommentClicked]);
   useEffect(() => {
-    console.log("skip", skip);
     dispatch(fetchAllComment({ _id, skip }));
   }, [skip]);
   useEffect(() => {
@@ -264,7 +264,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           <Link to={`/profile/${id}`}>
             <Status isOnline={onlineUsers.some((_user) => _user._id === id)}>
               <img
-                className=" shadow-sm cursor-pointer rounded-full w-10 h-10 "
+                className=" shadow-sm cursor-pointer rounded-full w-10 h-10 object-cover "
                 src={profilePictureURL ?? PROFILE_PIC_PLACEHOLDER}
                 alt="profilePicture"
               />
@@ -299,18 +299,28 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
             .map((word, i) => {
               if (word.startsWith("#"))
                 return (
-                  <>
+                  <React.Fragment key={word + i}>
                     {" "}
                     <Link
-                      key={word}
                       to={`/posts?hashtag=${word.slice(1)}`}
                       className={`text-primary`}
                     >
                       {word}
                     </Link>
-                  </>
+                  </React.Fragment>
                 );
-
+              if (isValidURL(word))
+                return (
+                  <a
+                    key={word + i}
+                    href={word}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary "
+                  >
+                    {word}
+                  </a>
+                );
               return word + " ";
             })}
         </Link>

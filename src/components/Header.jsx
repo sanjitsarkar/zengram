@@ -84,7 +84,7 @@ export const Header = () => {
       >
         <Link to={`/profile/${user?._id}`}>
           <img
-            className="shadow-sm cursor-pointer rounded-full w-10 h-10 "
+            className="shadow-sm cursor-pointer rounded-full w-10 h-10 object-cover"
             src={`${
               user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER
                 ? user.profilePictureURL ?? PROFILE_PIC_PLACEHOLDER
