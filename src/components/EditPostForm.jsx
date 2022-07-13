@@ -1,22 +1,20 @@
 import EmojiPicker from "emoji-picker-react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { GrEmoji } from "react-icons/gr";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
-import { useModal } from "../context";
 import { setPostUpdateStatusLoading } from "../features/posts/postsSlice";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useDropDown } from "../hooks/useDropDown";
 import { uploadImages } from "../services/cloudinary/cloudinaryService";
 import { updatePost } from "../services/posts/postsService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
-export const EditPostForm = ({ postInfo, setShowDropDown }) => {
+export const EditPostForm = ({ postInfo, setIsModalOpen }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [post, setPost] = useState(postInfo);
-  const { setIsModalOpen } = useModal();
   const [imgUrls, setImgUrls] = useState(postInfo?.mediaURLs ?? []);
   const [mediaURLs, setMediaURLs] = useState([]);
   const [uploadedImgUrls, setUploadedImgUrls] = useState(
@@ -76,10 +74,9 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
     return (
       <div
         style={{
-          maxWidth: "90vw",
-          minWidth: "40rem",
+          maxWidth: "80vw",
         }}
-        className="  md:p-6 p-4 rounded-lg shadow-lg bg-white 
+        className="sm:w-96 w-full md:p-6 p-4 rounded-lg shadow-lg bg-white 
       overflow-y-auto m-4
         
        "
@@ -88,7 +85,6 @@ export const EditPostForm = ({ postInfo, setShowDropDown }) => {
           {postInfo && (
             <IconButton
               onClick={() => {
-                setShowDropDown(false);
                 setIsModalOpen(false);
               }}
               Icon={MdClose}

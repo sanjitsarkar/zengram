@@ -1,50 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiBell, FiLogOut } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import LOGO from "../assets/logo.png";
 import { useSearch } from "../context";
 import { useNotification } from "../context/notificationContext";
 import { logout } from "../features/auth/authSlice";
 import { clearSearchedUsers } from "../features/searchedUsers/searchedUsersSlice";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useDebounce } from "../hooks/useDebounce";
+import { useDropDown } from "../hooks/useDropDown";
 import { searchUsers } from "../services/auth/authService";
 import { PROFILE_PIC_PLACEHOLDER } from "../utils";
+import { Loader } from "./Loader";
+import { UserList } from "./UserList";
 export const Header = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [navRef, isNavOpen, setIsNavOpen] = useDropDown();
   const user = useSelector((state) => state.auth.user);
-  const { search, setSearch, setSkip } = useSearch();
+  const { search, setSearch, setSkip, skip } = useSearch();
   const { notifications } = useNotification();
+  const searchedUsers = useSelector((state) => state.searchedUsers);
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [dropDownRef, showNotification, setShowNotification] = useDropDown();
+  const debounce = useDebounce();
 
+  const [dropDownRef, showNotification, setShowNotification] = useDropDown();
   useEffect(() => {
     if (!location.pathname.includes("users")) {
       setSearch("");
     }
   }, [location.pathname]);
-
+  useEffect(() => {
+    debounce(() => dispatch(searchUsers({ search, skip })));
+  }, [search, skip]);
   return (
     <header className="fixed z-20  left-0 right-0 top-0 text-dark justify-between bg-white py-4 px-6 shadow-md flex items-center">
-      <div className="left flex items-center gap-3">
+      <div className="left flex items-center gap-6 md:gap-20">
         {!isNavOpen ? (
           <MdMenu
-            className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md  sm:hidden"
+            className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md  md:hidden"
             onClick={() => setIsNavOpen(true)}
           />
         ) : (
           <MdClose
-            className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md sm:hidden"
+            className="cursor-pointer rounded-full p-2 w-10 h-10 shadow-md md:hidden"
             onClick={() => setIsNavOpen(false)}
           />
         )}
         <Link
           to="/"
-          className="site-title  text-xl sm:flex gap-2 items-center hidden "
+          className="site-title  text-xl md:flex gap-2 items-center hidden "
         >
           <img src={LOGO} alt="ZenGram" className="w-10" />
           <h4>
@@ -52,35 +65,59 @@ export const Header = () => {
             <span className="text-primary">Gram</span>
           </h4>
         </Link>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            dispatch(clearSearchedUsers());
-            setSkip(0);
-            navigate("/users?search=" + search);
-          }}
-          className="input-box ease-in-out transition-all bg-lightBlue bg-opacity-10 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-52 md:w-96  rounded-md flex  items-center"
-        >
-          <BiSearch className="ml-3  text-xl text-dark" />
-          <input
-            required
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              dispatch(searchUsers());
+        <div className="relative">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              dispatch(clearSearchedUsers());
+              setSkip(0);
+              navigate("/users?search=" + search);
             }}
-            type="search"
-            name=""
-            placeholder="Search something..."
-            id=""
-            className=" w-full pl-1 pr-3 py-2 outline-none bg-transparent"
-          />
-        </form>
+            className=" ease-in-out transition-all bg-lightBlue bg-opacity-10 focus-within:bg-opacity-5 focus-within:border-opacity-50 border border-transparent focus-within:border-primary sm:w-52 md:w-96  rounded-md flex  items-center"
+          >
+            <BiSearch className="ml-3  text-xl text-dark" />
+            <input
+              required
+              value={search}
+              onChange={(e) => {
+                dispatch(clearSearchedUsers());
+                setSearch(e.target.value);
+              }}
+              type="search"
+              name=""
+              placeholder="Search something..."
+              id=""
+              className=" w-full pl-1 pr-3 py-2 outline-none bg-transparent"
+            />
+          </form>
+          {!searchParams.get("search") && search !== "" && (
+            <div className="absolute top-11 rounded-md z-50 bg-lightBlue bg-opacity-30 backdrop-blur-lg  w-full max-h-96 flex flex-col gap-1  items-center overflow-y-auto shadow-xl">
+              {searchedUsers.status === "loading" && (
+                <div className="p-2">
+                  <Loader type="mini" />
+                </div>
+              )}
+              {searchedUsers.status !== "loading" &&
+                searchedUsers.data.length === 0 && (
+                  <div className="p-2">
+                    <h1 className="text-lightBlue">No user found</h1>
+                  </div>
+                )}
+              {searchedUsers.status !== "loading" &&
+                searchedUsers.data.length > 0 && (
+                  <div className="p-2">
+                    <UserList users={searchedUsers.data} type="small" />
+                  </div>
+                )}
+            </div>
+          )}
+        </div>
       </div>
       <div
+        ref={navRef}
         className={` right ${
           isNavOpen ? "flex" : "hidden"
-        }  sm:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
+        }  md:flex absolute top-20 sm:h-auto h-auto sm:relative sm:border-none border-2 border-primary sm:top-0 sm:left-0 p-5 sm:p-0   bg-lightBlue sm:bg-transparent left-2 rounded-md sm:rounded-none  flex-col sm:flex-row items-center  gap-4 shadow-lg sm:shadow-none`}
       >
         <Link to={`/profile/${user?._id}`}>
           <img

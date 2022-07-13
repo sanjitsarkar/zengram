@@ -1,4 +1,3 @@
-export { ModalProvider, useModal } from "./modalContext";
 export { NotificationProvider, useNotification } from "./notificationContext";
 export { OnlineUsersProvider } from "./onlineUsersContext";
 export { SearchProvider, useSearch } from "./searchContext";

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CommentSection } from ".";
 import { useSocket } from "../context";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useDropDown } from "../hooks/useDropDown";
 import {
   addComment,
   updateComment,

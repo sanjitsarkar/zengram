@@ -42,7 +42,9 @@ export const PostsSection = ({ type = "all" }) => {
   const loaderRef = useCallback(
     (node) => {
       if (allPosts.status === "loading" || posts.status === "loading") return;
+
       if (observer.current) observer.current.disconnect();
+
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           if (type === "all") {
@@ -50,10 +52,26 @@ export const PostsSection = ({ type = "all" }) => {
           } else setSkip(posts.data.length);
         }
       });
-      if (node) observer.current.observe(node);
+
+      node && observer.current.observe(node);
     },
     [allPosts, posts, type]
   );
+  // const loaderRef = useCallback(
+  //   (node) => {
+  //     if (allPosts.status === "loading" || posts.status === "loading") return;
+  //     if (observer.current) observer.current.disconnect();
+  //     observer.current = new IntersectionObserver((entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         if (type === "all") {
+  //           setSkip(allPosts.data.length);
+  //         } else setSkip(posts.data.length);
+  //       }
+  //     });
+  //     if (node) observer.current.observe(node);
+  //   },
+  //   [allPosts, posts, type]
+  // );
   return (
     <PostsWrapper
       posts={type === "all" ? allPosts : posts}

@@ -106,6 +106,18 @@ export const getFollowers = createAsyncThunk(
 export const searchUsers = createAsyncThunk(
   "auth/searchUsers",
   async (data) => {
+    console.log("search", data.search, data.skip);
+    const response = await callApi(
+      "get",
+      `user?search=${data.search}&skip=${data.skip}`,
+      true
+    );
+    return response.data;
+  }
+);
+export const fetchSuggestedUsers = createAsyncThunk(
+  "auth/fetchSuggestedUsers",
+  async (data) => {
     const response = await callApi(
       "get",
       `user?search=${data.search}&skip=${data.skip}`,

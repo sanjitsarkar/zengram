@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSuggestedUsers } from "../features/suggestedUsers/suggestedUsersSlice";
-import { searchUsers } from "../services/auth/authService";
+import { fetchSuggestedUsers } from "../services/auth/authService";
 import { NotAvailable } from "./NotAvailable";
 import { UserList } from "./UserList";
 import { UserListLoader } from "./UserListLoader";
@@ -29,9 +29,8 @@ export const SuggestionSection = () => {
     dispatch(clearSuggestedUsers());
   }, []);
   useEffect(() => {
-    dispatch(searchUsers({ skip }));
+    dispatch(fetchSuggestedUsers({ skip }));
   }, [skip]);
-
   return (
     <div className="md:flex flex-col items-center  p-1 overflow-y-auto scrollbar-none mx-5 ">
       <h1 className=" text-lg text-lightBlue ">Suggested users</h1>

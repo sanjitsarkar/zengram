@@ -3,6 +3,7 @@ import { Footer, Header, SideBar } from ".";
 
 export const Layout = ({ children }) => {
   const layoutRef = useRef(null);
+
   return (
     <div className="relative" ref={layoutRef}>
       <Header />

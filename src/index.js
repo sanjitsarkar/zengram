@@ -6,7 +6,6 @@ import App from "./App";
 import { store } from "./app/store";
 import { ScrollToTop } from "./components/ScrollToTop";
 import {
-  ModalProvider,
   NotificationProvider,
   OnlineUsersProvider,
   SearchProvider,
@@ -26,13 +25,11 @@ root.render(
         <NotificationProvider>
           <VideoCallProvider>
             <OnlineUsersProvider>
-              <ModalProvider>
-                <SideBarItemProvider>
-                  <SearchProvider>
-                    <App />
-                  </SearchProvider>
-                </SideBarItemProvider>
-              </ModalProvider>
+              <SideBarItemProvider>
+                <SearchProvider>
+                  <App />
+                </SearchProvider>
+              </SideBarItemProvider>
             </OnlineUsersProvider>
           </VideoCallProvider>
         </NotificationProvider>

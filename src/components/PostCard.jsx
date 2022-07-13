@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { BiArchive, BiTrash } from "react-icons/bi";
-import { isValidURL } from "../utils";
 import {
   MdArrowBack,
   MdArrowForward,
@@ -16,10 +15,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CommentsContainer, DropDownOption, EditPostForm, Modal } from ".";
-import { useModal, useSocket } from "../context";
+import { useSocket } from "../context";
 import { useOnlineUsers } from "../context/onlineUsersContext";
 import { clearComments } from "../features/comments/commentsSlice";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useDropDown } from "../hooks/useDropDown";
 import { followUser, unfollowUser } from "../services/auth/authService";
 import { fetchAllComment } from "../services/comments/commentsService";
 import { dislikePost, likePost } from "../services/likePost/likePostService";
@@ -32,6 +31,7 @@ import {
 } from "../services/posts/postsService";
 import {
   formatUserInfo,
+  isValidURL,
   notify,
   PROFILE_PIC_PLACEHOLDER,
   timeSince,
@@ -66,7 +66,7 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
   const [isCommentClicked, setIsCommentClicked] = useState(false);
   const userId = useSelector((state) => state.auth?.user?._id);
   const comments = useSelector((state) => state.comments);
-  const { isModalOpen, setIsModalOpen } = useModal();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOptionClicked, setIsEditOptionClicked] = useState(false);
   const [isCommentAdded, setIsCommentAdded] = useState(false);
   const [isCommentRemoved, setIsCommentRemoved] = useState(false);
@@ -245,16 +245,15 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
       ref={ref}
       className=" p-6 relative rounded-lg shadow-sm bg-white   gap-4 flex flex-col "
     >
-      {(bookmarkedPosts.status === "loading" ||
-        likedPost.status === "loading" ||
-        followers.status === "loading" ||
-        following.status === "loading") && <Loader />}
+      {(followers.status === "loading" || following.status === "loading") && (
+        <Loader />
+      )}
       {userId === id && isModalOpen && isEditOptionClicked && (
-        <Modal setShowDropDown={setIsModalOpen}>
+        <Modal setShowModal={setIsModalOpen}>
           <EditPostForm
             postInfo={post}
             setIsEditOptionClicked={setIsEditOptionClicked}
-            setShowDropDown={setShowDropDown}
+            setIsModalOpen={setIsModalOpen}
           />
         </Modal>
       )}
@@ -280,9 +279,9 @@ export const PostCard = forwardRef(({ post, type }, ref) => {
           </div>
         </div>
         <MdMoreHoriz
-          onClick={() =>
-            setShowDropDown((prevshowDropDown) => !prevshowDropDown)
-          }
+          onClick={() => {
+            !showDropDown && setShowDropDown(true);
+          }}
           className="fill-lightBlue cursor-pointer focus:bg-primary hover:bg-primary hover:fill-white focus:fill-white w-10 h-8 p-1 shadow-md rounded-md transition-all ease-in-out"
         />
       </div>

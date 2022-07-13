@@ -5,8 +5,8 @@ import { MdClose, MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from ".";
-import { useModal, useSocket } from "../context";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useSocket } from "../context";
+import { useDropDown } from "../hooks/useDropDown";
 import { sendMessage } from "../services/messages/messagesService";
 import { formatUserInfo, PROFILE_PIC_PLACEHOLDER } from "../utils";
 export const SendMessageForm = ({ profile, setShowSendMessageModal }) => {
@@ -14,7 +14,6 @@ export const SendMessageForm = ({ profile, setShowSendMessageModal }) => {
   const { socket } = useSocket();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const { isModalOpen, setIsModalOpen } = useModal();
   const [messageContent, setMessageContent] = useState("");
   const [dropDownRef, showEmojiPicker, setShowEmojiPicker] = useDropDown();
 
@@ -32,7 +31,6 @@ export const SendMessageForm = ({ profile, setShowSendMessageModal }) => {
         <IconButton
           onClick={() => {
             setShowSendMessageModal(false);
-            setIsModalOpen(false);
           }}
           Icon={MdClose}
           className="absolute right-0 top-0 "

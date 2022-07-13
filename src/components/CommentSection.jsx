@@ -3,7 +3,7 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import { MdMoreHoriz } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useDropDown } from "../hooks/useCloseDropDown";
+import { useDropDown } from "../hooks/useDropDown";
 import { removeComment } from "../services/comments/commentsService";
 import { PROFILE_PIC_PLACEHOLDER, timeSince } from "../utils";
 import { DropDownOption } from "./DropDownOption";

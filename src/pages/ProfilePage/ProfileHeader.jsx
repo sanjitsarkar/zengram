@@ -187,7 +187,7 @@ export const ProfileHeader = ({ profile }) => {
   return (
     <div className="flex flex-col bg-white  ">
       {showEditProfileModal && (
-        <Modal setShowDropDown={setShowEditProfileModal}>
+        <Modal setShowModal={setShowEditProfileModal}>
           <ProfileEditForm
             profileInfo={profile}
             setIsEditProfile={setShowEditProfileModal}
@@ -195,7 +195,7 @@ export const ProfileHeader = ({ profile }) => {
         </Modal>
       )}
       {showSendMessageModal && (
-        <Modal setShowDropDown={setShowSendMessageModal}>
+        <Modal setShowModal={setShowSendMessageModal}>
           <SendMessageForm
             profile={profile}
             setShowSendMessageModal={setShowSendMessageModal}

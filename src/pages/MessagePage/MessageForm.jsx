@@ -5,7 +5,7 @@ import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Loader } from "../../components";
 import { useSocket } from "../../context";
-import { useDropDown } from "../../hooks/useCloseDropDown";
+import { useDropDown } from "../../hooks/useDropDown";
 import { sendMessage } from "../../services/messages/messagesService";
 import { formatUserInfo } from "../../utils";
 

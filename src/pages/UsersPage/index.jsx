@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Layout, NotAvailable, UserListLoader } from "../../components";
 import { UserList } from "../../components/UserList";
 import { useSearch } from "../../context";
 import { clearSearchedUsers } from "../../features/searchedUsers/searchedUsersSlice";
-import { searchUsers } from "../../services/auth/authService";
 
 export const UsersPage = () => {
   const dispatch = useDispatch();
-  let search = useLocation().search;
-  search = new URLSearchParams(search).get("search");
-  const { skip, setSkip } = useSearch();
-
+  const [searchParams] = useSearchParams();
+  const { search, setSearch, skip, setSkip } = useSearch();
+  useEffect(() => {
+    searchParams.get("search") && setSearch(searchParams.get("search"));
+  }, [searchParams]);
   const searchedUsers = useSelector((state) => state.searchedUsers);
 
   const observer = useRef();
@@ -32,9 +32,6 @@ export const UsersPage = () => {
   useEffect(() => {
     dispatch(clearSearchedUsers());
   }, []);
-  useEffect(() => {
-    dispatch(searchUsers({ search, skip }));
-  }, [skip, search]);
 
   return (
     <Layout>

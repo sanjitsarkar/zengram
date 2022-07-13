@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { searchUsers } from "../../services/auth/authService";
+import { fetchSuggestedUsers } from "../../services/auth/authService";
 import { initialState } from "../../utils";
 
 export const suggestedUsersSlice = createSlice({
@@ -10,22 +10,20 @@ export const suggestedUsersSlice = createSlice({
       state.data = [];
     },
     updateSuggestedUsers: (state, action) => {
-     
-        state.data = state?.data?.filter(
-          (user) => user?._id !== action.payload?.followingId
-        );
-     
+      state.data = state?.data?.filter(
+        (user) => user?._id !== action.payload?.followingId
+      );
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(searchUsers.pending, (state) => {
+    builder.addCase(fetchSuggestedUsers.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(searchUsers.fulfilled, (state, action) => {
+    builder.addCase(fetchSuggestedUsers.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.data = [...state?.data, ...action.payload?.users];
     });
-    builder.addCase(searchUsers.rejected, (state, action) => {
+    builder.addCase(fetchSuggestedUsers.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error;
     });

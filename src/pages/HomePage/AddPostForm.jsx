@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IconButton, Loader } from "../../components";
 import { setPostCreateStatusLoading } from "../../features/posts/postsSlice";
-import { useDropDown } from "../../hooks/useCloseDropDown";
+import { useDropDown } from "../../hooks/useDropDown";
 import { uploadImages } from "../../services/cloudinary/cloudinaryService";
 import { createPost } from "../../services/posts/postsService";
 import { initialPostState, PROFILE_PIC_PLACEHOLDER } from "../../utils";

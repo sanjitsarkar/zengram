@@ -23,7 +23,7 @@ const UserCard = forwardRef(({ _user, type }, loaderRef) => {
       key={_user._id}
       className={`p-2  gap-1 rounded-md flex flex-wrap   shadow-md  sm:items-center ${
         type === "small" ? "w-80" : "min-w-96"
-      }  justify-between bg-white`}
+      }  justify-between bg-white w-full`}
     >
       {showSendMessageModal && (
         <Modal setShowDropDown={setShowSendMessageModal}>
